@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+
+		<link href="css/mricode.pagination.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/header.css" />
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
+		<link rel="stylesheet" type="text/css" href="css/footer.css"/>
+		<link rel="stylesheet" type="text/css" href="css/paper_details.css"/>
+		
+		
+		<title></title>
+	</head>
+	<body>
+
+
+		
+		
+		<header class="site-header">
+			<nav class="navbar" id="top">
+						
+						<!--这是导航图标-->
+						<div class="col-md-3 col-sm-12 header-nav-icon">
+							<div class="navbar-header">
+								DAO HANG
+							</div>
+						</div>
+						
+						<!-- 这是中间搜索部分-->
+						<form class="form-inline col-md-6 col-sm-12 header-search" action="/search">
+							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
+								<label class="sr-only" for="keywords">keywords</label>
+								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database" name="k">
+							</div>
+						
+							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
+								<div class="form-group  ">
+									<label class="sr-only" for="title">title</label>
+									<input type="text" class="form-control " id="title" placeholder="keywords" name="k">
+								</div>
+								<div class="form-group">
+									<label class="sr-only" for="authorname">authorname</label>
+									<input type="text" class="form-control " id="name" placeholder="author name" name="a">
+								</div>
+								<div class="form-group ">
+									<label class="sr-only" for="year">year</label>
+									<input type="text" class="form-control " id="year" placeholder="published year" name="y">
+								</div>
+						
+							</div>
+						
+							<button id="btn_search" class="btn btn-success" type="submit">
+											<span class="glyphicon glyphicon-search "></span>
+										</button>
+							<button id="btn_advanced" class="btn btn-success  ">
+											<span class="glyphicon glyphicon-edit "></span>
+										</button>
+						</form>						
+						
+						
+						
+						<!--这是右边菜单-->
+						<div class="col-md-3 col-sm-12" >
+							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
+								<ul class="nav navbar-nav navbar-right">
+									<li>
+										<a href="#" target="_blank">API</a>
+									</li>
+									<li>
+										<a href="#" target="_blank">博客</a>
+									</li>
+									<li>
+										<a href="#">关于</a>
+									</li>
+								</ul>
+							</nav>
+							
+						</div>
+						
+			</nav>
+		</header>
+		
+		
+		<!--左边的div-->
+		<div id="div_left_container" class="col-md-1" style="background-color: silver; margin-top: 50px;">
+			
+		</div>
+		
+		<!--中间展示数据-->
+		<div class="row " >
+			
+			<div class="col-md-9" style="height:auto; margin-top: 50px; background-color: rgb(250,250,240);">
+				<div class="col-md-12" style="margin-bottom: 10px; margin-top: 10px;">
+					<font size="6" face="book antiqua" th:text="${details.searchInfoBean.title}">this is paper title graph database </font>
+				</div>
+				
+				<div class="col-md-8 col-sm-12" style="background-color: white;" >
+					<ul id="myTab" class="nav nav-pills">
+						<li class="active"><a href="#info" data-toggle="tab"> Info</a></li>
+						<li><a href="#ref" data-toggle="tab" th:onclick="|getRef('${details.refs}')|" >References</a></li>
+						<li><a href="#cite" data-toggle="tab" th:onclick="|getCite('${details.cites}')|">Cites</a></li>
+				
+					</ul>
+			
+				<div id="paperTabContent" class="tab-content">
+					<div class="tab-pane fade in active" id="info"> 
+						<div class="panel panel-default">
+							<div class="panel-heading"> basic infomation </div>
+							<div class="panel-body">
+								<strong>Authors:</strong>
+									<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${details.searchInfoBean.authors}">
+											<a  th:text="${details.searchInfoBean.authors[nameStat.index]}" th:href="@{/author/(athid=${details.searchInfoBean.authorsID[nameStat.index]})}">author1</a>,&nbsp;
+    								</li>
+									<br />
+									
+								<strong>Venue:</strong>
+									<a th:text="${#strings.toUpperCase(details.searchInfoBean.venue)}" href="#">TKDE</a>
+									 <br/>
+									
+									
+								<strong>Year:</strong>
+									<span th:text="${details.searchInfoBean.year}">2001</span>
+									 <br />
+								<strong>paper DOI:</strong>
+									<a th:text="${details.doi}", th:href="@{https://www.doi.org/${details.doi}}" >2001.TKDE.2000001</a>
+									<br />
+								
+								<strong>NormalizedTitle:</strong>
+									 <span th:text="${details.norTitle}">this is normalized title</span>
+									<br />
+								
+								<strong>Citations:</strong>
+									<span th:text="${details.searchInfoBean.citations}">10</span>
+									<br />
+								<strong>Abstract:</strong>
+									<span>this is abstract </span>
+									<br/>
+								
+								<strong>Versions:</strong>
+								
+								<button type="button" class="btn btn-link" data-toggle="collapse" 
+										data-target="#demo">
+						    	    <span class="glyphicon glyphicon-eye-open"></span>
+						  	    </button>
+								
+								<div id="demo" class="collapse">
+									<li style="list-style-type: none; display: inline; margin-left: 10px;" th:each=" tmp : ${details.versions}">
+										<a th:text="${tmp}" th:href="${tmp}">this is paper url</a>	<br />
+    								</li>			
+								</div>
+								
+								<div >
+									<strong> Paper keywords :</strong>
+											<li style="list-style-type: none; margin-left: 10px;" th:each=" tmp : ${details.keywords}">
+												<a th:text="${tmp}"  href="#">data mining </a>	<br />
+	    									</li>
+								</div>
+								
+								<div>
+									<strong>Fields Of Study:</strong>
+											<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName}">
+												<a th:text="${fos}"  href="#">data mining </a>	<br />
+	    									</li>
+								</div>
+								
+																	
+							</div>
+							
+						</div>
+						
+					</div>
+					<div class="tab-pane fade" id="ref">
+						<div class="panel panel-default">
+							<div class="panel-heading"> 30 references </div>
+								<div class="paper-info-ref">
+									<span>2014</span>
+									<a href="#">This is paper title </a><br />
+									<a href="#">Author1</a>,&nbsp;
+									<a href="#">Author2</a>,&nbsp;
+									<a href="#">Author3</a>,&nbsp;
+								</div>							
+								
+								<div class="paper-info-ref">
+									<span>2014</span>
+									<a href="#">This is paper title </a><br />
+									<a href="#">Author1</a>,&nbsp;
+									<a href="#">Author2</a>,&nbsp;
+									<a href="#">Author3</a>,&nbsp;
+								</div>	
+								<div >
+									<span th:text="${ref.title}"></span>
+								</div>
+								
+						</div>
+						
+					</div>
+					<div class="tab-pane fade" id="cite">
+						<div class="panel panel-default">
+							<div class="panel-heading"> cite  top 30 </div>
+							
+							<div class="paper-info-ref">
+									<span>2014</span>
+									<a href="#">This is paper title </a><br />
+									<a href="#">Author1</a>,&nbsp;
+									<a href="#">Author2</a>,&nbsp;
+									<a href="#">Author3</a>,&nbsp;
+								</div>							
+								
+								<div class="paper-info-ref">
+									<span>2014</span>
+									<a href="#">This is paper title </a><br />
+									<a href="#">Author1</a>,&nbsp;
+									<a href="#">Author2</a>,&nbsp;
+									<a href="#">Author3</a>,&nbsp;
+								</div>	
+								
+						</div>
+					</div>
+					
+				</div>
+				</div>
+				<div class="col-md-4 col-sm-12" style="background-color: green;">
+					
+				</div>			
+				
+			</div>
+		</div>
+		
+	
+		<div class="page-container">
+			
+			<div id="page" class="m-pagination"></div>
+		
+		</div>
+				 
+		
+		<footer id="footer" class="footer hidden-print">
+			<div class="container">
+				<div class="row" id="footer-row">
+					<div class="footer-about col-md-4 col-sm-12" >
+						<a href="#">About Us</a>
+					</div>
+					<div class="footer-links col-md-4  col-sm-12">
+						<a href="#">Links</a>
+					</div>
+					
+					<div class="footer-sug col-md-4 col-sm-12">
+						<a href="#">Suggestion</a>						
+					</div>
+				</div>
+			</div>
+		<div class="copy-right"><span>© 2017-2018</span>
+				<a href="#" target="_blank">this is copy right</a> <span>copy right</span></div>
+				
+		</footer>
+		
+		
+		<!--<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>-->
+		<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+		<script src="js/mricode.pagination.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+
+
+		<script type="text/javascript">
+		
+			function getRef(listID) {
+				$.get("/paper/ref?refid=" + listID);
+				
+			}
+
+			function getCite(listID) {
+			}
+			
+			function queryByID() {
+				
+			}
+			
+			
+			$(document).ready(function() {
+				
+				
+				
+				// var input_map = new Map();
+				var isSingle = true;
+				var search_param ="";
+				$("#btn_advanced").click(function(e) {
+					e.preventDefault();
+					$("#input_multi").toggle(); 
+					$("#input_single").toggle();
+					isSingle = !isSingle;
+					
+				});
+				
+				
+				
+				
+				function searchPapers(input_map){
+					// 判断是否初始化
+					if ($("#page").pagination()) {
+						$("#page").pagination('remote');
+					} else {
+						$("#page").pagination({
+							pageSize: 10,
+							showJump: true,
+							showInfo: true,
+							prevBtnText: '&laquo;',
+							nextBtnText: '&raquo;',
+							remote: {
+								url: '/search',	
+								pageParams:function() {
+									return {
+										k:input_map.get("k"), n: input_map.get("n"), y: input_map.get("y"), i:input_map.get("i")
+									};
+								} ,
+								success: function(data) {
+									showItems(data);
+								},
+								totalName: 'total'
+							}
+						});
+					}
+				}
+				
+				function showItems(data) {
+					var t = $("#paper_entity").empty();
+					t.css("height", "auto");
+					if(!data) return;
+					var keywords = data.keywords;
+					data = data.papers;
+					data.forEach(function(singlePaper) {
+						var paperStr = "<div class='paper-item'>";
+						var tmp, title, i;
+						title = singlePaper.Title;
+						var regEx ; 
+						for (i = 0; i < keywords.length; i ++) {
+							tmp = keywords[i];
+							regEx = new RegExp(tmp, "i");
+							title = title.replace(regEx, "<font color='red'>"+tmp+"</font>");
+						}
+						
+						paperStr += "<div ><a style='font-size:x-large;' href='/paper?paid=" + singlePaper.PaperID + "'>" +
+								title + "</a>" +
+							"<div  class='paper-author'>";
+						var authorIDs = singlePaper.AuthorID;
+						var authorNames = singlePaper.AuthorName;
+						var infosContent = "";
+						for(var i = 0; i < authorIDs.length; i ++) {
+							// infosContent += '<li>' + infosArr[i] + ':' + infosArr[i+1] +  '</li>'
+							infosContent += "<a href='/paper/paid='" + authorIDs[i] + ">" + authorNames[i] + "</a>"
+							infosContent += ",&nbsp;&nbsp;";
+						}
+						infosContent += "<br />";
+						paperStr += infosContent;
+						paperStr += "<a href='/venue/venid='" + singlePaper.VenueID + ">" + (singlePaper.VenueName == null ? "&nbsp;" : singlePaper.VenueName ) + "(" + singlePaper.PublishYear + ")</a><p></p> </div></div>";
+						$(paperStr).appendTo(t);
+					});
+					$('html, body').animate({scrollTop: 0},500);
+					
+					
+				}
+				
+				
+				
+				$("#btn_search").click(function (e) {
+					e.preventDefault();
+					
+					search_param="";
+					if (isSingle){
+						input_map.set("k",$("#search_input").val() );
+						search_param = "k=" + encodeURIComponent($("#search_input").val());
+					} 
+					if (!isSingle){
+						input_map.set("k",$("#title").val() );
+						input_map.set("n",$("#name").val() );
+						input_map.set("y",$("#year").val() );
+						search_param = "k=" + encodeURIComponent($("#title").val()) +"&n=" + encodeURIComponent($("#name").val()) +"&y=" + encodeURIComponent($("#year").val());
+					}
+					
+					// searchPapers("/search?"+search_param);
+					searchPapers(input_map);
+				});
+				
+				
+				$("#page").on("pageClicked", function (event, data) {
+					// ajax 分页查询
+    				var tmp = search_param + "&i=" + $("#page").pagination('getPageIndex');
+    				// alert("page index : " + search_param);
+					// $.get("/search?"+search_param + "&i=" + $("#page").pagination('getPageIndex'), function (data) { showItems(data)}, "json");
+					input_map.set("i", $("#page").pagination('getPageIndex'));
+					// searchPapers("/search?"+search_param + "&i=" + $("#page").pagination('getPageIndex'));
+					searchPapers(input_map);
+					
+				})	
+				
+				$("#page").on("jumpClicked", function (event, data) {
+					//跳转按钮点击事件
+				})
+				
+			/*	$("#page").pagination({
+				    pageSize: 10,
+				    total: 1000
+				});*/
+				
+				
+				 
+			});
+		</script>
+  
+	</body>
+</html>
+ 

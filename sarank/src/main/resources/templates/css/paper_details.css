@@ -1,0 +1,38 @@
+
+.paper-info-ref {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left:10px;
+}
+
+.details-item-ref {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.details-item-ref-title {
+	font-size: larger;
+	font-family: 微软雅黑;
+}
+
+.details-item-ref-title:hover {
+	color: #222222;
+}
+
+.details-item-ref-ath a{
+	color: #222222; 
+}
+
+.details-item-ref-ath a:hover {
+	color: rgb(51,122,183);
+}
+
+.icon-sm {
+	width: 20px;
+	height: 20px;
+}
+
+.icon-xs {
+	width: 14px;
+	height:14px;
+}

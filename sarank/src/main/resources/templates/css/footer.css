@@ -1,0 +1,32 @@
+#footer{
+	height: 100px;
+	background-color: rgb(39,174,96);
+	
+}
+.copy-right{
+	margin-top: 45px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: rgb(40, 164, 92);
+	text-align: center;
+}
+
+.footer-about {
+	text-align: center;
+}
+ .footer-links{
+ 	text-align: center;
+ }
+ .footer-sug{
+ 	text-align: center;
+ }
+#footer-row{
+	margin-top: 25px;
+}
+#footer-row a{
+    color: white;
+    font-family: arial;
+    font-size: 15px;
+    transition: all .3s linear;
+}
+

@@ -1,0 +1,9 @@
+a:link {text-decoration: none;}
+a:hover {text-decoration:none;}
+
+.paper_title{
+	font-size:x-large;
+}
+.paper_title:link {text-decoration:none;}
+.paper_title:visited {text-decoration:none;}
+.paper_title:active {text-decoration:underline;}

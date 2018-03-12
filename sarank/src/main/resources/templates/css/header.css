@@ -1,0 +1,15 @@
+#top{
+	background-color: rgb(241,241,241);
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.header-search {
+	margin-top: 10px;
+}
+
+.header-nav-icon {
+	margin-top:10px;
+}
+#bs-navbar a{
+	font-size: larger;
+}
