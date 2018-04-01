@@ -1,0 +1,39 @@
+body{
+	font-family: "微软雅黑";
+}
+.container-papers{
+	
+}
+
+.paper-item {
+	text-align: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+
+.paper-item-title {
+	font-size: larger;
+}
+
+.paper-item-title:hover {
+	color: #222222;
+}
+
+.paper-item-ath a{
+	color: #222222; 
+}
+
+.paper-item-ath a:hover {
+	color: rgb(51,122,183);
+}
+
+.icon-div-sm {
+	width: 14px;
+	height: 14px;
+}
+
+.icon-div {
+	width: 20px;
+	height: 20px;
+}
