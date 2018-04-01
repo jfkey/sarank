@@ -1,6 +1,8 @@
-package com.jfkey.sarank.utils;
+package com.jfkey.sarank.domain;
 
 import java.io.Serializable;
+
+import org.springframework.data.neo4j.annotation.QueryResult;
 
 /**
  * 
@@ -9,9 +11,14 @@ import java.io.Serializable;
  * @version v0.1.0
  * @desc this is search hit including fields of NodeID and node score
  */
+@QueryResult
 public class SearchHit implements Comparable<SearchHit>, Serializable{
 	private String nodeId;
 	private double score;
+	
+	public SearchHit() {
+		
+	}
 	
 	public SearchHit(String nodeID, double score) {
 		this.nodeId = nodeID;

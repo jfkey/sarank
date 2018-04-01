@@ -40,4 +40,18 @@ public interface Constants {
 	
 	public final int REF_CITE_SIZE = 10;
 	
+	/**authors hot papers */
+	public final int TOP_K_AUTHORS = 10;
+	
+	/**search hot papers */
+	public final int TOP_K_SEARCH = 50;
+	
+	/** from now to 8 years ago */
+	public final int YEARS_CITE = 8;
+	
+	/** size of field of study in author page*/
+	public final int FOS_SIZE = 5;
+	
+	
+	
 }

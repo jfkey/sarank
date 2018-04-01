@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jfkey.sarank.domain.SearchHit;
 import com.jfkey.sarank.repository.PaperInfoRespository;
 import com.jfkey.sarank.utils.Constants;
-import com.jfkey.sarank.utils.SearchHit;
 
 
 /**

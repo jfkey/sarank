@@ -131,7 +131,7 @@
 								<div class="panel-body">
 									<strong>Authors:</strong>
 									<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${details.searchInfoBean.authors}">
-										<a th:text="${details.searchInfoBean.authors[nameStat.index]}" th:href="@{/author/(athid=${details.searchInfoBean.authorsID[nameStat.index]})}">author1</a>,&nbsp;
+										<a th:text="${details.searchInfoBean.authors[nameStat.index]}" th:href="@{/author(athid=${details.searchInfoBean.authorsID[nameStat.index]})}">author1</a>,&nbsp;
 									</li>
 									<br />
 		
@@ -205,7 +205,7 @@
 											<br />
 		
 											<div class="details-item-ref-ath">
-												<img src="img/ath.png" style="width: 14px; height: 14px;" />
+												<img src="img/co_ath.png" style="width: 14px; height: 14px;" />
 												<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${item.authors}">
 													<a th:text="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
 												</li><br />
