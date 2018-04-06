@@ -15,6 +15,9 @@ public class ThreeTuple {
 	// map<year, integer>
 	private Map<String, Integer> yearCount ;
 	
+	private int minYear = -1;
+	
+	private int maxYear = -1;
 	
 	public String getType() {
 		return type;
@@ -43,16 +46,37 @@ public class ThreeTuple {
 	public ThreeTuple() {
 		yearCount = new HashMap<String, Integer>();
 	}
-		
-	public int getMinYear() {
-		String minYear = "3000";
+	private void getMinAndMax() {
+		String strMinYear = "3000";
+		String strMaxYear = "1000";
 		for(String key : yearCount.keySet()) {
-			if(minYear.compareTo(key) > 0) {
-				minYear = key;
+			if(strMinYear.compareTo(key) > 0) {
+				strMinYear = key;
+			} 
+			if(strMaxYear.compareTo(key) < 0) {
+				strMaxYear = key;
 			}
 		}
+		maxYear = Integer.parseInt(strMaxYear);
+		minYear = Integer.parseInt(strMinYear);
+	}
 		
-		return Integer.parseInt(minYear);
+	public int getMinYear() {
+		if (minYear != -1) {
+			return minYear;
+		} else {
+			getMinAndMax();
+			return minYear;
+		}
+	}
+	
+	public int getMaxYear(){
+		if (maxYear != -1) {
+			return maxYear;
+		} else {
+			getMinAndMax();
+			return maxYear;
+		}
 	}
 	
 	public ThreeTuple(String type, String typeName,
@@ -85,7 +109,7 @@ public class ThreeTuple {
 	}
 	
 	
-	public List<String[]> getArray(int minYear) {
+	public List<String[]> getArray(int minYear, int maxYear) {
 		List<String[]> arr = new ArrayList<String[]>();
 		String[] item;
 		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(yearCount.entrySet());
@@ -110,6 +134,13 @@ public class ThreeTuple {
 			item = new String[3];
 			item[0] = tmp.getKey();
 			item[1] = String.valueOf(tmp.getValue());
+			item[2] = typeName;
+			arr.add(item);
+		}
+		for (int i = minYear; i <= maxYear; i ++) {
+			item = new String[3];
+			item[0] = String.valueOf(i);
+			item[1] = "0";
 			item[2] = typeName;
 			arr.add(item);
 		}

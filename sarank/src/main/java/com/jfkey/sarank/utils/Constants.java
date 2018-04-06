@@ -52,6 +52,7 @@ public interface Constants {
 	/** size of field of study in author page*/
 	public final int FOS_SIZE = 5;
 	
-	
+	/**co_author numbers will be shown `CO_AUTHOR_NUMBER - 1`*/
+	public final int CO_AUTHOR_NUMBER = 9;
 	
 }

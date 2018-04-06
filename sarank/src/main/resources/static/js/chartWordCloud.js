@@ -7,23 +7,43 @@
 		}});
 		
 		function showAvatar(keywords) {
-			  keywords = {
-              "minOpacity": 50,
-              "maxOpacity": 54,
-              "prevIcon": 12,
-              "children": 21,
-              "shape": 98,
-              "nextIcon": 12,
-              "showNextBtn": 17,
-              "stopIcon": 21,
-              "visibleMin": 83,
-              "visual": 97,
-              "colorSaturation": 56,
-              "colorAlpha": 66,
-              "emptyItem": 10,
-              "inactiveO": 14,
-           
-            };
+//			  keywords = {
+//              "minOpacity": 50,
+//              "maxOpacity": 54,
+//              "prevIcon": 12,
+//              "children": 21,
+//              "shape": 98,
+//              "nextIcon": 12,
+//              "showNextBtn": 17,
+//              "stopIcon": 21,
+//              "visibleMin": 83,
+//              "visual": 97,
+//              "colorSaturation": 56,
+//              "colorAlpha": 66,
+//              "emptyItem": 10,
+//              "inactiveO": 14,
+//              
+//                        "she": 98,
+//              "nIcon": 12,
+//              "howNn": 17,
+//              "stIon": 21,
+//              "vsMin": 83,
+//              "vual": 97,
+//              "colation": 56,
+//              "coorApha": 66,
+//              "emptem": 10,
+//              "incveO": 14,
+//           	
+//           	"Nn": 17,
+//              "son": 21,
+//              "vsin": 83,
+//              "al": 97,
+//              "colaion": 56, 
+//              "coApha": 66,
+//              "eptem": 10,
+//              "icveO": 14,
+//           	
+//            };
 			var data = [];
             for (var name in keywords) {
                 data.push({
@@ -37,11 +57,13 @@
             var option = {
                 series: [ {
                     type: 'wordCloud',
-                    sizeRange: [12, 18],
+                    sizeRange: [12, 16],
                     rotationRange: [-90, 90],
                     rotationStep: 45,
                     gridSize: 0 ,
-                    shape: 'pentagon',
+                    width:'80%',
+                    height:'80%',
+//                  shape: 'circle',
                     maskImage: maskImage,
                     drawOutOfBound: false,
                     textStyle: {
@@ -70,7 +92,6 @@
             }
 
                maskImage.src = 'img/logo-avatar.png';
-//			maskImage.src = './person.png';
 
             window.onresize = function () {
                 wc.resize();

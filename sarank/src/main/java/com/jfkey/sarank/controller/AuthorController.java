@@ -22,11 +22,12 @@ public class AuthorController {
 	@RequestMapping("/author")
 	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid) {
 		List<SearchInfoBean> hotPapers = authorService.getHotPapers(athid);		
-		Map<String, String> authorInfo = authorService.getAuthorInfo(athid);
+		Map<String, Object> coAuthorAndSimpleInfo = authorService.getCoAuthorAndSimpleInfo(athid);
 		
 		ModelAndView mv= new ModelAndView("/author");
 		mv.addObject("hotPapers", hotPapers);
-		mv.addObject("authorInfo", authorInfo);
+		mv.addObject("simpleInfo", coAuthorAndSimpleInfo);
+//		System.out.println(coAuthorAndSimpleInfo);
 //		authorService.getFosPerYear();
 		return mv;
 	}

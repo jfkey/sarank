@@ -99,26 +99,48 @@
 				<div class="col-md-7 col-sm-12" style="height: 300px; background-color: seashell;" >
 					<div class="img-circle col-md-5 col-sm-6">
 						<!--<img src="img/avatar.jpg" style=" margin-top:20px;"/>-->
-						<div id = "chartWordCloud" style="height:300px; background-color : rgb(250,250,240);"></div>
+						<div id = "chartWordCloud" style="height:300px; background-color : rgb(250,250,240); margin-left: 0px;"></div>
 
 					</div>
-					<div class="col-md-7 col-sm-6" id="simple_info" style="margin-top: 30px;">
-						<img src="img/ath.png" style="width: 25px; height: 25px;" />
-						<span th:text="${authorInfo.authorName}">xindong wu</span><br />
+					<div class="col-md-7 col-sm-6" id="simple_info" style="margin-top: ;">
+						<!-- map in -->
+						<th:block th:each="entry:${simpleInfo.author}">
+							
+						<!--<img src="img/ath.png" style="width: 25px; height: 25px;" />-->
+						<h1 th:text="${entry.value}">xindong wu</h1><br />
+						</th:block>
+								
 						
-						<span> affiliation: </span><br /><br />
+						<th:block th:each="aff,status : ${#strings.arraySplit(simpleInfo.aff, '#')}">
+							<span th:if="${status.index != 0}" th:text="|${aff}|">null</span>
+							
+						</th:block>
 						
-						<span>h-index: </span><br />
-						<span>Papers : </span><br />
-						<span>citations: </span>
+						
+						<div style="margin-top: 80px;">
+						
+						
+							<h1 th:text="| ${simpleInfo.papers}|">240</h1>
+							<span style="display: inline-block;">PAPERS</span>
+							
+							<h1 style="margin-left: 60px;" th:text="|${simpleInfo.cite}|">12000 </h1>
+							<span style="display: inline-block;">
+								CITATIONS
+							</span>
+						
+						</div>
+						
 					</div>
 					
 				</div>
 				<div class="col-md-5 col-sm-12" style="height: 300px; background-color: silver;" >
 					co-author infomation<br />
-					author1 <br />
-					author2<br />
-					author3<br />
+					<th:block th:each="ath:${simpleInfo.coAuthor}">
+						<th:block th:each="entry:${ath}">
+							<a th:href="@{/author(athid=${entry.key})}" th:text="${entry.value}">co_author</a><br />
+						</th:block>
+					</th:block>
+					
 				</div>
 				
 				<div class="col-md-12" style="height:400px; background-color: ;">
@@ -338,3 +360,4 @@
   
 	</body>
 </html>
+ 

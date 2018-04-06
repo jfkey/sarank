@@ -34,6 +34,9 @@ public class AuthorService {
 	
 	private Map<String, Integer> wordCloud;
 	
+	private List<Map<String, String>> coAuthor;
+	
+	
 	private int curYear = 2016;
 	
 	/**
@@ -52,7 +55,6 @@ public class AuthorService {
 
 	/**
 	 * get data from itertor
-	 * 
 	 * @param it
 	 * @return
 	 */
@@ -69,8 +71,12 @@ public class AuthorService {
 		}
 	}
 	
-	
-	public Map<String, String> getAuthorInfo(String athid) {
+	/**
+	 * 
+	 * @param athid 
+	 * @return get author name by author id
+	 */
+	public Map<String, String> getAuthorName(String athid) {
 		Map<String, String> infoMap = new HashMap<String, String>();
 		Iterator<Map<String, Object>> iterator = authorRepository.getAuthorName(athid).iterator();
 		String name = "";
@@ -78,7 +84,7 @@ public class AuthorService {
 			name = (String) iterator.next().get("name");
 			
 		}
-		infoMap.put("authorName", name);
+		infoMap.put(athid, name);
 		
 		return infoMap;
 	}
@@ -109,6 +115,84 @@ public class AuthorService {
 		List<SearchInfoBean> hotPapers = getIteratorData(hpIterable);
 		return hotPapers;
 	}
+	
+	
+	/**
+	 * get co_authors order by cooperation numbers
+	 * get simple information, e.g., paper numbers, citations, affiliationID, affiliation    
+	 * @return
+	 */
+	public Map<String, Object> getCoAuthorAndSimpleInfo(String athid) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int papers = 0, cite = 0, maxSim = 0, curSim = 0; 
+		String aff = "", affID = "", str = "", maxStr = "";
+		
+		Map<String,Integer> coAthIDNumber = new HashMap<String, Integer>();
+		Map<String,String> coAthIDName = new HashMap<String, String>();
+		Map<String, Integer> affIDNumber = new HashMap<String, Integer>();
+		Map<String, String> athIDName = new HashMap<String, String>();
+		coAuthor = new ArrayList<Map<String, String>>();
+		for (AuthorInfoBean tmp : allPapers) {
+			cite += tmp.getCite();
+			if (tmp.getAffID() != null) {
+				str = tmp.getAffID() + "#" + tmp.getAff();
+				if (affIDNumber.containsKey(str) ) {
+					curSim = affIDNumber.get(str) + 1;
+					affIDNumber.put(str, curSim);
+					if (curSim > maxSim) {
+						maxSim = curSim;
+						maxStr = str;
+					}
+				} else {
+					affIDNumber.put(str, 1);
+				}
+			}
+			for (int i = 0; i < tmp.getAuthorsID().length; i ++) {
+				if (coAthIDNumber.containsKey(tmp.getAuthorsID()[i])) {
+					coAthIDNumber.put(tmp.getAuthorsID()[i], coAthIDNumber.get(tmp.getAuthorsID()[i]) + 1);
+				} else {
+					coAthIDNumber.put(tmp.getAuthorsID()[i], 1);
+					coAthIDName.put(tmp.getAuthorsID()[i], tmp.getAuthors()[i]);
+				}
+			}
+		}
+		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(coAthIDNumber.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			@Override
+			public int compare(Entry<String, Integer> o1,
+					Entry<String, Integer> o2) {
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+		int coAuthorSize = (coAthIDNumber.size() > Constants.CO_AUTHOR_NUMBER) ? Constants.CO_AUTHOR_NUMBER : coAthIDNumber.size()  ;
+		HashMap<String, String> tmp = null;
+		for (int i = 0; i < coAuthorSize; i++) {
+			if (i == 0) {
+				if (allPapers.size() == 1) {
+					athIDName = getAuthorName(athid);
+				} else {
+					athIDName.put(list.get(0).getKey(), coAthIDName.get(list.get(0).getKey()));
+				}
+				continue;
+			}
+			tmp = new HashMap<String, String>();
+			tmp.put(list.get(i).getKey(), coAthIDName.get(list.get(i).getKey()));
+			coAuthor.add(tmp);
+		}
+		result.put("papers", allPapers.size());
+		result.put("cite", cite);
+		result.put("aff", maxStr);
+		result.put("coAuthor", coAuthor);
+		result.put("author", athIDName);
+		
+//		System.out.println("papers: "+ allPapers.size());
+//		System.out.println("cite: "+ cite);
+//		System.out.println("maxStr: "+ maxStr + ", maxSize : " + maxSim);
+//		System.out.println("coAuthor: "+ coAuthor);
+		
+		return result;
+	}
+	
 	
 	/**
 	 * return author's all paper about first author, conference,journal
@@ -236,16 +320,20 @@ public class AuthorService {
 		i = 0;
 		ArrayList<String[]> fosYearArr = new ArrayList<String[]>();
 		int minYear = Integer.MAX_VALUE;
+		int maxYear = Integer.MIN_VALUE;
 		for (ThreeTuple tmp : fosYear) {
 			// legend.add(tmp.getTypeName());
 			legend[i ++] = tmp.getTypeName(); 
 			if (tmp.getMinYear() < minYear){
 				minYear = tmp.getMinYear();
 			}
+			if (tmp.getMaxYear() > maxYear ) {
+				maxYear = tmp.getMaxYear();
+			}
 		}
 		for (int j = 0; j < fosYear.size(); j++) {
 			if(j == 0) {
-				fosYearArr.addAll(fosYear.get(j).getArray(minYear));
+				fosYearArr.addAll(fosYear.get(j).getArray(minYear, maxYear));
 //				fosYearStr.append(fosYear.get(j).toString(minYear));
 			}else {
 				fosYearArr.addAll(fosYear.get(j).getArray());
