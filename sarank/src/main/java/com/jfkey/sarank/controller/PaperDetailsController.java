@@ -16,7 +16,7 @@ import com.jfkey.sarank.service.PaperDetailsService;
  * 
  * @author junfeng Liu
  * @time 3:27:10 PM Mar 4, 2018
- * @version v0.1.0
+ * @version v0.1.1
  * @desc the details of Papers 
  */
 @Controller

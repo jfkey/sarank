@@ -13,13 +13,13 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
  * 
  * @author junfeng Liu
  * @time 10:14:16 PM Jan 31, 2018
- * @version v0.1.0
+ * @version v0.1.1
  * @desc use IKAnalyzer to split input
  */
 public class InputIKAnalyzer {
-//	public static void main(String[] args) {
-//		System.out.println(analyzerAndFormat("中国和美国 a and 学习 not 作业 or 任务", Constants.PAPER_TITLE));
-//	}
+	public static void main(String[] args) {
+		System.out.println(analyzerAndFormat("data mining and database or data", Constants.PAPER_TITLE));
+	}
 
 	
 	/**

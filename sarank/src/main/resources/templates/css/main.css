@@ -1,3 +1,19 @@
+/* this is main page e.g. search page*/
+
+body {
+	font-family: "微软雅黑";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: #5E5E5E;
+	font-weight: ;
+	display: inline-block;
+}
 
 #paper_entity {
 	height: 1070px;
@@ -11,28 +27,28 @@
 	margin-bottom: 200px;
 }
 
-.paper-item:hover{
-	background-color: rgb(246,248,250);
+.paper-item:hover {
+	background-color: rgb(246, 248, 250);
 }
 
-.paper-item a {	
+.paper-item a {
 	color: #555555;
 }
 
-.paper-item{
+.paper-item {
 	padding-left: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
 .paper-item a:hover {
-	color: rgb(2,176,229);;
-	/*color: rgb(39,174,96)*/;
+	color: rgb(2, 176, 229);
+	/*color: rgb(39,174,96)*/
+	;
 }
 
-
-.paper-author a{
-	color: rgb(60,60,60);
+.paper-author a {
+	color: rgb(60, 60, 60);
 }
 
 .paper-author {
@@ -41,4 +57,99 @@
 
 .paper-author a:hover {
 	color: black;
+}
+
+.div-left-condition {
+	margin-left: 30px;
+}
+
+.ul-style-type {
+	list-style-type: none;
+}
+
+.ul-style-type li {
+	margin-top: 10px;
+}
+
+.ul-style-type a {
+	color: #222222;
+}
+
+.ul-style-type a:hover {
+	color: rgb(51, 122, 183);
+}
+
+.div-left-rank-type {
+	padding-top: 10px;
+}
+
+.div-left-date-range {
+	padding-top: 10px;
+}
+
+.img_right_icon {
+	width: 32px;
+	height: 32px;
+}
+
+/** paper style **/
+.div-paper-item {
+	padding: 2px 4px 2px 4px;
+	margin-bottom: 20px;
+}
+.div-paper-item:hover {
+	background-color: rgb(246,248,250);
+}
+
+
+.div-paper-item-title {
+	font-size: large;
+}
+
+.div-paper-item-title:hover {
+	color: #222222;
+}
+
+.ul-paper-item-actions a, .ul-paper-item-aths a{
+	color: #222222; 
+}
+
+a:hover, .ul-paper-item-actions a:hover, .ul-paper-item-aths a:hover{
+	color: rgb(51,122,183);
+}
+
+.ul-paper-item-aths {
+	list-style-type: none;
+	
+}
+
+.ul-paper-item-aths li {
+	display:  inline;
+}
+
+
+.ul-paper-item-actions li {
+	display:  inline;
+	margin-left: 40px;
+}
+
+.ul-paper-item-actions :first-child {
+	margin-left:  0px;
+}
+
+.li-actions-cite {
+	margin-left: 0px;
+}
+
+.ul-paper-item-actions img{
+	height: 20px;
+	width: 20px;
+}
+
+
+.hr-paper-split {
+	height:1px; 
+	border-top:1px solid #D4D4D4; 
+	margin-top: 4px; 
+	margin-bottom: 8px;
 }

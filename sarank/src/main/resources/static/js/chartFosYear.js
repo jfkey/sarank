@@ -16,16 +16,16 @@ chart_fos_year.setOption({
 	legend: {
 		data: ["Machine learning", "Statistics", "Data mining", "Artificial intelligence", "Algorithm"]
 	},
-//	 title: { 
-//					show:true,
-//					text: "Research Interest ",
-//					x:"center", 
-//					textStyle : {
-//						fontSize: 14,
-//					    fontWeight: '',
-//					    color: '#333'
-//					}
-//				},
+	 title: { 
+					show:true,
+					text: "Research Interest ",
+					x:"center", 
+					textStyle : {
+						fontSize: 14,
+					    fontWeight: '',
+					    color: '#333'
+					}
+				},
 	singleAxis: {
 		top: 50,
 		bottom: 50,

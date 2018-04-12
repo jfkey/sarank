@@ -9,7 +9,7 @@ import com.jfkey.sarank.domain.AuthorInfoBean;
  * 
  * @author junfeng Liu
  * @time 5:29:13 PM Mar 16, 2018
- * @version v0.1.0
+ * @version v0.1.1
  * @desc TopK Ranking of AuthorInfoBean
  */
 public class TopKRank{

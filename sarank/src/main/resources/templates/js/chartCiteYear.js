@@ -1,4 +1,6 @@
-// citations change with year. 
+
+
+// citations change with year.
 var chart_cite_year = echarts.init(document.getElementById('chartCiteYear'));
 				 
 				

@@ -19,6 +19,13 @@ import com.jfkey.sarank.repository.AuthorRepositroy;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.TopKRank;
 
+/**
+ * 
+ * @author junfeng Liu
+ * @time 5:08:28 PM Apr 6, 2018
+ * @version v0.1.1
+ * @desc author information service, some business code. 
+ */
 @Service
 public class AuthorService {
 	@Autowired

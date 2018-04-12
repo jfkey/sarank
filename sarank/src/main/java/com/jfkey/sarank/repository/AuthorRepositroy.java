@@ -10,6 +10,13 @@ import com.jfkey.sarank.domain.Author;
 import com.jfkey.sarank.domain.AuthorInfoBean;
 import com.jfkey.sarank.domain.SearchInfoBean;
 
+/**
+ * 
+ * @author junfeng Liu
+ * @time 5:20:23 PM Apr 6, 2018
+ * @version v0.1.1
+ * @desc author repository
+ */
 public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{
 	@Query("MATCH (a:Author)-[r:PaaAth ]->(p:Paper)-[:PaperIndex]->(score:PaperIndexScore), "
 			+ "(p)-[pkw :Pkw]->(fos1:FOS)-[fosH:FosHierarchy]->(fos2:FOS) "

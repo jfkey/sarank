@@ -19,7 +19,7 @@ public class AuthorController {
 	@Autowired
 	private AuthorService authorService;
 	
-	@RequestMapping("/author")
+	@RequestMapping("/author") 
 	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid) {
 		List<SearchInfoBean> hotPapers = authorService.getHotPapers(athid);		
 		Map<String, Object> coAuthorAndSimpleInfo = authorService.getCoAuthorAndSimpleInfo(athid);

@@ -12,7 +12,7 @@
 
 .details-item-ref-title {
 	font-size: larger;
-	font-family: 微软雅黑;
+	font-family: "微软雅黑";
 }
 
 .details-item-ref-title:hover {
@@ -35,4 +35,13 @@
 .icon-xs {
 	width: 14px;
 	height:14px;
+}
+
+.font-theme-lg {
+	font-size: larger;
+	font-family: "微软雅黑";
+}
+
+body{
+	font-family: "微软雅黑";
 }

@@ -1,15 +1,3 @@
-#footer{
-	height: 100px;
-	background-color: rgb(39,174,96);
-	
-}
-.copy-right{
-	margin-top: 45px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background-color: rgb(40, 164, 92);
-	text-align: center;
-}
 
 .footer-about {
 	text-align: center;
@@ -30,3 +18,14 @@
     transition: all .3s linear;
 }
 
+#div_footer_1 {
+	padding-bottom: 10px;
+	padding-top: 20px;
+	background-color: rgb(230,240,240);
+}
+
+#div_footer_2 {
+	padding-bottom: 20px;
+	padding-top: 10px;
+	background-color: rgb(230, 240, 240);
+}

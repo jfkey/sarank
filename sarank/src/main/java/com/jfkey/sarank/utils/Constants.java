@@ -4,7 +4,7 @@ package com.jfkey.sarank.utils;
  * 
  * @author junfeng Liu
  * @time 3:28:36 PM Jan 31, 2018
- * @version v0.1.0
+ * @version v0.1.1
  * @desc some constans
  */
 public interface Constants {
