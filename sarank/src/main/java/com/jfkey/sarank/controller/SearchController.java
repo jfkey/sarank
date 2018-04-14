@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jfkey.sarank.domain.SearchPara;
-import com.jfkey.sarank.service.PaperInfoService;
+import com.jfkey.sarank.service.SearchService;
 
 /**
  * 
@@ -19,11 +19,14 @@ import com.jfkey.sarank.service.PaperInfoService;
 @Controller
 public class SearchController {
 	@Autowired
-	private PaperInfoService paperInfoService;
+	private SearchService searchService;
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String search(@ModelAttribute(value = "para") SearchPara searchPara) {
+		// 1. is the search parameter legal ?
 		
+		
+		searchService.search(searchPara);
 		
 		return null;
 	}
