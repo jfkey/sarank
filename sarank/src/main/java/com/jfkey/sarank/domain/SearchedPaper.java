@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * @author junfeng Liu
  * @time 5:43:26 PM Apr 13, 2018
  * @version v0.1.1
+ * 
  * @desc searched paper information in search page
  */
 @QueryResult
@@ -24,10 +25,14 @@ public class SearchedPaper {
 	private String[] authorsID;
 	/*published year*/
 	private String year; 
-	/*published in journal */
-	private String jou;
-	/*published in conference */
-	private String con;
+	
+//	/*published in journal */
+//	private String jou;
+//	/*published in conference */
+//	private String con;
+	/*paper venue */
+	private String venue;
+	
 	/*journal id */
 	private String jouID;
 	/*conference id*/
@@ -42,20 +47,19 @@ public class SearchedPaper {
 	private double score;
 	
 	public SearchedPaper() {
-		
 	}
+	
 	public SearchedPaper(String title, String paID, String[] authors,
-			String[] authorsID, String year, String jou, String con,
-			String jouID, String conID, int citations, double versions,
-			String doi, double score) {
+			String[] authorsID, String year, String venue, String jouID,
+			String conID, int citations, double versions, String doi,
+			double score) {
 		super();
 		this.title = title;
 		this.paID = paID;
 		this.authors = authors;
 		this.authorsID = authorsID;
 		this.year = year;
-		this.jou = jou;
-		this.con = con;
+		this.venue = venue;
 		this.jouID = jouID;
 		this.conID = conID;
 		this.citations = citations;
@@ -63,6 +67,7 @@ public class SearchedPaper {
 		this.doi = doi;
 		this.score = score;
 	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -93,17 +98,11 @@ public class SearchedPaper {
 	public void setYear(String year) {
 		this.year = year;
 	}
-	public String getJou() {
-		return jou;
+	public String getVenue() {
+		return venue;
 	}
-	public void setJou(String jou) {
-		this.jou = jou;
-	}
-	public String getCon() {
-		return con;
-	}
-	public void setCon(String con) {
-		this.con = con;
+	public void setVenue(String venue) {
+		this.venue = venue;
 	}
 	public String getJouID() {
 		return jouID;
@@ -145,11 +144,12 @@ public class SearchedPaper {
 	public String toString() {
 		return "SearchedPaper [title=" + title + ", paID=" + paID
 				+ ", authors=" + Arrays.toString(authors) + ", authorsID="
-				+ Arrays.toString(authorsID) + ", year=" + year + ", jou="
-				+ jou + ", con=" + con + ", jouID=" + jouID + ", conID="
-				+ conID + ", citations=" + citations + ", versions=" + versions
+				+ Arrays.toString(authorsID) + ", year=" + year + ", venue="
+				+ venue + ", jouID=" + jouID + ", conID=" + conID
+				+ ", citations=" + citations + ", versions=" + versions
 				+ ", doi=" + doi + ", score=" + score + "]";
 	}
+	
 	
 	
 }

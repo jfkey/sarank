@@ -30,13 +30,16 @@ public interface Constants {
 	public final int TOP_K = 100;
 	
 	/** combine the paper relevance (paper weight) and paper score, height relevance 0.9*/
-	public final double RELEVANCE_HEIGHT = 0.9;
+	public final double RELEVANCE_HEIGHT = 0.8;
 	
 	/**medium relevance 0.5*/
 	public final double RELEVANCE_MEDIUM = 0.5;
 	
 	/**low relevance 0.0 */
-	public final double RELEVANCE_LOW = 0.0;
+	public final double RELEVANCE_LOW = 0.2;
+	
+	/** make sarank score is similar as relevance score*/
+	public final double C = 3 * Math.pow(10, 10);
 	
 	public final int REF_CITE_SIZE = 10;
 	

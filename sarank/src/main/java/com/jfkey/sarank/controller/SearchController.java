@@ -24,7 +24,9 @@ public class SearchController {
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String search(@ModelAttribute(value = "para") SearchPara searchPara) {
 		// 1. is the search parameter legal ?
-		
+		searchPara.setAuthor("");
+		searchPara.setKeywords("originalTitle:graph AND originalTitle database");
+		searchPara.setYear(0);
 		
 		searchService.search(searchPara);
 		
