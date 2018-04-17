@@ -18,6 +18,7 @@ import com.jfkey.sarank.service.SearchService;
  */
 @Controller
 public class SearchController {
+	
 	@Autowired
 	private SearchService searchService;
 	
@@ -25,7 +26,7 @@ public class SearchController {
 	public String search(@ModelAttribute(value = "para") SearchPara searchPara) {
 		// 1. is the search parameter legal ?
 		searchPara.setAuthor("");
-		searchPara.setKeywords("originalTitle:graph AND originalTitle database");
+		searchPara.setKeywords("originalTitle:graph AND originalTitle : database");
 		searchPara.setYear(0);
 		
 		searchService.search(searchPara);

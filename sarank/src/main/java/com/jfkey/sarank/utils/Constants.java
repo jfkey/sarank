@@ -26,6 +26,9 @@ public interface Constants {
 	/**the default size of pre page */
 	public final int PRE_PAGE_SIZE = 10;
 	
+	/**find {@link com.jfkey.sarank.domain.ACJA} information need 30 items*/
+	public final int ACJA_SIZE = 30;
+	
 	/**top k ranking*/
 	public final int TOP_K = 100;
 	
@@ -47,7 +50,7 @@ public interface Constants {
 	public final int TOP_K_AUTHORS = 10;
 	
 	/**search hot papers */
-	public final int TOP_K_SEARCH = 50;
+	public final int TOP_K_SEARCH = 100;
 	
 	/** from now to 8 years ago */
 	public final int YEARS_CITE = 8;
@@ -57,5 +60,9 @@ public interface Constants {
 	
 	/**co_author numbers will be shown `CO_AUTHOR_NUMBER - 1`*/
 	public final int CO_AUTHOR_NUMBER = 9;
+	
+	/**only show 8 influent Author conference journal affiliation*/
+	public final int ACJA_SHOW = 8;
+	
 	
 }
