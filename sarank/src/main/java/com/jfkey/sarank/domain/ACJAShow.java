@@ -1,6 +1,7 @@
 package com.jfkey.sarank.domain;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.jfkey.sarank.utils.Constants;
 
@@ -28,7 +29,7 @@ public class ACJAShow {
 	private String[] affName;
 	private double[] affScore;
 	
-	private String[] years;
+	private List<String> years;
 	
 	public ACJAShow() {
 		athID = new String[Constants.ACJA_SHOW];
@@ -141,11 +142,11 @@ public class ACJAShow {
 		this.affScore = affScore;
 	}
 
-	public String[] getYears() {
+	public List<String> getYears() {
 		return years;
 	}
 
-	public void setYears(String[] years) {
+	public void setYears(List<String> years) {
 		this.years = years;
 	}
 
@@ -162,9 +163,9 @@ public class ACJAShow {
 				+ Arrays.toString(jouScore) + ", affID="
 				+ Arrays.toString(affID) + ", affName="
 				+ Arrays.toString(affName) + ", affScore="
-				+ Arrays.toString(affScore) + ", years="
-				+ Arrays.toString(years) + "]";
+				+ Arrays.toString(affScore) + ", years=" + years + "]";
 	}
-
+	
+	
 	
 }

@@ -1,5 +1,7 @@
 package com.jfkey.sarank.domain;
 
+import java.util.Arrays;
+
 import com.jfkey.sarank.utils.Constants;
 
 /**
@@ -31,11 +33,16 @@ public class ACJAShowFun {
 			while ( i >= 0 && curScore > acjaShow.getAthScore()[i] ) {
 				i --;
 			}
+			// remove same author .
+			if (i >= 0 && curAthID.equals(acjaShow.getAthID()[i]) ) {
+				return -1;
+			}
+			
 			// move and set curScore, also for athID, athName
-			for (int j = Constants.ACJA_SHOW-1; j> i +1; j-- ) {
-				acjaShow.getAthScore()[j] = acjaShow.getAthScore()[j-1];
-				acjaShow.getAthID()[j] = acjaShow.getAthID()[j-1];
-				acjaShow.getAthName()[j] = acjaShow.getAthName()[j-1];
+			for (int j = Constants.ACJA_SHOW-2; j> i ; j-- ) {
+				acjaShow.getAthScore()[j+1] = acjaShow.getAthScore()[j];
+				acjaShow.getAthID()[j+1] = acjaShow.getAthID()[j];
+				acjaShow.getAthName()[j+1] = acjaShow.getAthName()[j];
 			}
 			acjaShow.getAthScore()[i+1] = curScore;
 			acjaShow.getAthID()[i+1] = curAthID;
@@ -59,11 +66,15 @@ public class ACJAShowFun {
 			while ( i >= 0 && curScore > acjaShow.getAffScore()[i] ) {
 				i --;
 			}
+			// remove same author .
+			if (i >= 0  && curAffID.equals(acjaShow.getAffID()[i])) {
+				return -1;
+			}
 			// move and set curScore, also for athID, athName
-			for (int j = Constants.ACJA_SHOW-1; j> i +1; j-- ) {
-				acjaShow.getAffScore()[j] = acjaShow.getAffScore()[j-1];
-				acjaShow.getAffID()[j] = acjaShow.getAffID()[j-1];
-				acjaShow.getAffName()[j] = acjaShow.getAffName()[j-1];
+			for (int j = Constants.ACJA_SHOW-2; j> i ; j-- ) {
+				acjaShow.getAffScore()[j+1] = acjaShow.getAffScore()[j];
+				acjaShow.getAffID()[j+1] = acjaShow.getAffID()[j];
+				acjaShow.getAffName()[j+1] = acjaShow.getAffName()[j];
 			}
 			acjaShow.getAffScore()[i+1] = curScore;
 			acjaShow.getAffID()[i+1] = curAffID;
@@ -87,11 +98,14 @@ public class ACJAShowFun {
 			while ( i >= 0 && curScore > acjaShow.getConScore()[i] ) {
 				i --;
 			}
+			if (i >= 0 && curConID.equals(acjaShow.getConID()[i]) ) {
+				return -1;
+			}
 			// move and set curScore, also for athID, athName
-			for (int j = Constants.ACJA_SHOW-1; j> i +1; j-- ) {
-				acjaShow.getConScore()[j] = acjaShow.getConScore()[j-1];
-				acjaShow.getConID()[j] = acjaShow.getConID()[j-1];
-				acjaShow.getConName()[j] = acjaShow.getConName()[j-1];
+			for (int j = Constants.ACJA_SHOW-2; j> i ; j-- ) {
+				acjaShow.getConScore()[j+1] = acjaShow.getConScore()[j];
+				acjaShow.getConID()[j+1] = acjaShow.getConID()[j];
+				acjaShow.getConName()[j+1] = acjaShow.getConName()[j];
 			}
 			acjaShow.getConScore()[i+1] = curScore;
 			acjaShow.getConID()[i+1] = curConID;
@@ -115,11 +129,14 @@ public class ACJAShowFun {
 			while ( i >= 0 && curScore > acjaShow.getJouScore()[i] ) {
 				i --;
 			}
+			if (i >= 0 && curJouID.equals(acjaShow.getJouID()[i]) ) {
+				return -1;
+			}
 			// move and set curScore, also for athID, athName
-			for (int j = Constants.ACJA_SHOW-1; j> i +1; j-- ) {
-				acjaShow.getJouScore()[j] = acjaShow.getJouScore()[j-1];
-				acjaShow.getJouID()[j] = acjaShow.getJouID()[j-1];
-				acjaShow.getJouName()[j] = acjaShow.getJouName()[j-1];
+			for (int j = Constants.ACJA_SHOW-2; j> i ; j-- ) {
+				acjaShow.getJouScore()[j+1] = acjaShow.getJouScore()[j];
+				acjaShow.getJouID()[j+1] = acjaShow.getJouID()[j];
+				acjaShow.getJouName()[j+1] = acjaShow.getJouName()[j];
 			}
 			acjaShow.getJouScore()[i+1] = curScore;
 			acjaShow.getJouID()[i+1] = curJouID;

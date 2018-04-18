@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,24 +30,24 @@
 						</div>
 						
 						<!-- 这是中间搜索部分-->
-						<form class="form-inline col-md-6 col-sm-12 header-search" action="/search">
+						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${seachPara}" method="get">
 							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
 								<label class="sr-only" for="keywords">keywords</label>
-								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database" name="k">
+								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database" name="k"  th:field="*{keywords}">
 							</div>
 						
 							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
-								<div class="form-group  ">
+								<div class="form-group">
 									<label class="sr-only" for="title">title</label>
-									<input type="text" class="form-control " id="title" placeholder="keywords" name="k">
+									<input  class="form-control " id="title" placeholder="keywords" name="" th:field="*{keywords}" >
 								</div>
 								<div class="form-group">
 									<label class="sr-only" for="authorname">authorname</label>
-									<input type="text" class="form-control " id="name" placeholder="author name" name="a">
+									<input type="text" class="form-control " id="author" placeholder="author name" name="" th:field="*{author}">
 								</div>
 								<div class="form-group ">
 									<label class="sr-only" for="year">year</label>
-									<input type="text" class="form-control " id="year" placeholder="published year" name="y">
+									<input type="text" class="form-control " id="year" placeholder="published year" name="" th:field="*{year}">
 								</div>
 						
 							</div>
@@ -100,18 +100,18 @@
 						<div class="div-left-date-range">
 							<h4>Date Range </h4><br />
 							
-							<select>
-								<option value="1995" selected="true">1995</option>
-								<option value="1996">1996</option>
-								<option value="1997">1997</option>
-								<option value="1998">1998</option>
+							<select >
+                         		<option th:each="entry : acjaShow.years"
+                                 	th:value="${entry}"> 1995
+                        		</option>
+							</select>
+
 							</select>
 							&nbsp;to &nbsp;&nbsp;
-							<select>
-								<option value="1995">1995</option>
-								<option value="1996">1996</option>
-								<option value="1997">1997</option>
-								<option value="2005" selected="true">2005</option>
+							<select >
+                         		<option th:each="entry : acjaShow.years"
+                                 	th:value="${entry.y}"> 2016
+                        		</option>
 							</select>
 				
 						</div>
@@ -149,14 +149,14 @@
 						<div id="paper_entity" style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
 				
 							
-								<th:block th:each="item:${hotPapers}">
+								<th:block th:each="item:${paperList}">
 									
 										<div class="div-paper-item">
 		
 											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID})}" th:text="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 											<br />
 											
-											<span th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+											<span th:if="" th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
 		
 											<br />
 		
@@ -182,15 +182,15 @@
 													
 													<li>
 														<span class="glyphicon glyphicon-globe"></span> 
-														<a th:text="${item.citations}" >doi </a>
+														<a th:text="${item.doi}" >doi </a>
 													</li>
 													<li>
 														<img  src="img/bib.png"/> 
-														<a th:text="${item.citations}" > bibtex  </a>	
+														<a  > bibtex  </a>	
 													</li>													
 													<li>
 														<img src="img/version.png" />
-														<a th:text="${item.citations}" >All .. Versions</a>
+														<a th:text="|All ${item.versions} Versions|" >All .. Versions</a>
 													</li>
 													
 												</ul>
@@ -399,8 +399,8 @@
 		<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 		<script src="js/mricode.pagination.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script src="js/main_search.js"></script>
-
+		<!--<script src="js/main_search.js"></script>-->
+		<script src="js/mainSearch.js"></script>
   
 	</body>
 </html>

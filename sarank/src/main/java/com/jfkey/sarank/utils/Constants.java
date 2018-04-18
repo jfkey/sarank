@@ -61,8 +61,8 @@ public interface Constants {
 	/**co_author numbers will be shown `CO_AUTHOR_NUMBER - 1`*/
 	public final int CO_AUTHOR_NUMBER = 9;
 	
-	/**only show 8 influent Author conference journal affiliation*/
-	public final int ACJA_SHOW = 8;
+	/**only show 10 influent Author conference journal affiliation*/
+	public final int ACJA_SHOW = 10;
 	
 	
 }

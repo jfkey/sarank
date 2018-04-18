@@ -1,6 +1,7 @@
 package com.jfkey.sarank.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class SearchService {
 	private PreviousSearch previousSearch = PreviousSearch.getInstance();
 	
 	
-	public void search(SearchPara searchPara){
+	public Map<String, Object> search(SearchPara searchPara){
 		// 1. a new search ? ? ? 
 		// 2. search type 
 		// 3. do different operation according different type;
@@ -54,27 +55,27 @@ public class SearchService {
 		SearchPara para = previousSearch.getSearchPara();
 		if ( isNewSearch(searchPara, para )){
 			// a new search 
-			newSearch(searchPara);
+			return newSearch(searchPara);
 		} else  {
 			secondSearch(searchPara);
+			return null;
 		}
 	}
 	
-	public void newSearch(SearchPara searchPara) {
+	public Map<String, Object> newSearch(SearchPara searchPara) {
 		// set previous parameter
 		previousSearch.setSearchPara(searchPara);
 		
 		SearchType type = getSearchType(searchPara);
 		if (type == SearchType.AUTHOR) {
 			// 1. search author. 
-			
+			return null;
 		} else if (type == SearchType.KEYWORDS) {
 			// search keywords 
 			ACJAShow acjaShow = new ACJAShow();
-			
 			// 1.get paperSocres and get ACJAShow year
 			Iterable<PaperScoresBean> paperScoresIt= searchRepository.getScoresByKeywords(searchPara.getKeywords());
-			String[] years = null;
+			List<String> years = new ArrayList<String>();
 			List<PaperScoresBean> paperScoresList = getIteratorDataAndYears(paperScoresIt, years);
 			acjaShow.setYears(years);
 			// 2.set PaperScoresBean's Score
@@ -86,16 +87,24 @@ public class SearchService {
 			// 4.get SearchedPaper  
 			Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
 			List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
-			System.out.println("searchedPaperList : " + searchedPaperList);
 			// 5.get ACJA information
 			List<String> paIDs = pagination(paperScoresList, 0, Constants.ACJA_SIZE );
-			Iterable<ACJA> ACJAIt = searchRepository.getACJAInfo(paIDs);
+			// Iterable<ACJA> ACJAIt = searchRepository.getACJAInfo(paIDs);
 			// List<ACJA> ACJAList = getIteratorData(ACJAIt);
 			getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(paIDs));
 			previousSearch.setAcjaShow(acjaShow);
 			// return searchedPaperList;
-			System.out.println("acjaShow:  " + acjaShow);
+//			System.out.println(Arrays.toString(acjaShow.getAffID()));
+//			System.out.println(Arrays.toString(acjaShow.getAffName()));
+			
+			// return acja show and list of paper data
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("acjaShow", acjaShow);
+			result.put("paperList", searchedPaperList);
+			return result;
 		}
+		
+		return null;
 	}
 	
 	public void secondSearch(SearchPara searchPara) {
@@ -167,7 +176,7 @@ public class SearchService {
 	 * @param years a Array of String.
 	 * @return Traverse the Iterable, get list of PaperScoresBean and paper published years.
 	 */
-	private List<PaperScoresBean> getIteratorDataAndYears(Iterable<PaperScoresBean>paperScoresIt, String[] years ){
+	private List<PaperScoresBean> getIteratorDataAndYears(Iterable<PaperScoresBean>paperScoresIt, List<String> years ){
 		int i = 0;
 		List<PaperScoresBean> list = new ArrayList<PaperScoresBean>();
 		Set<String> setYears = new TreeSet<String>();
@@ -180,11 +189,9 @@ public class SearchService {
 		}
 		// get ACJAShow years.
 		Iterator<String> yearsIt = setYears.iterator();
-		String[] curYears = new String[setYears.size()];
 		while (yearsIt.hasNext()) {
-			curYears[i ++] = yearsIt.next();
+			years.add(yearsIt.next());
 		}
-		years = curYears;
 		return list;
 	}
 	
@@ -249,7 +256,7 @@ public class SearchService {
 				fun.findSetJou(acja.getVenScore(), acja.getJouID(), acja.getVenName());
 			}
 			for (i = 0; i < acja.getAffScores().length; i ++) {
-				fun.findSetAff(acja.getAffScores()[i],acja.getAffIDs()[i], acja.getAffNames()[i]);
+				fun.findSetAff(acja.getAffScores()[i], acja.getAffIDs()[i], acja.getAffNames()[i]);
 			}
 		}
 		return acjaShow;
