@@ -64,5 +64,12 @@ public interface Constants {
 	/**only show 10 influent Author conference journal affiliation*/
 	public final int ACJA_SHOW = 10;
 	
+	/**search type e.g., keywords , author*/
+	public final String SEARCH_TYPE="SEARCH_TYPE";
+	
+	/**search type is keywords*/
+	public final String TYPE_KEYWORDS = "KEYWORDS";
+	/** search type is author */
+	public final String TYPE_AUTHOR = "AUTHOR";
 	
 }

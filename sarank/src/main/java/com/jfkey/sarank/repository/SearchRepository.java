@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.jfkey.sarank.domain.ACJA;
+import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.Paper;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.SearchedPaper;
@@ -71,4 +72,15 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "COLLECT (affScore.score) as affScores;")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
 
+	
+	@Query("MATCH (a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore), (a)-[paa:PaaAth]->(p:Paper) "
+			+ "WHERE a.athName = {athName} AND paa.authorNumber = '1' "
+			+ "WITH  a.athName as athName, a.athID as athID, SIZE((a)-[:PaaAth]->(:Paper)) as paNumber, "
+			+ "COLLECT(paa)[0] as paa,  athScore.authorScore as athScore "
+			+ "ORDER BY athScore desc  "
+			+ "RETURN athName, athID, paNumber, paa.paaAffID as affID, paa.normalizedName as affName, athScore; ")
+	Iterable<AuthorHit> searchAuthor(@Param("athName") String athName);
+	
+	
+	
 }

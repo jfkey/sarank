@@ -1,5 +1,6 @@
 package com.jfkey.sarank.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class ACJAShow {
 		affID = new String[Constants.ACJA_SHOW];
 		affName = new String[Constants.ACJA_SHOW];
 		affScore = new double[Constants.ACJA_SHOW];
+		years = new ArrayList<String>();
 	}
 	
 	public String[] getAthID() {

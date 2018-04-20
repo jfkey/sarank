@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.ACJAShowFun;
+import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.PreviousSearch;
 import com.jfkey.sarank.domain.SearchPara;
@@ -51,7 +52,6 @@ public class SearchService {
 		// 1. a new search ? ? ? 
 		// 2. search type 
 		// 3. do different operation according different type;
-		
 		SearchPara para = previousSearch.getSearchPara();
 		if ( isNewSearch(searchPara, para )){
 			// a new search 
@@ -68,8 +68,34 @@ public class SearchService {
 		
 		SearchType type = getSearchType(searchPara);
 		if (type == SearchType.AUTHOR) {
-			// 1. search author. 
-			return null;
+			// 1. search author. contains 4 types e.g. author; author keywords; author year; author keywords year 
+			if ( !searchPara.getKeywords().equals("")  &&  searchPara.getKeywords() != null && searchPara.getYear() > 1800 && searchPara.getYear() < 2100) {
+				// author keywords year
+				Map<String, Object> result = new HashMap<String, Object>();
+				result.put("acjaShow", new ACJAShow());
+				result.put("paperList", new ArrayList<SearchedPaper>());
+				return result;
+			} else if (!searchPara.getKeywords().equals("")  &&  searchPara.getKeywords() != null ) {
+				// keywords author
+				Map<String, Object> result = new HashMap<String, Object>();
+				result.put("acjaShow", new ACJAShow());
+				result.put("paperList", new ArrayList<SearchedPaper>());
+				return result;
+			} else if ( searchPara.getYear() > 1800 && searchPara.getYear() < 2100 ) {
+				// proper year 
+				Map<String, Object> result = new HashMap<String, Object>();
+				result.put("acjaShow", new ACJAShow());
+				result.put("paperList", new ArrayList<SearchedPaper>());
+				return result;
+			} else {
+				// only search author.
+				Map<String, Object> result = new HashMap<String, Object>();
+				result.put(Constants.SEARCH_TYPE, SearchType.AUTHOR);
+				result.put("authors", getIteratorData(searchRepository.searchAuthor(searchPara.getAuthor())));
+				return result;
+			}
+			
+			
 		} else if (type == SearchType.KEYWORDS) {
 			// search keywords 
 			ACJAShow acjaShow = new ACJAShow();
@@ -129,7 +155,7 @@ public class SearchService {
 		if (!cur.getKeywords().equalsIgnoreCase(last.getKeywords())) { 
 			return true; 
 		} else {
-			
+				
 		}
 		return true;
 	}
