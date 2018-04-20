@@ -58,7 +58,7 @@ public class PaperInfoController {
 		}
 	}
 	
-	@RequestMapping("/search")
+	@RequestMapping("/searchasdf")
 	public Map<String, Object> search(@RequestParam(value="k", required=false)String keywords, 
 			@RequestParam(value="a", required=false)String author, @RequestParam(value="y", required=false)Integer year, 
 			@RequestParam(value="i", required=false)Integer index ) {

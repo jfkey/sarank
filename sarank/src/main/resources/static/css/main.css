@@ -94,8 +94,9 @@ h6 {
 
 /** paper style **/
 .div-paper-item {
+	margin-top: 20px;
 	padding: 2px 4px 2px 4px;
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 }
 .div-paper-item:hover {
 	background-color: rgb(246,248,250);

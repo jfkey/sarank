@@ -30,7 +30,7 @@
 						</div>
 						
 						<!-- 这是中间搜索部分-->
-						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${seachPara}" method="get">
+						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${searchPara}" method="get">
 							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
 								<label class="sr-only" for="keywords">keywords</label>
 								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database" name="k"  th:field="*{keywords}">
@@ -39,15 +39,15 @@
 							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
 								<div class="form-group">
 									<label class="sr-only" for="title">title</label>
-									<input  class="form-control " id="title" placeholder="keywords" name="" th:field="*{keywords}" >
+									<input  class="form-control " id="title" placeholder="keywords" name="">
 								</div>
 								<div class="form-group">
 									<label class="sr-only" for="authorname">authorname</label>
-									<input type="text" class="form-control " id="author" placeholder="author name" name="" th:field="*{author}">
+									<input type="text" class="form-control " id="author" placeholder="author name" name="" >
 								</div>
 								<div class="form-group ">
 									<label class="sr-only" for="year">year</label>
-									<input type="text" class="form-control " id="year" placeholder="published year" name="" th:field="*{year}">
+									<input type="text" class="form-control " id="year" placeholder="published year" name="" >
 								</div>
 						
 							</div>
@@ -100,18 +100,15 @@
 						<div class="div-left-date-range">
 							<h4>Date Range </h4><br />
 							
-							<select >
-                         		<option th:each="entry : acjaShow.years"
-                                 	th:value="${entry}"> 1995
-                        		</option>
+							<select id="select_start">
+                         		<option th:each="entry : ${acjaShow.years}"
+                                 	th:text="${entry}">1995</option>
 							</select>
 
-							</select>
 							&nbsp;to &nbsp;&nbsp;
-							<select >
-                         		<option th:each="entry : acjaShow.years"
-                                 	th:value="${entry.y}"> 2016
-                        		</option>
+							<select id="select_end">
+                         		<option th:each="entry : ${acjaShow.years}"
+                                 	th:text="${entry}"> 2016</option>
 							</select>
 				
 						</div>
@@ -122,17 +119,17 @@
 							
 							<ul class="ul-style-type">
 								<li>
-									<a><span>default ranking</span></a>
+									<a style="color: rgb(51,122,183); font-size: large;"><span >default ranking</span></a>
 								</li>
 								<li>
-									<a><span>relevance ranking</span></a>
+									<a style="color: #222222; font-size: large;"><span>relevance ranking</span></a>
 								</li>
 								<li>
-									<a><span>most citations</span></a>
+									<a style="color: #222222; font-size: large;"><span>most citations</span></a>
 								</li>
 								
 								<li>
-									<a><span>time ranking</span></a>
+									<a style="color: #222222; font-size: large;"><span>time ranking</span></a>
 								</li>
 							</ul>
 						</div>
@@ -141,7 +138,6 @@
 				</div>
 
 				<!--中间展示数据-->
-				
  				<div class="col-md-7 col-sm-12" style="margin-top: 50px;">
 					<div class="panel panel-default">
 						<div class="panel-heading">Paper Results</div>
@@ -156,7 +152,7 @@
 											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID})}" th:text="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 											<br />
 											
-											<span th:if="" th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+											<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
 		
 											<br />
 		
@@ -177,7 +173,7 @@
 												<ul class="ul-paper-item-actions">
 													<li class="li-actions-cite">
 														<img src="img/cite.png"/>
-														<a th:text="${item.citations}" >cited by 111 </a>		
+														<a th:text="|cited by ${item.citations}|" >cited by 111 </a>		
 													</li>
 													
 													<li>
@@ -190,7 +186,7 @@
 													</li>													
 													<li>
 														<img src="img/version.png" />
-														<a th:text="|All ${item.versions} Versions|" >All .. Versions</a>
+														<a th:text="|All ${item.versions} Versions|" >all .. versions</a>
 													</li>
 													
 												</ul>
@@ -215,34 +211,15 @@
 					<!--some Authors-->
 					<div id="div_right_author" class="col-sm-12 col-md-12"> 
 						<img class="img_right_icon" src="img/ath-ac.png"/> <h4>Prestige Author</h4>
-						<ul class="ul-style-type">
+						<ul id="ul_ath" class="ul-style-type">
+							<th:block th:each="name, nameStat: ${acjaShow.athName}">
 								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Author1</span></a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
 								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Author2</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Author3</span></a>
-								</li>
-								
-						</ul>
-						<div id="div_right_moreAth">
-							<a href="#"><span >More Authors </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-							<ul class="ul-style-type" style="display: none;">
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Author4</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Author5</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Author5</span></a>
-								</li>
-								
-							</ul>
+							</th:block>
 							
-						</div>
+						</ul>
+						<a  onclick="showMore('ath')"><span >More Authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
 					</div>
 					
 					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
@@ -250,32 +227,15 @@
 					<!--Affiliations-->
 					<div id="div_right_aff" class="col-sm-12 col-md-12">
 						<img class="img_right_icon" src="img/venue-ac.png"/> <h4>Influential Affiliation</h4>
-						<ul class="ul-style-type">
+						<ul id="ul_aff" class="ul-style-type">
+							<th:block th:each="name, nameStat: ${acjaShow.affName}">
 								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Aff1</span></a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affid=${acjaShow.affID[nameStat.index]})}">aff1</a>
 								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Aff2</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Aff3</span></a>
-								</li>
+							</th:block>
 						</ul>
 						
-						<div id="div_right_moreAff">
-							<a href="#"><span >More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-							<ul class="ul-style-type" style="display: none;">
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Aff4</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Aff5</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Aff5</span></a>
-								</li>
-							</ul>
-						</div>
+						<a onclick="showMore('aff')"><span >More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
 						
 					</div>
 					
@@ -284,33 +244,17 @@
 					<!--some Journal -->
 					<div id="div_right_jou" class="col-sm-12 col-md-12">
 						<img class="img_right_icon" src="img/jou-ac.png"/> <h4>Famous Journals</h4>
-						<ul class="ul-style-type">
+						<ul id="ul_jou" class="ul-style-type">
+							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
 								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Journal1</span></a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/jou(jouid=${acjaShow.jouID[nameStat.index]})}">aff1</a>
 								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Journal2</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Journal3</span></a>
-								</li>
+							</th:block>
 								
 						</ul>
-						<div id="div_right_moreJou">
-							<a href="#"><span >More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-							<ul class="ul-style-type" style="display: none;">
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Journal4</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Journal5</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;Journal6</span></a>
-								</li>
-							</ul>
+						<a onclick="showMore('jou')"><span >More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
 							
-						</div>
+							
 					</div>
 					
 					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
@@ -318,33 +262,16 @@
 					<!--some conference -->
 					<div id="div_right_con" class="col-sm-12 col-md-12"> 
 						<img class="img_right_icon" src="img/conf-ac.png"/> <h4>Famous Conferences</h4>
-						<ul class="ul-style-type">
+						<ul id="ul_con" class="ul-style-type">
+							<th:block th:each="name, nameStat: ${acjaShow.conName}">
 								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;conferences1</span></a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/con(conid=${acjaShow.conID[nameStat.index]})}">aff1</a>
 								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;conferences2</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;conferences3</span></a>
-								</li>
+							</th:block>
 								
 						</ul>
-						<div id="div_right_moreJou">
-							<a href="#"><span >More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-							<ul class="ul-style-type" style="display: none;">
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;conferences4</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;conferences5</span></a>
-								</li>
-								<li>
-									<a><span class="glyphicon glyphicon-hand-right"></span><span>&nbsp;&nbsp;conferences6</span></a>
-								</li>
-							</ul>
-							
-						</div>
+						<a onclick="showMore('con')"><span >More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						
 					</div>
 					
 					

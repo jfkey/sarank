@@ -1,6 +1,7 @@
 package com.jfkey.sarank.controller;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.SearchPara;
+import com.jfkey.sarank.domain.SearchedPaper;
 import com.jfkey.sarank.service.SearchService;
+import com.jfkey.sarank.utils.Constants;
+import com.jfkey.sarank.utils.InputIKAnalyzer;
 
 /**
  * 
@@ -27,27 +32,36 @@ public class SearchController {
 	@Autowired
 	private SearchService searchService;
 	
-	@RequestMapping(value="/search", method=RequestMethod.POST)
-	public String search(@ModelAttribute(value = "searchPara") SearchPara searchPara) {
-		// 1. is the search parameter legal ?
-		System.out.println(searchPara);
-		searchPara.setAuthor("");
-		searchPara.setKeywords("originalTitle:graph AND originalTitle : database");
-		searchPara.setYear(0);
+	@RequestMapping(value="/search", method=RequestMethod.GET)
+	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara) {
+		// 1. are the search parameters legal ?
+		// 2. format parameters 
+		// 3. search and return . 
+		SearchPara formatPara = new SearchPara();
+		formatPara.setAuthor(searchPara.getAuthor());
+		String k = InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE);
+		formatPara.setKeywords(k);
+		formatPara.setYear(searchPara.getYear());
+		System.out.println("searchPara: "+ searchPara);
+		System.out.println("formatPara : "+ formatPara);
 		
-		// Map<String, Object> search = searchService.search(searchPara);
+		ModelAndView mv= new ModelAndView("/copy_main");
+		mv.addAllObjects(searchService.search(formatPara));
+		return mv;
 		
-//		ModelAndView mv= new ModelAndView("/copy_main");
-//		mv.addObject("acjaShow", search.get("acjaShow"));
-//		mv.addObject("paperList", search.get("paperList"));
-		
-		return "/copy_main";
+//		model.addAttribute("acjaShow", search.get("acjaShow"));
+//		model.addAttribute("paperList", search.get("paperList"));		
+//		
+//		return "/copy_main";
 		
 	}
 	
-	@GetMapping("/search2")
+	@GetMapping("/main")
 	public String greetingForm(Model model) {
 	        model.addAttribute("searchPara", new SearchPara());
+	        model.addAttribute("acjaShow", new ACJAShow());
+	        model.addAttribute("paperList",  new ArrayList<SearchedPaper>());
+	        
 	        System.out.println("model: " + model);
 	        return "copy_main";
 	    }
