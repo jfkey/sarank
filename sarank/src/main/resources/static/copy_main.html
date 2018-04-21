@@ -33,21 +33,21 @@
 						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${searchPara}" method="get">
 							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
 								<label class="sr-only" for="keywords">keywords</label>
-								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database" name="k"  th:field="*{keywords}">
+								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database"  th:field="*{keywords}">
 							</div>
 						
 							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
 								<div class="form-group">
 									<label class="sr-only" for="title">title</label>
-									<input  class="form-control " id="title" placeholder="keywords" name="">
+									<input  class="form-control " id="title" placeholder="keywords" name="" >
 								</div>
 								<div class="form-group">
 									<label class="sr-only" for="authorname">authorname</label>
-									<input type="text" class="form-control " id="author" placeholder="author name" name="" >
+									<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}" >
 								</div>
 								<div class="form-group ">
 									<label class="sr-only" for="year">year</label>
-									<input type="text" class="form-control " id="year" placeholder="published year" name="" >
+									<input type="text" class="form-control " id="year" placeholder="published year" th:field="*{year}" >
 								</div>
 						
 							</div>
@@ -107,8 +107,7 @@
 
 							&nbsp;to &nbsp;&nbsp;
 							<select id="select_end">
-                         		<option th:each="entry : ${acjaShow.years}"
-                                 	th:text="${entry}"> 2016</option>
+                         		<option th:each="entry : ${acjaShow.years}" th:text="${entry}"> 2016</option>
 							</select>
 				
 						</div>
@@ -116,22 +115,24 @@
 						
 						<div class="div-left-rank-type">
 							<h4>Ranking Type</h4><br />
+							<ul class="ul-style-type" id="ul_rank_type">
+								<li>
+									<a style="color: #337AB7; font-size: large;" href="/search?rankType=1" onclick="changeRT(1)">
+										<span>default ranking</span>
+									</a>
+								</li>
+								<li>
+									<a style="color: #222222; font-size: large;" href="/search?rankType=2" onclick="changeRT(2)"><span>relevance ranking</span></a>
+								</li>
+								<li>
+									<a style=" color: #222222; font-size: large; " href="/search?rankType=3" onclick="changeRT(3)"><span>most citations</span></a>
+								</li>
 							
-							<ul class="ul-style-type">
 								<li>
-									<a style="color: rgb(51,122,183); font-size: large;"><span >default ranking</span></a>
-								</li>
-								<li>
-									<a style="color: #222222; font-size: large;"><span>relevance ranking</span></a>
-								</li>
-								<li>
-									<a style="color: #222222; font-size: large;"><span>most citations</span></a>
-								</li>
-								
-								<li>
-									<a style="color: #222222; font-size: large;"><span>time ranking</span></a>
+									<a style="color: #222222; font-size: large;" href="/search?rankType=4" onclick="changeRT(4)"><span>time ranking</span></a>
 								</li>
 							</ul>
+												
 						</div>
 						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
 					</div>
@@ -140,10 +141,11 @@
 				<!--中间展示数据-->
  				<div class="col-md-7 col-sm-12" style="margin-top: 50px;">
 					<div class="panel panel-default">
-						<div class="panel-heading">Paper Results</div>
+						<div class="panel-heading">
+							<span th:text="|search  ${#lists.size(paperList)}  relevant papers|"> search xxx relevant papers</span>
+						</div>
 				
 						<div id="paper_entity" style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
-				
 							
 								<th:block th:each="item:${paperList}">
 									
@@ -283,11 +285,34 @@
 		</div>
 				
 
-		<div class="page-container">
-			<div id="page" class="m-pagination"></div>
-		</div>
-		
-		
+
+	<!--search(keywords=${searchPara.keywords},author=${searchPara.author}, ${year=searchPara.year},-->
+	<div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div th:if="${paper.totalPages != 1}" class="form-group col-md-11 pagination-centered">
+            <ul class="pagination">
+            	
+                <li th:class="${paper.number == 0} ? disabled">
+                    <a class="pageLink" th:href="@{ search(page=1)}">&laquo;</a>
+                </li>
+                <li th:class="${paper.number == 0} ? disabled">
+                    <a class="pageLink" th:href="@{search(page=${paper.number})}">&larr;</a>
+                </li>
+                <li th:class="${paper.number == (page - 1)} ? 'active pointer-disabled'"
+                    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                    <a class="pageLink" th:href="@{search(page=${page})}" th:text="${page}"></a>
+                </li>
+                <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
+                    <a class="pageLink"th:href="@{search(page=${paper.number + 2})}">&rarr;</a>
+                </li>
+                <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
+                    <a class="pageLink" th:href="@{search(page=${paper.totalPages})}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
 		
 		
 		<footer class="page-footer font-small blue pt-4 mt-4">

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.ACJAShowFun;
-import com.jfkey.sarank.domain.AuthorHit;
+import com.jfkey.sarank.domain.Pager;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.PreviousSearch;
 import com.jfkey.sarank.domain.SearchPara;
@@ -38,27 +38,21 @@ public class SearchService {
 	private SearchRepository searchRepository;
 	
 	
-//	// last search content 
-//	private SearchPara lastSearchPara;
-//	// paper IDS after rank
-//	private List<String> rankArray;
-//	// paper Scores, contains paper sarank score and relevance score
-//	private List<PaperScoresBean> paperScores;
-	
 	private PreviousSearch previousSearch = PreviousSearch.getInstance();
 	
+	private String[] highCitationList = null;
 	
 	public Map<String, Object> search(SearchPara searchPara){
 		// 1. a new search ? ? ? 
 		// 2. search type 
 		// 3. do different operation according different type;
+		
 		SearchPara para = previousSearch.getSearchPara();
-		if ( isNewSearch(searchPara, para )){
+		if ( isNewSearch(searchPara, para)){
 			// a new search 
 			return newSearch(searchPara);
 		} else  {
-			secondSearch(searchPara);
-			return null;
+			return secondSearch(searchPara);
 		}
 	}
 	
@@ -108,6 +102,7 @@ public class SearchService {
 			setPaperScoresBeanScore(paperScoresList, RankType.DEFAULT_RANK);
 			// 3.rank PaperScoresBean according rank type
 			rankList(paperScoresList, RankType.DEFAULT_RANK);
+			highCitationList = getHighCitationList(paperScoresList);
 			previousSearch.setPaperScores(paperScoresList);
 			List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
 			// 4.get SearchedPaper  
@@ -119,22 +114,100 @@ public class SearchService {
 			// List<ACJA> ACJAList = getIteratorData(ACJAIt);
 			getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(paIDs));
 			previousSearch.setAcjaShow(acjaShow);
-			// return searchedPaperList;
-//			System.out.println(Arrays.toString(acjaShow.getAffID()));
-//			System.out.println(Arrays.toString(acjaShow.getAffName()));
 			
 			// return acja show and list of paper data
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("acjaShow", acjaShow);
 			result.put("paperList", searchedPaperList);
+			
+			// add pager information
+			int allNumber = previousSearch.getPaperScores().size();
+			result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));
+			
+			// add paper totalPages and current page
+			Map<String, Object> paper = new HashMap<String, Object>();
+			paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
+			paper.put("number", searchPara.getPage() );
+			
+			result.put("paper", paper);
+						
 			return result;
 		}
 		
 		return null;
 	}
 	
-	public void secondSearch(SearchPara searchPara) {
-		// 
+
+	/**
+	 * 
+	 * @param searchPara current searchPara,  keywords is the same with the previous search parameters, e.g., we do not need to search keywords in database. 
+	 * @return get different content from the previous list of {@link com.jfkey.sarank.domain.PaperScoresBean}
+	 */
+	public Map<String, Object> secondSearch(SearchPara searchPara) {
+		// second search contains 1.get different page, 2.different rank type.
+		
+		// 1.get different page,
+		if (searchPara.getPage() != 0) {
+			
+			Map<String, Object> result = new HashMap<String, Object>();
+			// add paperList and acjaShow 
+			List<String> paIDs = pagination(previousSearch.getPaperScores(), searchPara.getPage(), Constants.PRE_PAGE_SIZE);
+			Iterable<SearchedPaper> paperIt = searchRepository.getPaperByIDs(paIDs);
+			List<SearchedPaper> paperList = getIteratorData(paperIt);
+			result.put("paperList", paperList);
+			result.put("acjaShow", previousSearch.getAcjaShow());
+			
+			// add pager information
+			int allNumber = previousSearch.getPaperScores().size();
+			result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));
+			
+			// add paper totalPages and current page
+			Map<String, Object> paper = new HashMap<String, Object>();
+			paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
+			paper.put("number", searchPara.getPage() );
+			
+			result.put("paper", paper);
+			return result;
+		} else if (searchPara.getRt() != RankType.DEFAULT_RANK) {
+			// 1.different rank type.
+			if (searchPara.getRt() == RankType.RELEVANCE_RANK) {
+				Map<String, Object> result = new HashMap<String, Object>();
+				
+				List<PaperScoresBean> paperScoresList = previousSearch.getPaperScores();
+				setPaperScoresBeanScore(paperScoresList, RankType.RELEVANCE_RANK);
+				rankList(paperScoresList, RankType.RELEVANCE_RANK);
+				previousSearch.setPaperScores(paperScoresList);
+				List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
+				Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
+				List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
+				
+				result.put("acjaShow", previousSearch.getAcjaShow());
+				result.put("paperList", searchedPaperList);
+				
+				// add pager information
+				int allNumber = previousSearch.getPaperScores().size();
+				result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));	// in fact searchPara.getPage() is zero 
+				
+				// add paper totalPages and current page
+				Map<String, Object> paper = new HashMap<String, Object>();
+				paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
+				paper.put("number", searchPara.getPage() );
+				
+				result.put("paper", paper);
+							
+				return result;
+				
+			} else if(searchPara.getRt() == RankType.MOST_CITATION) {
+				
+			} else if ( searchPara.getRt() == RankType.LATEST_YEAR) {
+				
+			}
+			return null;
+		} else {
+			return null;
+		}
+		
+		
 	}
 	
 	/**
@@ -151,15 +224,25 @@ public class SearchService {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param cur current search parameters 
+	 * @param last last search parameters.
+	 * @return current search is a new search. that means if we need to interact with database.
+	 */
 	private boolean isNewSearch(SearchPara cur, SearchPara last) {
 		if (!cur.getKeywords().equalsIgnoreCase(last.getKeywords())) { 
 			return true; 
 		} else {
-				
+			if (cur.getPage() != 0) {
+				return false;
+			}
+			if (cur.getRt() != RankType.DEFAULT_RANK) {
+				return false;
+			}
 		}
 		return true;
 	}
-	
 	
 	/**
 	 * 
@@ -231,11 +314,12 @@ public class SearchService {
 	private void setPaperScoresBeanScore(List<PaperScoresBean> list, RankType rt) {
 		if (rt == RankType.DEFAULT_RANK) {
 			for (PaperScoresBean tmp : list) {
-				tmp.setRtDefaultScore( (1-Constants.RELEVANCE_LOW) * Constants.C * tmp.getPaScore() + Constants.RELEVANCE_LOW * tmp.getRelScore());
+				tmp.setRtDefaultScore(tmp.getPaScore());
+				
 			}
 		} else if (rt == RankType.RELEVANCE_RANK) {
 			for(PaperScoresBean tmp : list) {
-				tmp.setRtRelScore((1-Constants.RELEVANCE_HEIGHT) * Constants.C * tmp.getPaScore() + Constants.RELEVANCE_HEIGHT * tmp.getRelScore() );
+				tmp.setRtRelScore( (1-Constants.RELEVANCE_LOW) * Constants.C * tmp.getPaScore() + Constants.RELEVANCE_LOW * tmp.getRelScore());
 			}
 		}else if (rt == RankType.MOST_CITATION) { 
 			//  TODO: only use first and second windows. 
@@ -258,6 +342,21 @@ public class SearchService {
 			rankSize = list.size();
 		}
 		tr.topK(list, 0, list.size()- 1,rankSize);
+	}
+	
+	/**
+	 * 
+	 * @param paperScoresList a list a PaperScoresBean
+	 * @return default most citations list.
+	 */
+	private String[] getHighCitationList(List<PaperScoresBean> paperScoresList){ 
+		// we use first 3 page in default. 
+		int citeSize = paperScoresList.size() > 3*Constants.PRE_PAGE_SIZE ? 3*Constants.PRE_PAGE_SIZE : paperScoresList.size(); 
+		String []highCite = new String[citeSize];
+		for (int i = 0; i < citeSize; i ++){
+			highCite[i] = paperScoresList.get(i).getNodeID();
+		}
+		return highCite;
 	}
 	
 	/**
@@ -287,5 +386,6 @@ public class SearchService {
 		}
 		return acjaShow;
 	}
+	
 	
 }

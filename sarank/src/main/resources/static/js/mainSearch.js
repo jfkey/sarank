@@ -51,6 +51,8 @@ $(document).ready(function() {
 	}
 	
 	
+	
+
 });
 
 function showMore(type){
@@ -65,3 +67,16 @@ function showMore(type){
 	return false;
 }
 
+function changeRT(type) {
+	i = $("#ul_rank_type").children().length;
+	for (j = 0; j < i; j ++ ){
+		// $("#ul_rank_type").css("background-color", "red"); 
+		var li = $("#ul_rank_type").children().eq(j).children().eq(0).css("color",  "#222222");
+
+//		$("#ul_rank_type").children().eq(j).css();
+			
+	}
+	$("#ul_rank_type").children().eq(type-1).children().eq(0).css("color", "#337AB7")
+	
+	return false;
+}

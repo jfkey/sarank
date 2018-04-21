@@ -107,8 +107,7 @@
 
 							&nbsp;to &nbsp;&nbsp;
 							<select id="select_end">
-                         		<option th:each="entry : ${acjaShow.years}"
-                                 	th:text="${entry}"> 2016</option>
+                         		<option th:each="entry : ${acjaShow.years}" th:text="${entry}"> 2016</option>
 							</select>
 				
 						</div>
@@ -116,22 +115,24 @@
 						
 						<div class="div-left-rank-type">
 							<h4>Ranking Type</h4><br />
+							<ul class="ul-style-type" id="ul_rank_type">
+								<li>
+									<a style="color: #337AB7; font-size: large;" href="/search?rankType=1" onclick="changeRT(1)">
+										<span>default ranking</span>
+									</a>
+								</li>
+								<li>
+									<a style="color: #222222; font-size: large;" href="/search?rankType=2" onclick="changeRT(2)"><span>relevance ranking</span></a>
+								</li>
+								<li>
+									<a style=" color: #222222; font-size: large; " href="/search?rankType=3" onclick="changeRT(3)"><span>most citations</span></a>
+								</li>
 							
-							<ul class="ul-style-type">
 								<li>
-									<a style="color: rgb(51,122,183); font-size: large;"><span >default ranking</span></a>
-								</li>
-								<li>
-									<a style="color: #222222; font-size: large;"><span>relevance ranking</span></a>
-								</li>
-								<li>
-									<a style="color: #222222; font-size: large;"><span>most citations</span></a>
-								</li>
-								
-								<li>
-									<a style="color: #222222; font-size: large;"><span>time ranking</span></a>
+									<a style="color: #222222; font-size: large;" href="/search?rankType=4" onclick="changeRT(4)"><span>time ranking</span></a>
 								</li>
 							</ul>
+												
 						</div>
 						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
 					</div>
@@ -285,26 +286,27 @@
 				
 
 
-    <div class="row">
+	<!--search(keywords=${searchPara.keywords},author=${searchPara.author}, ${year=searchPara.year},-->
+	<div class="row">
       <div class="col-md-4 col-md-offset-4">
         <div th:if="${paper.totalPages != 1}" class="form-group col-md-11 pagination-centered">
             <ul class="pagination">
             	
                 <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{/search(page=1)}">&laquo;</a>
+                    <a class="pageLink" th:href="@{ search(page=1)}">&laquo;</a>
                 </li>
                 <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{search/(page=${paper.number})}">&larr;</a>
+                    <a class="pageLink" th:href="@{search(page=${paper.number})}">&larr;</a>
                 </li>
                 <li th:class="${paper.number == (page - 1)} ? 'active pointer-disabled'"
                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                    <a class="pageLink" th:href="@{search/(page=${page})}" th:text="${page}"></a>
+                    <a class="pageLink" th:href="@{search(page=${page})}" th:text="${page}"></a>
                 </li>
                 <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink"th:href="@{search/(page=${paper.number + 2})}">&rarr;</a>
+                    <a class="pageLink"th:href="@{search(page=${paper.number + 2})}">&rarr;</a>
                 </li>
                 <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink" th:href="@{search/(page=${paper.totalPages})}">&raquo;</a>
+                    <a class="pageLink" th:href="@{search(page=${paper.totalPages})}">&raquo;</a>
                 </li>
             </ul>
         </div>

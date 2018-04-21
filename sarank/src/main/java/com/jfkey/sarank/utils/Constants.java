@@ -23,7 +23,7 @@ public interface Constants {
 	/**the max value that can be sort*/
 	public final int RANK_SIZE = 1000;
 	
-	/**the default size of pre page */
+	/**the default size of pre page 10 */
 	public final int PRE_PAGE_SIZE = 10;
 	
 	/**find {@link com.jfkey.sarank.domain.ACJA} information need 30 items*/
@@ -69,7 +69,11 @@ public interface Constants {
 	
 	/**search type is keywords*/
 	public final String TYPE_KEYWORDS = "KEYWORDS";
+	
 	/** search type is author */
 	public final String TYPE_AUTHOR = "AUTHOR";
+	
+	/** button numbers be shown in pagination*/
+	public final int BUTTONS_TO_SHOW = 5;
 	
 }

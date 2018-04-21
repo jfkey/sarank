@@ -22,6 +22,7 @@ import com.jfkey.sarank.domain.SearchedPaper;
 import com.jfkey.sarank.service.SearchService;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.InputIKAnalyzer;
+import com.jfkey.sarank.utils.RankType;
 import com.jfkey.sarank.utils.SearchType;
 
 /**
@@ -34,47 +35,76 @@ import com.jfkey.sarank.utils.SearchType;
 @Controller
 public class SearchController {
 	
-	 private static final int BUTTONS_TO_SHOW = 5;
-	    private static final int INITIAL_PAGE = 0;
-	    private static final int INITIAL_PAGE_SIZE = 10;
-	    private static final int[] PAGE_SIZES = {5, 10, 20};
+	private final int BUTTONS_TO_SHOW = 5;
+	private final int INITIAL_PAGE = 0;
 
+	// it will be used in pagination. and rank type. 
+	// as we wrote in front end, we can not get all search parameters, so we store in back end.
+	private SearchPara previousSearch;
+	
 	
 	@Autowired
 	private SearchService searchService;
-	
+
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara, @RequestParam("pageSize") Optional<Integer> pageSize,@RequestParam("page") Optional<Integer> page) {
-		// 1. are the search parameters legal ?
-		// 2. format parameters 
-		// 3. search and return . 
-		SearchPara formatPara = new SearchPara();
-		formatPara.setAuthor(searchPara.getAuthor().trim());
-		String k = InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE);
-		formatPara.setKeywords(k);
-		formatPara.setYear(searchPara.getYear());
-		System.out.println("searchPara: "+ searchPara);
-		System.out.println("formatPara : "+ formatPara);
+	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara, 
+			@RequestParam("page") Optional<Integer> page, @RequestParam("rankType") Optional<Integer> rankType) {
 		
-		// initial page size default 10.
-		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE); 
-	    int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
+		// 1. set current page, set rank type default
+		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
+		int evalRt = (rankType.isPresent()) ? rankType.get() : 1;
+		RankType rt = RankType.DEFAULT_RANK; 
+		if (evalRt == 2) {
+			rt = RankType.RELEVANCE_RANK;
+		} else if (evalRt == 3) {
+			rt = RankType.MOST_CITATION;
+		} else if (evalRt == 4) {
+			rt = RankType.LATEST_YEAR;
+		} else  {
+			rt = RankType.DEFAULT_RANK;
+		}
+		searchPara.setRt(rt);
+		searchPara.setPage(evalPage);
+		
+		// 2. if we specify current page or rank type, we will use previous search parameters.
+		boolean usePrevious = false;
+		if (page.isPresent()) {
+			searchPara = previousSearch;
+			searchPara.setRt(rt);
+			searchPara.setPage(evalPage);
+			
+			usePrevious = true;
+		}
+		if (rankType.isPresent()) {
+			searchPara = previousSearch;
+			searchPara.setRt(rt);
+			searchPara.setPage(evalPage);
+			usePrevious = true;
+		}
+		
+		
+		// 3. return search result according search parameters
+		Map<String, Object> searchResult = null;
+		if (usePrevious) {
+			searchPara = previousSearch;
+			searchResult = searchService.search(searchPara);
+		} else {
+			SearchPara formatPara = new SearchPara();
+			formatPara.setAuthor(searchPara.getAuthor());
+			formatPara.setKeywords(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
+			formatPara.setYear(searchPara.getYear());
+			formatPara.setPage(evalPage);
+			formatPara.setRt(searchPara.getRt());
+			previousSearch = formatPara;
+			searchResult = searchService.search(formatPara);
+		}
 
 		
-		Map<String, Object> searchResult = searchService.search(formatPara);
 		// default doing keywords search.
 		if (searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS ) {
 			ModelAndView mv= new ModelAndView("/copy_main");
 			mv.addAllObjects(searchResult);
-			Pager pager = new Pager(23, 1, BUTTONS_TO_SHOW);
-			Map<String, Object> person = new HashMap<String,Object>();
-			person.put("totalPages", 23);
-			person.put("number", 0);
 			
-			mv.addObject("pager", pager);
-			mv.addObject("persons", person);
-			
-		
 			return mv;
 		} else if  (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AUTHOR) {
 			ModelAndView mv= new ModelAndView("/authors");
@@ -93,11 +123,6 @@ public class SearchController {
 			
 			return mv;
 		}
-		
-//		model.addAttribute("acjaShow", search.get("acjaShow"));
-//		model.addAttribute("paperList", search.get("paperList"));		
-//		
-//		return "/copy_main";
 		
 	}
 	
@@ -119,6 +144,4 @@ public class SearchController {
 		System.out.println("model: " + model);
 		return "copy_main";
     }
-		
-	
-	}
+}
