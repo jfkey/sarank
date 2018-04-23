@@ -19,21 +19,37 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 *            a list of paper ID.
 	 * @return SearchedPaper {@link com.jfkey.sarank.domain.SearchedPaper}
 	 */
+	
 	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
-			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p1:Paper)-[ref:PaRef]->(p:Paper),  "
-			+ "(p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
+			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
 			+ "WHERE p.paID= col "
-			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors,  "
+			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, "
 			+ "p.originalTitle as title, p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, "
-			+ "p.conID as conID, r.authorNumber as number, count(p1) as citations, p.paDOI as doi, score.paperScore as score "
+			+ "p.conID as conID, r.authorNumber as number, size((:Paper)-[:PaRef]->(p:Paper)) as citations, "
+			+ "p.paDOI as doi, score.paperScore as score "
 			+ "ORDER BY toInteger(number) "
-			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID ,"
-			+ " COLLECT(authors) AS authors, citations, doi,  score "
-			+ "OPTIONAL MATCH (paUrl:PaperUrl) "
-			+ "WHERE paUrl.paID = paID RETURN  title, paID, authors, authorsID, year, venue,"
-			+ " jouID, conID, citations,count(paUrl) as versions, doi, score;")
+			+ "WITH paID, title, venue, conID, jouID, year, "
+			+ "COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations, doi,  score "
+			+ "OPTIONAL MATCH (paUrl:PaperUrl) WHERE paUrl.paID = paID "
+			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations,count(paUrl) as versions, doi, score;")
 	Iterable<SearchedPaper> getPaperByIDs(@Param("paIDs") List<String> paIDs);
 
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
+			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
+			+ "WHERE p.paID= col "
+			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, "
+			+ "p.originalTitle as title, p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, "
+			+ "p.conID as conID, r.authorNumber as number, size((:Paper)-[:PaRef]->(p:Paper)) as citations, "
+			+ "p.paDOI as doi, score.paperScore as score "
+			+ "ORDER BY toInteger(number) "
+			+ "WITH paID, title, venue, conID, jouID, year, "
+			+ "COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations, doi,  score "
+			+ "OPTIONAL MATCH (paUrl:PaperUrl) WHERE paUrl.paID = paID "
+			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations,count(paUrl) as versions, doi, score "
+			+ "ORDER BY citations DESC;")
+	Iterable<SearchedPaper> getCitationByIDs(@Param("paIDs") List<String> paIDs);
+	
+	
 	/**
 	 * @param keywords
 	 *            search keywords in `Paper` node `originalTitle` property, like

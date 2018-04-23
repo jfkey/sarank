@@ -72,7 +72,6 @@ public class SearchController {
 			searchPara = previousSearch;
 			searchPara.setRt(rt);
 			searchPara.setPage(evalPage);
-			
 			usePrevious = true;
 		}
 		if (rankType.isPresent()) {
@@ -81,7 +80,6 @@ public class SearchController {
 			searchPara.setPage(evalPage);
 			usePrevious = true;
 		}
-		
 		
 		// 3. return search result according search parameters
 		Map<String, Object> searchResult = null;
@@ -99,7 +97,6 @@ public class SearchController {
 			searchResult = searchService.search(formatPara);
 		}
 
-		
 		// default doing keywords search.
 		if (searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS ) {
 			ModelAndView mv= new ModelAndView("/copy_main");

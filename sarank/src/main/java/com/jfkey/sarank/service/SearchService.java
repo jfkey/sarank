@@ -169,7 +169,7 @@ public class SearchService {
 			result.put("paper", paper);
 			return result;
 		} else if (searchPara.getRt() != RankType.DEFAULT_RANK) {
-			// 1.different rank type.
+			// 2.different rank type.
 			if (searchPara.getRt() == RankType.RELEVANCE_RANK) {
 				Map<String, Object> result = new HashMap<String, Object>();
 				
@@ -196,11 +196,49 @@ public class SearchService {
 				result.put("paper", paper);
 							
 				return result;
+			} else if(searchPara.getRt() == RankType.LATEST_YEAR) {
+				Map<String, Object> result = new HashMap<String, Object>();
+				List<PaperScoresBean> paperScoresList = previousSearch.getPaperScores();
+				rankList(paperScoresList, RankType.LATEST_YEAR);
+				previousSearch.setPaperScores(paperScoresList);
+				List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
+				Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
+				List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
 				
-			} else if(searchPara.getRt() == RankType.MOST_CITATION) {
+				result.put("acjaShow", previousSearch.getAcjaShow());
+				result.put("paperList", searchedPaperList);
 				
-			} else if ( searchPara.getRt() == RankType.LATEST_YEAR) {
+				// add pager information
+				int allNumber = previousSearch.getPaperScores().size();
+				result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));	// in fact searchPara.getPage() is zero 
 				
+				// add paper totalPages and current page
+				Map<String, Object> paper = new HashMap<String, Object>();
+				paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
+				paper.put("number", searchPara.getPage() );
+				
+				result.put("paper", paper);
+				return result;
+			} else if ( searchPara.getRt() == RankType.MOST_CITATION) {
+				Map<String, Object> result = new HashMap<String, Object>();
+				// rankList(paperScoresList, RankType.LATEST_YEAR);
+				List<String> iDs = pagination( previousSearch.getPaperScores(), 0, Constants.PRE_PAGE_SIZE );
+				List<SearchedPaper> searchedPaperList = getIteratorData(searchRepository.getCitationByIDs(iDs));
+				
+				result.put("acjaShow", previousSearch.getAcjaShow());
+				result.put("paperList", searchedPaperList);
+				
+				// add pager information
+				int allNumber = previousSearch.getPaperScores().size();
+				result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));	// in fact searchPara.getPage() is zero 
+				
+				// add paper totalPages and current page
+				Map<String, Object> paper = new HashMap<String, Object>();
+				paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
+				paper.put("number", searchPara.getPage() );
+				
+				result.put("paper", paper);
+				return result;
 			}
 			return null;
 		} else {
@@ -336,12 +374,14 @@ public class SearchService {
 	 *  according RankType return topK PaperScoresBean .
 	 */
 	private void rankList(List<PaperScoresBean> list, RankType rt) {
-		TopKRank2 tr = new TopKRank2(list, rt);
-		int rankSize = Constants.TOP_K_SEARCH;
-		if(list.size() < Constants.TOP_K_SEARCH ) {
-			rankSize = list.size();
-		}
-		tr.topK(list, 0, list.size()- 1,rankSize);
+
+			TopKRank2 tr = new TopKRank2(list, rt);
+			int rankSize = Constants.TOP_K_SEARCH;
+			if(list.size() < Constants.TOP_K_SEARCH ) {
+				rankSize = list.size();
+			}
+			tr.topK(list, 0, list.size()- 1,rankSize);	
+		
 	}
 	
 	/**
