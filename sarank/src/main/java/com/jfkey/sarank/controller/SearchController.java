@@ -40,7 +40,7 @@ public class SearchController {
 
 	// it will be used in pagination. and rank type. 
 	// as we wrote in front end, we can not get all search parameters, so we store in back end.
-	private SearchPara previousSearch;
+	 private SearchPara previousSearch;
 	
 	
 	@Autowired
@@ -87,25 +87,30 @@ public class SearchController {
 			searchPara = previousSearch;
 			searchResult = searchService.search(searchPara);
 		} else {
-			SearchPara formatPara = new SearchPara();
-			formatPara.setAuthor(searchPara.getAuthor());
-			formatPara.setKeywords(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
-			formatPara.setYear(searchPara.getYear());
-			formatPara.setPage(evalPage);
-			formatPara.setRt(searchPara.getRt());
-			previousSearch = formatPara;
-			searchResult = searchService.search(formatPara);
+//			SearchPara formatPara = new SearchPara();
+//			formatPara.setAuthor(searchPara.getAuthor());
+//			formatPara.setKeywords(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
+//			formatPara.setYear(searchPara.getYear());
+//			formatPara.setPage(evalPage);
+//			formatPara.setRt(searchPara.getRt());
+			searchPara.setFormatStr(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
+			searchPara.setAuthor(searchPara.getAuthor().trim());
+			
+			previousSearch = searchPara;
+			searchResult = searchService.search(searchPara);
 		}
 
 		// default doing keywords search.
 		if (searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS ) {
 			ModelAndView mv= new ModelAndView("/copy_main");
 			mv.addAllObjects(searchResult);
+			mv.addObject("para", searchPara );
 			
 			return mv;
 		} else if  (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AUTHOR) {
 			ModelAndView mv= new ModelAndView("/authors");
 			mv.addAllObjects(searchResult);
+			mv.addObject("para", searchPara );
 			return mv;
 		} else {
 			ModelAndView mv= new ModelAndView("/copy_main");
@@ -117,6 +122,7 @@ public class SearchController {
 			mv.addObject("paper", paper);
 			Pager pager = new Pager(23, 0, BUTTONS_TO_SHOW);
 			mv.addObject("pager", pager);
+			mv.addObject("para", searchPara );
 			
 			return mv;
 		}
@@ -129,6 +135,10 @@ public class SearchController {
 		model.addAttribute("searchPara", new SearchPara());
 		model.addAttribute("acjaShow", new ACJAShow());
 		model.addAttribute("paperList", new ArrayList<SearchedPaper>());
+		SearchPara para = new SearchPara();
+		para.setRt(RankType.DEFAULT_RANK);
+		para.setYear(10);
+		model.addAttribute("para", para);
 
 		// init pagination
 		Pager pager = new Pager(23, 0, BUTTONS_TO_SHOW);
@@ -137,7 +147,7 @@ public class SearchController {
 		paper.put("number", 0);
 		model.addAttribute("paper", paper);
 		model.addAttribute("pager", pager);
-
+		
 		System.out.println("model: " + model);
 		return "copy_main";
     }

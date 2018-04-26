@@ -94,10 +94,11 @@ public class SearchService {
 			// search keywords 
 			ACJAShow acjaShow = new ACJAShow();
 			// 1.get paperSocres and get ACJAShow year
-			Iterable<PaperScoresBean> paperScoresIt= searchRepository.getScoresByKeywords(searchPara.getKeywords());
+			Iterable<PaperScoresBean> paperScoresIt= searchRepository.getScoresByKeywords(searchPara.getFormatStr());
 			List<String> years = new ArrayList<String>();
 			List<PaperScoresBean> paperScoresList = getIteratorDataAndYears(paperScoresIt, years);
 			acjaShow.setYears(years);
+			acjaShow.setAllPaperNum(paperScoresList.size());
 			// 2.set PaperScoresBean's Score
 			setPaperScoresBeanScore(paperScoresList, RankType.DEFAULT_RANK);
 			// 3.rank PaperScoresBean according rank type
@@ -108,22 +109,21 @@ public class SearchService {
 			// 4.get SearchedPaper  
 			Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
 			List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
+			changeOrder(iDs, searchedPaperList);
+			colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 			// 5.get ACJA information
 			List<String> paIDs = pagination(paperScoresList, 0, Constants.ACJA_SIZE );
 			// Iterable<ACJA> ACJAIt = searchRepository.getACJAInfo(paIDs);
 			// List<ACJA> ACJAList = getIteratorData(ACJAIt);
 			getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(paIDs));
 			previousSearch.setAcjaShow(acjaShow);
-			
 			// return acja show and list of paper data
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("acjaShow", acjaShow);
 			result.put("paperList", searchedPaperList);
-			
 			// add pager information
 			int allNumber = previousSearch.getPaperScores().size();
 			result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));
-			
 			// add paper totalPages and current page
 			Map<String, Object> paper = new HashMap<String, Object>();
 			paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
@@ -154,13 +154,13 @@ public class SearchService {
 			List<String> paIDs = pagination(previousSearch.getPaperScores(), searchPara.getPage(), Constants.PRE_PAGE_SIZE);
 			Iterable<SearchedPaper> paperIt = searchRepository.getPaperByIDs(paIDs);
 			List<SearchedPaper> paperList = getIteratorData(paperIt);
+			changeOrder(paIDs, paperList);
+			colorTitle(paperList, searchPara.getKeywords(), 1);
 			result.put("paperList", paperList);
 			result.put("acjaShow", previousSearch.getAcjaShow());
-			
 			// add pager information
 			int allNumber = previousSearch.getPaperScores().size();
 			result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));
-			
 			// add paper totalPages and current page
 			Map<String, Object> paper = new HashMap<String, Object>();
 			paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
@@ -180,14 +180,13 @@ public class SearchService {
 				List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
 				Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
 				List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
-				
+				changeOrder(iDs, searchedPaperList);
+				colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 				result.put("acjaShow", previousSearch.getAcjaShow());
 				result.put("paperList", searchedPaperList);
-				
 				// add pager information
 				int allNumber = previousSearch.getPaperScores().size();
 				result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));	// in fact searchPara.getPage() is zero 
-				
 				// add paper totalPages and current page
 				Map<String, Object> paper = new HashMap<String, Object>();
 				paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
@@ -204,14 +203,13 @@ public class SearchService {
 				List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
 				Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
 				List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
-				
+				changeOrder(iDs, searchedPaperList);
+				colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 				result.put("acjaShow", previousSearch.getAcjaShow());
 				result.put("paperList", searchedPaperList);
-				
 				// add pager information
 				int allNumber = previousSearch.getPaperScores().size();
 				result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));	// in fact searchPara.getPage() is zero 
-				
 				// add paper totalPages and current page
 				Map<String, Object> paper = new HashMap<String, Object>();
 				paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
@@ -224,14 +222,12 @@ public class SearchService {
 				// rankList(paperScoresList, RankType.LATEST_YEAR);
 				List<String> iDs = pagination( previousSearch.getPaperScores(), 0, Constants.PRE_PAGE_SIZE );
 				List<SearchedPaper> searchedPaperList = getIteratorData(searchRepository.getCitationByIDs(iDs));
-				
+				colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 				result.put("acjaShow", previousSearch.getAcjaShow());
 				result.put("paperList", searchedPaperList);
-				
 				// add pager information
 				int allNumber = previousSearch.getPaperScores().size();
 				result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));	// in fact searchPara.getPage() is zero 
-				
 				// add paper totalPages and current page
 				Map<String, Object> paper = new HashMap<String, Object>();
 				paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );
@@ -428,4 +424,64 @@ public class SearchService {
 	}
 	
 	
+	/**
+	 * 
+	 * @param ids paper id.
+	 * @param paperList  a list of {@link com.jfkey.sarank.domain.SearchedPaper}.
+	 * 	fix bug when query using aggregate function COLLECT in neo4j.
+	 * 
+	 */
+	private void changeOrder(List<String> ids, List<SearchedPaper> paperList) {
+		String tmpID = "";
+		SearchedPaper pa = null;
+		for (int i = 0; i < ids.size() - 1; i ++) {
+			tmpID = ids.get(i);
+			for (int j = i; j < paperList.size() - 1; j ++) {
+				if (tmpID.equals(paperList.get(j).getPaID())) {
+					pa = paperList.get(i);
+					paperList.set(i, paperList.get(j));
+					paperList.set(j, pa);
+					break;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param list a list of SearchedPaper
+	 * @param colored keywords need to color
+	 * @param type if type is 1, will color keywords, if type is 2, will color author, if color is 3, then color year
+	 */
+	private void colorTitle(List<SearchedPaper>list, String colored, int type) {
+		String colorType = "red";
+		if (type == 1) {
+			String[] split = colored.split(" ");
+			String title = "";
+			for (SearchedPaper tmp : list ) {
+				title = tmp.getTitle();
+				for (String str : split) {
+					title= title.replaceAll("(?i)"+str, "<span class=\""+colorType +"\">" +str + "</span>");
+				}
+				tmp.setTitle(title);;
+			}
+		} else if (type == 2) {
+			// color Author. 
+			
+		}
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

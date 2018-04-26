@@ -117,19 +117,19 @@
 							<h4>Ranking Type</h4><br />
 							<ul class="ul-style-type" id="ul_rank_type">
 								<li>
-									<a style="color: #337AB7; font-size: large;" href="/search?rankType=1" onclick="changeRT(1)">
+									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" href="/search?rankType=1" >
 										<span>default ranking</span>
 									</a>
 								</li>
 								<li>
-									<a style="color: #222222; font-size: large;" href="/search?rankType=2" onclick="changeRT(2)"><span>relevance ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  href="/search?rankType=2"><span>relevance ranking</span></a>
 								</li>
 								<li>
-									<a style=" color: #222222; font-size: large; " href="/search?rankType=3" onclick="changeRT(3)"><span>most citations</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  href="/search?rankType=3" ><span>most citations</span></a>
 								</li>
 							
 								<li>
-									<a style="color: #222222; font-size: large;" href="/search?rankType=4" onclick="changeRT(4)"><span>time ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  href="/search?rankType=4" ><span>time ranking</span></a>
 								</li>
 							</ul>
 												
@@ -142,7 +142,7 @@
  				<div class="col-md-7 col-sm-12" style="margin-top: 50px;">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<span th:text="|search  ${#lists.size(paperList)}  relevant papers|"> search xxx relevant papers</span>
+							<span th:text="|search  ${acjaShow.allPaperNum}  relevant papers|"> search xxx relevant papers</span>
 						</div>
 				
 						<div id="paper_entity" style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
@@ -151,7 +151,7 @@
 									
 										<div class="div-paper-item">
 		
-											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID})}" th:text="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
+											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID})}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 											<br />
 											
 											<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
@@ -208,7 +208,7 @@
 				
 				
 				<!--右边的一些ranking-->
-				<div id="div_right_container" class="col-md-3 "style="background-color:; margin-top: 80px; height: 200px;" >
+				<div id="div_right_container" class="col-md-3 "style="background-color:; margin-top: 80px; " >
 					
 					<!--some Authors-->
 					<div id="div_right_author" class="col-sm-12 col-md-12"> 

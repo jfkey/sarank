@@ -103,6 +103,7 @@ public class ACJAShowFun {
 			}
 			// move and set curScore, also for athID, athName
 			for (int j = Constants.ACJA_SHOW-2; j> i ; j-- ) {
+				
 				acjaShow.getConScore()[j+1] = acjaShow.getConScore()[j];
 				acjaShow.getConID()[j+1] = acjaShow.getConID()[j];
 				acjaShow.getConName()[j+1] = acjaShow.getConName()[j];
@@ -144,4 +145,36 @@ public class ACJAShowFun {
 			return i+1;
 		}
 	}
+	
+	public static void main(String[] args) {
+		
+		ACJAShow acjaShow = new ACJAShow();
+		
+		String[] conID = {"1", "2", "3", "4", "5", "6", "7", "5", "4", "3"};
+		String[] conName = {"con-1", "con-2", "con-3", "con-4", "con-5", "con-6", "con-7", "con-5", "con-4", "con-3" };
+		double [] conScore = {1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.5, 1.4, 1.3};
+		
+//		String[] conID1 = new String[10];
+//		String[] conName1 = new String[10];
+//		double[] conScore1 = new double[10];
+//		conID1[0] = "3";
+//		conName1[0] = "con-3";
+//		conScore1[0] = 1.3;
+//		conID1[0] = "2";
+//		conName1[0] = "con-2";
+//		conScore1[0] = 1.2;
+		acjaShow.setConID(conID);
+		acjaShow.setConName(conName);
+		acjaShow.setConScore(conScore);
+		ACJAShowFun fun = new ACJAShowFun(acjaShow);
+		
+		for (int i = conID.length -1; i >= 0; i --) {
+			fun.findSetCon(acjaShow.getConScore()[i], acjaShow.getConID()[i], acjaShow.getConName()[i]);
+		}
+		
+		System.out.println(Arrays.toString(acjaShow.getConID()));
+		
+	}
+	
+	
 }

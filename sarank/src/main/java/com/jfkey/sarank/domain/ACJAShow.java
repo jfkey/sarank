@@ -32,6 +32,8 @@ public class ACJAShow {
 	
 	private List<String> years;
 	
+	private int allPaperNum;
+	
 	public ACJAShow() {
 		athID = new String[Constants.ACJA_SHOW];
 		athName = new String[Constants.ACJA_SHOW];
@@ -46,6 +48,7 @@ public class ACJAShow {
 		affName = new String[Constants.ACJA_SHOW];
 		affScore = new double[Constants.ACJA_SHOW];
 		years = new ArrayList<String>();
+		allPaperNum = 0;
 	}
 	
 	public String[] getAthID() {
@@ -152,6 +155,14 @@ public class ACJAShow {
 		this.years = years;
 	}
 
+	public int getAllPaperNum() {
+		return allPaperNum;
+	}
+
+	public void setAllPaperNum(int allPaperNum) {
+		this.allPaperNum = allPaperNum;
+	}
+
 	@Override
 	public String toString() {
 		return "ACJAShow [athID=" + Arrays.toString(athID) + ", athName="
@@ -165,9 +176,9 @@ public class ACJAShow {
 				+ Arrays.toString(jouScore) + ", affID="
 				+ Arrays.toString(affID) + ", affName="
 				+ Arrays.toString(affName) + ", affScore="
-				+ Arrays.toString(affScore) + ", years=" + years + "]";
+				+ Arrays.toString(affScore) + ", years=" + years
+				+ ", allPaperNum=" + allPaperNum + "]";
 	}
-	
-	
-	
+
+		
 }

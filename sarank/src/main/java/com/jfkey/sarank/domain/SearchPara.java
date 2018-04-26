@@ -32,19 +32,23 @@ public class SearchPara {
 	/*current  rank type */
 	private RankType rt;
 	
+	/*keywords after formate*/
+	private String formatStr;
+	
 	
 	public SearchPara() {
 	}
 
 
 	public SearchPara(String keywords, String author, int year, int page,
-			RankType rt) {
+			RankType rt, String formatStr) {
 		super();
 		this.keywords = keywords;
 		this.author = author;
 		this.year = year;
 		this.page = page;
 		this.rt = rt;
+		this.formatStr = formatStr;
 	}
 
 
@@ -97,10 +101,26 @@ public class SearchPara {
 		this.rt = rt;
 	}
 
+
+	public String getFormatStr() {
+		return formatStr;
+	}
+
+
+	public void setFormatStr(String formatStr) {
+		this.formatStr = formatStr;
+	}
+
+
 	@Override
 	public String toString() {
 		return "SearchPara [keywords=" + keywords + ", author=" + author
-				+ ", year=" + year + ", page=" + page + ", rt=" + rt + "]";
+				+ ", year=" + year + ", page=" + page + ", rt=" + rt
+				+ ", formatStr=" + formatStr + "]";
 	}
 
+	
+	
+	
+	
 }

@@ -167,3 +167,7 @@ a:hover, .ul-paper-item-actions a:hover, .ul-paper-item-aths a:hover{
 .pointer-disabled {
     pointer-events: none;
 }
+
+.red {
+	color: red;
+}
