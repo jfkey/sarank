@@ -17,7 +17,7 @@ import com.jfkey.sarank.utils.InputIKAnalyzer;
  * 
  * @author junfeng Liu
  * @time 2:21:39 PM Jan 19, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc paper info controller
  */
 @RestController

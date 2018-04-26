@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.Pager;
 import com.jfkey.sarank.domain.SearchPara;
-import com.jfkey.sarank.domain.SearchedPaper;
+import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.service.SearchService;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.InputIKAnalyzer;
@@ -29,7 +29,7 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 10:35:30 PM Apr 12, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc search controller
  */
 @Controller
@@ -115,7 +115,7 @@ public class SearchController {
 		} else {
 			ModelAndView mv= new ModelAndView("/copy_main");
 			mv.addObject("acjaShow", new ACJAShow());
-			mv.addObject("paperList", new ArrayList<SearchedPaper>());
+			mv.addObject("paperList", new ArrayList<PaperInSearchBean>());
 			Map<String, Object> paper = new HashMap<String,Object>();
 			paper.put("totalPages", 23);
 			paper.put("number", 0);
@@ -134,7 +134,7 @@ public class SearchController {
 		// init copy_main.html with null data 
 		model.addAttribute("searchPara", new SearchPara());
 		model.addAttribute("acjaShow", new ACJAShow());
-		model.addAttribute("paperList", new ArrayList<SearchedPaper>());
+		model.addAttribute("paperList", new ArrayList<PaperInSearchBean>());
 		SearchPara para = new SearchPara();
 		para.setRt(RankType.DEFAULT_RANK);
 		para.setYear(10);

@@ -8,7 +8,7 @@ import com.jfkey.sarank.utils.Constants;
  * 
  * @author junfeng Liu
  * @time 9:53:26 PM Apr 17, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc some function of ACJAShow. it will be easy to find influential points.
  */
 public class ACJAShowFun {

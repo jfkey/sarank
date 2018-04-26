@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jfkey.sarank.domain.AuthorInfoBean;
-import com.jfkey.sarank.domain.SearchInfoBean;
+import com.jfkey.sarank.domain.PaperSimpleBean;
 import com.jfkey.sarank.domain.ThreeTuple;
 import com.jfkey.sarank.repository.AuthorRepositroy;
 import com.jfkey.sarank.utils.Constants;
@@ -23,7 +23,7 @@ import com.jfkey.sarank.utils.TopKRank;
  * 
  * @author junfeng Liu
  * @time 5:08:28 PM Apr 6, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc author information service, some business code. 
  */
 @Service
@@ -102,7 +102,7 @@ public class AuthorService {
 	 * @param athID
 	 * @return
 	 */
-	public List<SearchInfoBean> getHotPapers(String athID) {
+	public List<PaperSimpleBean> getHotPapers(String athID) {
 		TopKRank rank = new TopKRank(getAllPapers(athID));
 		int hotPapersLen = 0;
 		if (allPapers.size() >= Constants.TOP_K_AUTHORS) {
@@ -117,9 +117,9 @@ public class AuthorService {
 		for (int i = 0; i < hotPapersLen; i++) {
 			listID[i] = allPapers.get(i).getNodeID();
 		}
-		Iterable<SearchInfoBean> hpIterable = authorRepository
+		Iterable<PaperSimpleBean> hpIterable = authorRepository
 				.getPaperPerPage(listID);
-		List<SearchInfoBean> hotPapers = getIteratorData(hpIterable);
+		List<PaperSimpleBean> hotPapers = getIteratorData(hpIterable);
 		return hotPapers;
 	}
 	

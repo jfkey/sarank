@@ -8,13 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.jfkey.sarank.domain.Author;
 import com.jfkey.sarank.domain.AuthorInfoBean;
-import com.jfkey.sarank.domain.SearchInfoBean;
+import com.jfkey.sarank.domain.PaperSimpleBean;
 
 /**
  * 
  * @author junfeng Liu
  * @time 5:20:23 PM Apr 6, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc author repository
  */
 public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{
@@ -37,7 +37,7 @@ public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{
 			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID , COLLECT(authors) AS authors, citations, score  "
 			+ "ORDER BY score DESC "
 			+ "RETURN  title, paID, authors, authorsID, year, venue, jouID, conID, citations, score; ")
-	Iterable<SearchInfoBean> getPaperPerPage(@Param("listID") String[] listID);
+	Iterable<PaperSimpleBean> getPaperPerPage(@Param("listID") String[] listID);
 	
 	@Query("MATCH(a:Author) WHERE a.athID = {athid} RETURN a.athName as name")
 	Iterable<Map<String, Object>> getAuthorName(@Param("athid") String athid);

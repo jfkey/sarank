@@ -4,7 +4,7 @@ package com.jfkey.sarank.utils;
  * 
  * @author junfeng Liu
  * @time 3:28:36 PM Jan 31, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc some constans
  */
 public interface Constants {
@@ -44,7 +44,7 @@ public interface Constants {
 	/** make sarank score is similar as relevance score*/
 	public final double C = 3 * Math.pow(10, 10);
 	
-	public final int REF_CITE_SIZE = 10;
+	public final int REF_CITE_SIZE = 15;
 	
 	/**authors hot papers */
 	public final int TOP_K_AUTHORS = 10;

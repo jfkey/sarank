@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jfkey.sarank.domain.SearchInfoBean;
+import com.jfkey.sarank.domain.PaperSimpleBean;
 import com.jfkey.sarank.service.AuthorService;
 
 
@@ -21,7 +21,7 @@ public class AuthorController {
 	
 	@RequestMapping("/author") 
 	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid) {
-		List<SearchInfoBean> hotPapers = authorService.getHotPapers(athid);		
+		List<PaperSimpleBean> hotPapers = authorService.getHotPapers(athid);		
 		Map<String, Object> coAuthorAndSimpleInfo = authorService.getCoAuthorAndSimpleInfo(athid);
 		
 		ModelAndView mv= new ModelAndView("/author");

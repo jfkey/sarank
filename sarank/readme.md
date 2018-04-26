@@ -1,6 +1,9 @@
 # Design and Implementation of Scholarly Article Ranking System 
 
 ## Log
+**Version v.0.1.2(4/26/2018 9:48:56 PM )**
+	
+
 **Version v.0.1.1(4/26/2018 9:48:56 PM )**
 
 * rewrite search page 

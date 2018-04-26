@@ -7,11 +7,11 @@ import java.util.List;
  * 
  * @author junfeng Liu
  * @time 3:57:42 PM Mar 4, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc the details of paper in paper_info page
  */
 public class BasicInfoBean {
-	private SearchInfoBean searchInfoBean;
+	private PaperSimpleBean searchInfoBean;
 	private String doi;
 	private String norTitle;
 	private String[] versions;
@@ -28,7 +28,7 @@ public class BasicInfoBean {
 	}
 
 
-	public BasicInfoBean(SearchInfoBean searchInfoBean, String doi,
+	public BasicInfoBean(PaperSimpleBean searchInfoBean, String doi,
 			String norTitle, String[] versions, String[] keywords,
 			String[] refs, String[] cites, String[] fosName, String[] fosID) {
 		super();
@@ -44,12 +44,12 @@ public class BasicInfoBean {
 	}
 
 
-	public SearchInfoBean getSearchInfoBean() {
+	public PaperSimpleBean getSearchInfoBean() {
 		return searchInfoBean;
 	}
 
 
-	public void setSearchInfoBean(SearchInfoBean searchInfoBean) {
+	public void setSearchInfoBean(PaperSimpleBean searchInfoBean) {
 		this.searchInfoBean = searchInfoBean;
 	}
 

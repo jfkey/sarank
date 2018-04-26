@@ -10,14 +10,14 @@ import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.Paper;
 import com.jfkey.sarank.domain.PaperScoresBean;
-import com.jfkey.sarank.domain.SearchedPaper;
+import com.jfkey.sarank.domain.PaperInSearchBean;
 
 public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 
 	/**
 	 * @param paIDs
 	 *            a list of paper ID.
-	 * @return SearchedPaper {@link com.jfkey.sarank.domain.SearchedPaper}
+	 * @return SearchedPaper {@link com.jfkey.sarank.domain.PaperInSearchBean}
 	 */
 	
 	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
@@ -32,7 +32,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations, doi,  score "
 			+ "OPTIONAL MATCH (paUrl:PaperUrl) WHERE paUrl.paID = paID "
 			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations,count(paUrl) as versions, doi, score;")
-	Iterable<SearchedPaper> getPaperByIDs(@Param("paIDs") List<String> paIDs);
+	Iterable<PaperInSearchBean> getPaperByIDs(@Param("paIDs") List<String> paIDs);
 
 	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
 			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
@@ -47,7 +47,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "OPTIONAL MATCH (paUrl:PaperUrl) WHERE paUrl.paID = paID "
 			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations,count(paUrl) as versions, doi, score "
 			+ "ORDER BY citations DESC;")
-	Iterable<SearchedPaper> getCitationByIDs(@Param("paIDs") List<String> paIDs);
+	Iterable<PaperInSearchBean> getCitationByIDs(@Param("paIDs") List<String> paIDs);
 	
 	
 	/**

@@ -8,12 +8,12 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 3:54:57 PM Mar 4, 2018
- * @version v0.1.1
- * @desc paper info in author page,  paper detailed page.
+ * @version v0.1.2
+ * @desc paper info in author page,  paper detailed page. 
  */
 
 @QueryResult
-public class SearchInfoBean {
+public class PaperSimpleBean {
 	// title, paID, authors, authorsID, year, venue, jouID, conID, citations, score
 	/*paper title*/
 	private String title;
@@ -36,12 +36,12 @@ public class SearchInfoBean {
 	/*the score of paper calculate by sarank */
 	private double score;
 	
-	public SearchInfoBean() {
+	public PaperSimpleBean() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SearchInfoBean(String title, String paID, String[] authors,
+	public PaperSimpleBean(String title, String paID, String[] authors,
 			String[] authorsID, String year, String venue, String jouID,
 			String conID, int citations, double score) {
 		super();

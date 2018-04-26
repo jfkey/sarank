@@ -18,7 +18,7 @@ import com.jfkey.sarank.domain.Pager;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.PreviousSearch;
 import com.jfkey.sarank.domain.SearchPara;
-import com.jfkey.sarank.domain.SearchedPaper;
+import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.repository.SearchRepository;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.RankType;
@@ -29,7 +29,7 @@ import com.jfkey.sarank.utils.TopKRank2;
  * 
  * @author junfeng Liu
  * @time 5:09:50 PM Apr 17, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * @desc search paepr service.
  */
 @Service
@@ -67,19 +67,19 @@ public class SearchService {
 				// author keywords year
 				Map<String, Object> result = new HashMap<String, Object>();
 				result.put("acjaShow", new ACJAShow());
-				result.put("paperList", new ArrayList<SearchedPaper>());
+				result.put("paperList", new ArrayList<PaperInSearchBean>());
 				return result;
 			} else if (!searchPara.getKeywords().equals("")  &&  searchPara.getKeywords() != null ) {
 				// keywords author
 				Map<String, Object> result = new HashMap<String, Object>();
 				result.put("acjaShow", new ACJAShow());
-				result.put("paperList", new ArrayList<SearchedPaper>());
+				result.put("paperList", new ArrayList<PaperInSearchBean>());
 				return result;
 			} else if ( searchPara.getYear() > 1800 && searchPara.getYear() < 2100 ) {
 				// proper year 
 				Map<String, Object> result = new HashMap<String, Object>();
 				result.put("acjaShow", new ACJAShow());
-				result.put("paperList", new ArrayList<SearchedPaper>());
+				result.put("paperList", new ArrayList<PaperInSearchBean>());
 				return result;
 			} else {
 				// only search author.
@@ -107,8 +107,8 @@ public class SearchService {
 			previousSearch.setPaperScores(paperScoresList);
 			List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
 			// 4.get SearchedPaper  
-			Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
-			List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
+			Iterable<PaperInSearchBean> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
+			List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
 			changeOrder(iDs, searchedPaperList);
 			colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 			// 5.get ACJA information
@@ -152,8 +152,8 @@ public class SearchService {
 			Map<String, Object> result = new HashMap<String, Object>();
 			// add paperList and acjaShow 
 			List<String> paIDs = pagination(previousSearch.getPaperScores(), searchPara.getPage(), Constants.PRE_PAGE_SIZE);
-			Iterable<SearchedPaper> paperIt = searchRepository.getPaperByIDs(paIDs);
-			List<SearchedPaper> paperList = getIteratorData(paperIt);
+			Iterable<PaperInSearchBean> paperIt = searchRepository.getPaperByIDs(paIDs);
+			List<PaperInSearchBean> paperList = getIteratorData(paperIt);
 			changeOrder(paIDs, paperList);
 			colorTitle(paperList, searchPara.getKeywords(), 1);
 			result.put("paperList", paperList);
@@ -178,8 +178,8 @@ public class SearchService {
 				rankList(paperScoresList, RankType.RELEVANCE_RANK);
 				previousSearch.setPaperScores(paperScoresList);
 				List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
-				Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
-				List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
+				Iterable<PaperInSearchBean> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
+				List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
 				changeOrder(iDs, searchedPaperList);
 				colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 				result.put("acjaShow", previousSearch.getAcjaShow());
@@ -201,8 +201,8 @@ public class SearchService {
 				rankList(paperScoresList, RankType.LATEST_YEAR);
 				previousSearch.setPaperScores(paperScoresList);
 				List<String> iDs = pagination(paperScoresList, 0, Constants.PRE_PAGE_SIZE );
-				Iterable<SearchedPaper> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
-				List<SearchedPaper> searchedPaperList = getIteratorData(searchedPaperIt);
+				Iterable<PaperInSearchBean> searchedPaperIt = searchRepository.getPaperByIDs(iDs);
+				List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
 				changeOrder(iDs, searchedPaperList);
 				colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 				result.put("acjaShow", previousSearch.getAcjaShow());
@@ -221,7 +221,7 @@ public class SearchService {
 				Map<String, Object> result = new HashMap<String, Object>();
 				// rankList(paperScoresList, RankType.LATEST_YEAR);
 				List<String> iDs = pagination( previousSearch.getPaperScores(), 0, Constants.PRE_PAGE_SIZE );
-				List<SearchedPaper> searchedPaperList = getIteratorData(searchRepository.getCitationByIDs(iDs));
+				List<PaperInSearchBean> searchedPaperList = getIteratorData(searchRepository.getCitationByIDs(iDs));
 				colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 				result.put("acjaShow", previousSearch.getAcjaShow());
 				result.put("paperList", searchedPaperList);
@@ -427,13 +427,13 @@ public class SearchService {
 	/**
 	 * 
 	 * @param ids paper id.
-	 * @param paperList  a list of {@link com.jfkey.sarank.domain.SearchedPaper}.
+	 * @param paperList  a list of {@link com.jfkey.sarank.domain.PaperInSearchBean}.
 	 * 	fix bug when query using aggregate function COLLECT in neo4j.
 	 * 
 	 */
-	private void changeOrder(List<String> ids, List<SearchedPaper> paperList) {
+	private void changeOrder(List<String> ids, List<PaperInSearchBean> paperList) {
 		String tmpID = "";
-		SearchedPaper pa = null;
+		PaperInSearchBean pa = null;
 		for (int i = 0; i < ids.size() - 1; i ++) {
 			tmpID = ids.get(i);
 			for (int j = i; j < paperList.size() - 1; j ++) {
@@ -453,12 +453,12 @@ public class SearchService {
 	 * @param colored keywords need to color
 	 * @param type if type is 1, will color keywords, if type is 2, will color author, if color is 3, then color year
 	 */
-	private void colorTitle(List<SearchedPaper>list, String colored, int type) {
+	private void colorTitle(List<PaperInSearchBean>list, String colored, int type) {
 		String colorType = "red";
 		if (type == 1) {
 			String[] split = colored.split(" ");
 			String title = "";
-			for (SearchedPaper tmp : list ) {
+			for (PaperInSearchBean tmp : list ) {
 				title = tmp.getTitle();
 				for (String str : split) {
 					title= title.replaceAll("(?i)"+str, "<span class=\""+colorType +"\">" +str + "</span>");

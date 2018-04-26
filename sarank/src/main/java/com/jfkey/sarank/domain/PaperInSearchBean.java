@@ -8,12 +8,12 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 5:43:26 PM Apr 13, 2018
- * @version v0.1.1
+ * @version v0.1.2
  * 
  * @desc searched paper information in search page
  */
 @QueryResult
-public class SearchedPaper {
+public class PaperInSearchBean {
 	// title, paID, authors, authorsID, year, venue, jouID, conID, citations, score
 	/*paper title*/
 	private String title;
@@ -46,10 +46,10 @@ public class SearchedPaper {
 	/*the score of paper calculate by sarank */
 	private double score;
 	
-	public SearchedPaper() {
+	public PaperInSearchBean() {
 	}
 	
-	public SearchedPaper(String title, String paID, String[] authors,
+	public PaperInSearchBean(String title, String paID, String[] authors,
 			String[] authorsID, String year, String venue, String jouID,
 			String conID, int citations, double versions, String doi,
 			double score) {
