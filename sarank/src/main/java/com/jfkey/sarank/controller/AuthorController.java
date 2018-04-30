@@ -21,14 +21,14 @@ public class AuthorController {
 	
 	@RequestMapping("/author") 
 	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid) {
-		List<PaperSimpleBean> hotPapers = authorService.getHotPapers(athid);		
-		Map<String, Object> coAuthorAndSimpleInfo = authorService.getCoAuthorAndSimpleInfo(athid);
 		
 		ModelAndView mv= new ModelAndView("/author");
+		List<PaperSimpleBean> hotPapers = authorService.getHotPapers(athid);
+		
+		mv.addAllObjects(authorService.getCoAuthorAndSimpleInfo(athid));
+		authorService.colorAuthor(hotPapers, authorService.getAthName());
 		mv.addObject("hotPapers", hotPapers);
-		mv.addObject("simpleInfo", coAuthorAndSimpleInfo);
-//		System.out.println(coAuthorAndSimpleInfo);
-//		authorService.getFosPerYear();
+		
 		return mv;
 	}
 

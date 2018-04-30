@@ -35,7 +35,7 @@ var myChart = echarts.init(document.getElementById('chartAllPapers'));
 			    		{
 			            name: 'not-first author',
 			            type: 'bar',
-			            color :['#516b91'],
+			            color :['#b8d2c7'],
 			            barWidth:'40%',
 			            stack: 'all papers',
 			            label: {
@@ -47,7 +47,7 @@ var myChart = echarts.init(document.getElementById('chartAllPapers'));
 			       },  {
 			            name: 'first author',
 			            type: 'bar', 
-			            color :['#59c4e6'],
+			            color :['#f5e8c8'],
 			            barWidth:'40%',
 			            stack: 'all papers',
 			            label: {

@@ -36,7 +36,7 @@ var chart_cite_year = echarts.init(document.getElementById('chartCiteYear'));
 			    		{
 			            name: 'citations',
 			            type: 'bar',
-			            color :['#3685BC'],
+			            color :['#61a0a8'],
 			            barWidth:'70%',
 			            stack: 'all papers',
 			            label: {
@@ -45,10 +45,10 @@ var chart_cite_year = echarts.init(document.getElementById('chartCiteYear'));
 			                    position: 'insideRight'
 			                }
 			            },
-			            data: [20,12,33,22]
+			            data: [20,12,33,22,43,18,26]
 			       }
-			       ]
- 
+			    		
+			       ],
 			});
 			
 			// myChart.showLoading();

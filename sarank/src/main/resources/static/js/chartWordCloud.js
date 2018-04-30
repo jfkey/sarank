@@ -1,5 +1,6 @@
  var wc = echarts.init(document.getElementById('chartWordCloud'));
 		
+		
 		$.ajax({
 			url:"/author/getAvatar",
 			success:function(keywords){
@@ -7,7 +8,8 @@
 		}});
 		
 		function showAvatar(keywords) {
-			  keywords = {
+			if (keywords == null) {
+					  keywords = {
               "minOpacity": 50,
               "maxOpacity": 54,
               "prevIcon": 12,
@@ -43,7 +45,8 @@
               "eptem": 10,
               "icveO": 14,
            	
-            };
+         	   };
+			}
 			var data = [];
             for (var name in keywords) {
                 data.push({
@@ -97,6 +100,9 @@
                 wc.resize();
             }
 		}
+		
+		
+		
 		
 //          var keywords = {
 //          

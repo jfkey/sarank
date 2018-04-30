@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
 
+import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.Paper;
 import com.jfkey.sarank.domain.PaperDetailBean;
 import com.jfkey.sarank.domain.PaperSimpleBean;
@@ -26,7 +27,7 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 	@Query("MATCH (p:Paper)<-[r:PaaAth]-(a:Author)  WHERE p.paID = {paID} "
 			+ "WITH p.originalTitle as title, p.paID as paID, p.paDOI as doi, p.paDate as date, p.NormalizedName as venName, "
 			+ "p.jouID as jouID, p.conID as conID, p.normalizedTitle as norTitle, 	SIZE((:Paper)-[:PaRef]->(p)) as cite, "
-			+ "SIZE( (p:Paper)-[:PaRef]-(:Paper) ) as ref, a.athName as athName, a.athID as athID, r.authorNumber as number, p "
+			+ "SIZE( (p)-[:PaRef]->(:Paper) ) as ref, a.athName as athName, a.athID as athID, r.authorNumber as number, p "
 			+ "ORDER BY number WITH title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, "
 			+ "COLLECT(athName) as athName, COLLECT(athID) as athID, p "
 			+ "OPTIONAL MATCH  (p:Paper)-[kw:Pkw]->(fos1:FOS)-[fosH:FosHierarchy]->(fos2:FOS) "
@@ -38,10 +39,10 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 			+ "RETURN title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, athName, athID, keywords, fosName1,  fosID1, fosName2,  fosID2,  COLLECT( DISTINCT paUrl.paUrl) as paUrl ")
 	Iterable<PaperDetailBean> getPaperInfo(@Param("paID") String paID);
 	
-	
+	 
 	/**
 	 * 
-	 * @param paID  paper id
+	 * @param paID  paper id	
 	 * @param limitSize result limit size 
 	 * @return get paper citations, return {@link com.jfkey.sarank.domain.PaperSimpleBean}
 	 */
@@ -52,7 +53,7 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, p.originalTitle as title, "
 			+ "p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, p.conID as conID, r.authorNumber as number, "
 			+ "size((:Paper)-[:PaRef]->(p:Paper)) as citations, score.paperScore as score "
-			+ "ORDER BY number "
+			+ "ORDER BY toInteger(number) "
 			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID , COLLECT(authors) AS authors, "
 			+ "citations, score "
 			+ "ORDER BY score DESC "
@@ -72,11 +73,13 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, p.originalTitle as title, "
 			+ "p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, p.conID as conID, r.authorNumber as number, "
 			+ "size((:Paper)-[:PaRef]->(p:Paper)) as citations, score.paperScore as score "
-			+ "ORDER BY number "
+			+ "ORDER BY toInteger(number) "
 			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID , COLLECT(authors) AS authors, "
 			+ "citations, score "
 			+ "ORDER BY score DESC "
 			+ "RETURN  title, paID, authors, authorsID, year, venue, jouID, conID, citations, score LIMIT {limitSize}")
 	Iterable<PaperSimpleBean> getPaperRef(@Param("paID")String paID, @Param("limitSize")int limitSize );
 
+	
+	
 }

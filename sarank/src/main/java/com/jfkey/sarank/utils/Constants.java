@@ -44,7 +44,8 @@ public interface Constants {
 	/** make sarank score is similar as relevance score*/
 	public final double C = 3 * Math.pow(10, 10);
 	
-	public final int REF_CITE_SIZE = 15;
+	/** default reference and citations size */
+	public final int REF_CITE_SIZE = 10;
 	
 	/**authors hot papers */
 	public final int TOP_K_AUTHORS = 10;
@@ -59,7 +60,10 @@ public interface Constants {
 	public final int FOS_SIZE = 5;
 	
 	/**co_author numbers will be shown `CO_AUTHOR_NUMBER - 1`*/
-	public final int CO_AUTHOR_NUMBER = 9;
+	public final int CO_AUTHOR_NUMBER = 11;
+	
+	/** aff_number will be shown in author info page.*/
+	public final int AFF_NUMBER = 8;
 	
 	/**only show 10 influent Author conference journal affiliation*/
 	public final int ACJA_SHOW = 10;

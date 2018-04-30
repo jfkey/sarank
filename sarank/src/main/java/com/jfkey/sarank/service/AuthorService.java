@@ -12,7 +12,10 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jfkey.sarank.domain.AffYear;
+import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.AuthorInfoBean;
+import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperSimpleBean;
 import com.jfkey.sarank.domain.ThreeTuple;
 import com.jfkey.sarank.repository.AuthorRepositroy;
@@ -30,7 +33,8 @@ import com.jfkey.sarank.utils.TopKRank;
 public class AuthorService {
 	@Autowired
 	private AuthorRepositroy authorRepository;
-
+	
+	/*all papers by this author*/
 	private List<AuthorInfoBean> allPapers;
 	
 	private Map<String, Object> chartFirstAndNot;
@@ -41,17 +45,19 @@ public class AuthorService {
 	
 	private Map<String, Integer> wordCloud;
 	
-	private List<Map<String, String>> coAuthor;
+//	private List<Map<String, String>> coAuthor;
+	private Map<String, String> coAuthor;
 	
+	/*current author name*/
+	private String athName ;
 	
 	private int curYear = 2016;
 	
 	/**
 	 * get author all papers
-	 * 
-	 * @param athID
-	 *            author ID
+	 * @param athID author ID
 	 * @return
+	 * 
 	 */
 	private List<AuthorInfoBean> getAllPapers(String athID) {
 		// allPapers = new ArrayList<SearchHit>();
@@ -89,7 +95,6 @@ public class AuthorService {
 		String name = "";
 		while (iterator.hasNext()) {
 			name = (String) iterator.next().get("name");
-			
 		}
 		infoMap.put(athid, name);
 		
@@ -106,8 +111,7 @@ public class AuthorService {
 		TopKRank rank = new TopKRank(getAllPapers(athID));
 		int hotPapersLen = 0;
 		if (allPapers.size() >= Constants.TOP_K_AUTHORS) {
-			rank.topK(allPapers, 0, allPapers.size() - 1,
-					Constants.TOP_K_AUTHORS);
+			rank.topK(allPapers, 0, allPapers.size() - 1, Constants.TOP_K_AUTHORS);
 			hotPapersLen = Constants.TOP_K_AUTHORS;
 		} else {
 			rank.topK(allPapers, 0, allPapers.size() - 1, allPapers.size());
@@ -117,9 +121,9 @@ public class AuthorService {
 		for (int i = 0; i < hotPapersLen; i++) {
 			listID[i] = allPapers.get(i).getNodeID();
 		}
-		Iterable<PaperSimpleBean> hpIterable = authorRepository
-				.getPaperPerPage(listID);
+		Iterable<PaperSimpleBean> hpIterable = authorRepository.getPaperPerPage(listID);
 		List<PaperSimpleBean> hotPapers = getIteratorData(hpIterable);
+		
 		return hotPapers;
 	}
 	
@@ -138,7 +142,8 @@ public class AuthorService {
 		Map<String,String> coAthIDName = new HashMap<String, String>();
 		Map<String, Integer> affIDNumber = new HashMap<String, Integer>();
 		Map<String, String> athIDName = new HashMap<String, String>();
-		coAuthor = new ArrayList<Map<String, String>>();
+		List<AffYear> affYear = new ArrayList<AffYear>();
+		coAuthor = new HashMap<String, String>();
 		for (AuthorInfoBean tmp : allPapers) {
 			cite += tmp.getCite();
 			if (tmp.getAffID() != null) {
@@ -151,7 +156,12 @@ public class AuthorService {
 						maxStr = str;
 					}
 				} else {
-					affIDNumber.put(str, 1);
+					if (affIDNumber.size() <= Constants.AFF_NUMBER) {
+						affIDNumber.put(str, 1);
+						if (notContain(affYear, tmp.getAffID())) {
+							affYear.add(new AffYear(tmp.getAff(), tmp.getAffID(), tmp.getYear()));
+						}
+					}
 				}
 			}
 			for (int i = 0; i < tmp.getAuthorsID().length; i ++) {
@@ -172,30 +182,40 @@ public class AuthorService {
 			}
 		});
 		int coAuthorSize = (coAthIDNumber.size() > Constants.CO_AUTHOR_NUMBER) ? Constants.CO_AUTHOR_NUMBER : coAthIDNumber.size()  ;
-		HashMap<String, String> tmp = null;
+		String[] coAthIDStr = new String[coAuthorSize-1];
 		for (int i = 0; i < coAuthorSize; i++) {
 			if (i == 0) {
-				if (allPapers.size() == 1) {
-					athIDName = getAuthorName(athid);
-				} else {
-					athIDName.put(list.get(0).getKey(), coAthIDName.get(list.get(0).getKey()));
-				}
+//				if (allPapers.size() == 1) {
+//					athIDName = getAuthorName(athid);
+//				} else {
+//					athIDName.put(list.get(0).getKey(), coAthIDName.get(list.get(0).getKey()));
+//				}
+				this.athName = coAthIDName.get(list.get(0).getKey());
+				athIDName.put(list.get(0).getKey(), athName);
 				continue;
 			}
-			tmp = new HashMap<String, String>();
-			tmp.put(list.get(i).getKey(), coAthIDName.get(list.get(i).getKey()));
-			coAuthor.add(tmp);
+			coAthIDStr[i-1] = list.get(i).getKey();
+			coAuthor.put(list.get(i).getKey(), coAthIDName.get(list.get(i).getKey()));
 		}
+		Iterable<AuthorHit> coAuthorInfoIt = authorRepository.getCoAuthorInfo(coAthIDStr);
+		List<AuthorHit> coAuthor = getIteratorData(coAuthorInfoIt);
+		changeOrder(coAthIDStr, coAuthor);
+		
+		
 		result.put("papers", allPapers.size());
 		result.put("cite", cite);
 		result.put("aff", maxStr);
 		result.put("coAuthor", coAuthor);
 		result.put("author", athIDName);
+		result.put("affYear", affYear);
 		
 //		System.out.println("papers: "+ allPapers.size());
 //		System.out.println("cite: "+ cite);
-//		System.out.println("maxStr: "+ maxStr + ", maxSize : " + maxSim);
+//		System.out.println("aff"+ maxStr + ", maxSize : " + maxSim);
 //		System.out.println("coAuthor: "+ coAuthor);
+//		System.out.println("athID: "+ Arrays.toString(coAthIDStr));
+//		System.out.println("author: " + athIDName);
+		
 		
 		return result;
 	}
@@ -368,12 +388,65 @@ public class AuthorService {
 		return wordCloud;
 	}
 	
+	
+	/**
+	 * rearrange a list of {@link com.jfkey.sarank.domain.AuthorHit} order by an array of IDs
+	 * @param ids  an array of String
+	 * @param authorHit a list of AuthorHit
+	 */
+	private void changeOrder(String[] ids, List<AuthorHit> authorHit) {
+		String tmpID = "";
+		AuthorHit pa = null;
+		for (int i = 0; i < ids.length - 1; i ++) {
+			tmpID = ids[i];
+			for (int j = i; j < authorHit.size() - 1; j ++) {
+				if (tmpID.equals(authorHit.get(j).getAthID())) {
+					pa = authorHit.get(i);
+					authorHit.set(i, authorHit.get(j));
+					authorHit.set(j, pa);
+					break;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param affYearList
+	 * @param affID
+	 * @return judge affYearList whether contains affID.
+	 */
+	private boolean notContain(List<AffYear> affYearList, String affID) {
+		boolean b = true;
+		for(AffYear tmp : affYearList) {
+			if (tmp.getAffID().equals(affID)) {
+				b = false;
+				break;
+			}
+		}
+		return b;
+	}
+	
+	/**
+	 * colored the author
+	 * @param list a list of PaperSimpleBean 
+	 * @param athName author name
+	 */
+	public void colorAuthor(List<PaperSimpleBean>list, String athName) {
+		String colorType = "red";
+		String formatAthStr = "<span class=\"" + colorType + "\">" + athName
+				+ "</span>";
+		for (PaperSimpleBean tmp : list) {
+			for (int i = 0; i < tmp.getAuthors().length; i++) {
+				if (athName.equals(tmp.getAuthors()[i])) {
+					tmp.getAuthors()[i] = formatAthStr;
+				}
+			}
+		}
+	}
+	
+	public String getAthName() {
+		return this.athName;
+	}
 }
-
-
-
-
-
-
-
 

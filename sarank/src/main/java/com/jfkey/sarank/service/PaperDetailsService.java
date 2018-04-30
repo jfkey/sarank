@@ -26,10 +26,13 @@ public class PaperDetailsService {
 	@Autowired
 	private PaperDetailsRepository paperDetailsRepository;
 	
-	public List<PaperDetailBean> getPaperDetails(String paID) {
+	public PaperDetailBean getPaperDetails(String paID) {
 		List<PaperDetailBean> paperDetailList = getIteratorData(paperDetailsRepository.getPaperInfo(paID));
+		if (paperDetailList != null && paperDetailList.size() > 0) {
+			return paperDetailList.get(0);
+		}
 		
-		return paperDetailList;
+		return new PaperDetailBean();
 	}
 	
 	/**

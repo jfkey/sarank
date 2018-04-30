@@ -99,7 +99,7 @@
 		
 			<div class="col-md-9" style="height:auto; margin-top: 50px; background-color: rgb(250,250,240);">
 				<div class="col-md-12" style="margin-bottom: 10px; margin-top: 10px;">
-					<font size="6" face="book antiqua" th:text="${details.searchInfoBean.title}">this is paper title graph database </font>
+					<font size="6" face="book antiqua" th:text="${details.title}">this is paper title graph database </font>
 				</div>
 		
 				<div class="col-md-8 col-sm-12" style="background-color: white;">
@@ -130,17 +130,17 @@
 								<div class="panel-heading" > Basic infomation </div>
 								<div class="panel-body">
 									<strong>Authors:</strong>
-									<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${details.searchInfoBean.authors}">
-										<a th:text="${details.searchInfoBean.authors[nameStat.index]}" th:href="@{/author(athid=${details.searchInfoBean.authorsID[nameStat.index]})}">author1</a>,&nbsp;
+									<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${details.athName}">
+										<a th:text="${details.athName[nameStat.index]}" th:href="@{/author(athid=${details.athID[nameStat.index]})}">author1</a>,&nbsp;
 									</li>
 									<br />
 		
 									<strong>Venue:</strong>
-									<a th:text="${#strings.toUpperCase(details.searchInfoBean.venue)}" href="#">TKDE</a>
+										<a th:text="${details.conID != null} ? ${#strings.toUpperCase(details.venName)} : ${details.venName}  " href="#">TKDE</a>
 									<br/>
 		
 									<strong>Year:</strong>
-									<span th:text="${details.searchInfoBean.year}">2001</span>
+									<span th:text="${details.date}">2001</span>
 									<br />
 									<strong>paper DOI:</strong>
 									<a th:text="${details.doi}" , th:href="@{https://www.doi.org/${details.doi}}">2001.TKDE.2000001</a>
@@ -151,7 +151,7 @@
 									<br />
 		
 									<strong>Citations:</strong>
-									<span th:text="${details.searchInfoBean.citations}">10</span>
+									<span th:text="${details.cite}">10</span>
 									<br />
 									<strong>Abstract:</strong>
 									<span>this is abstract </span>
@@ -164,7 +164,7 @@
 								  	    </button>
 		
 									<div id="demo" class="collapse">
-										<li style="list-style-type: none; display: inline; margin-left: 10px;" th:each=" tmp : ${details.versions}">
+										<li style="list-style-type: none; display: inline; margin-left: 10px;" th:each=" tmp : ${details.paUrl}">
 											<a th:text="${tmp}" th:href="${tmp}">this is paper url</a> <br />
 										</li>
 									</div>
@@ -178,7 +178,10 @@
 		
 									<div>
 										<strong>Fields Of Study:</strong>
-										<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName}">
+										<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName1}">
+											<a th:text="${fos}" href="#">data mining </a> <br />
+										</li>
+										<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName2}">
 											<a th:text="${fos}" href="#">data mining </a> <br />
 										</li>
 									</div>
@@ -190,7 +193,7 @@
 						<div class="tab-pane fade " id="ref">
 							<div class="panel panel-default">
 								<div class="panel-heading" >
-									<span>Refs: 10</span>
+									<span th:text="|Refs: ${details.ref}|">Refs: 10</span>
 									
 								</div>
 		
@@ -229,12 +232,13 @@
 						<div class="tab-pane fade" id="cite">
 							<div class="panel panel-default">
 								<div class="panel-heading"> 
-									<span>Top citations 30 </span>
+									<span th:text="|Cite: ${details.cite}|">cite: 10</span>
 								</div>
 		
 								<div class="panel-body">
 									<th:block th:each="item:${cite}">
 										<div class="details-item-ref">
+											
 		
 											<img src="img/icon-paper.png" style="width: 20px; height: 20px;" />
 											<a class="details-item-ref-title" th:href="@{/paper(paid=${item.paID})}" th:text="${item.title}">This is paper title </a>

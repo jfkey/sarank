@@ -14,11 +14,12 @@ chart_fos_year.setOption({
 //	},
 
 	legend: {
-		data: ["Machine learning", "Statistics", "Data mining", "Artificial intelligence", "Algorithm"]
+		 data:[ 'Machine learning', 'World Wide Web', 'Machine', 'learning', 'asdf'
+          ]
 	},
 	 title: { 
 					show:true,
-					text: "Research Interest ",
+					text: "",
 					x:"center", 
 					textStyle : {
 						fontSize: 14,
@@ -62,8 +63,44 @@ chart_fos_year.setOption({
 			}
 		},
 		data: [
-		
-		]
+			
+			
+			 ["2009", "2", "Machine learning"],
+			 ["2010", "0", "Machine learning"]
+			,["2011", "8", "Machine learning"]
+			,["2012", "3", "Machine learning"]
+			,["2013", "0", "Machine learning"]
+			,["2014", "2", "Machine learning"]
+			
+			,["2011", "5", "World Wide Web"]
+			,["2012", "1", "World Wide Web"]
+			,["2013", "2", "World Wide Web"]
+			,["2014", "5", "World Wide Web"]
+			
+			,["2009", "2", "Machine"]
+			,["2010", "0", "Machine"]
+			,["2011", "8", "Machine"]
+			,["2012", "3", "Machine"]
+			,["2013", "0", "Machine"]
+			,["2014", "2", "Machine"]
+			
+			 ,["2009", "2", "learning"]
+			 ,["2010", "0", "learning"]
+			,["2011", "8", "learning"]
+			,["2012", "3", "learning"]
+			,["2013", "0", "learning"]
+			,["2014", "2", "learning"]
+			
+			 ,["2009", "2", "asdf"]
+			 ,["2010", "0", "asdf"]
+			,["2011", "8", "asdf"]
+			,["2012", "3", "asdf"]
+			,["2013", "0", "asdf"]
+			,["2014", "2", "asdf"]
+			
+		], 
+		color:['#d87c7c', '#919e8b', '#d7ab82', '#6e7074', '#61a0a8', ]
+  	  
 	}]
 });
  

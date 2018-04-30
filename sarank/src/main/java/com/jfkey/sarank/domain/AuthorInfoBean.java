@@ -8,11 +8,13 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * @author junfeng Liu
  * @time 5:25:39 PM Mar 20, 2018
  * @version v0.1.2
- * @desc details information of the author in a specific paper 
+ * @desc details information of the author in a specific paper. we will statistic the author information, 
+ * 		for example, citations of year, fields of study, research interest.
  */
 
 @QueryResult
 public class AuthorInfoBean {
+	
 	/*paper id */
 	private String nodeID;
 	/*venue of */
@@ -30,7 +32,6 @@ public class AuthorInfoBean {
 	/*the sequence of author in paper, note the type is string */
 	private String number;
 	private double score;
-	
 	
 	
 	
