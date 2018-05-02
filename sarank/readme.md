@@ -1,7 +1,10 @@
 # Design and Implementation of Scholarly Article Ranking System 
 
 ## Log
-**Version v.0.1.2(4/26/2018 9:48:56 PM )**
+**Version v.0.1.2(5/2/2018 11:20:36 AM )**
+
+* we reorganize the author page, paper_info page and add some functions .
+* we rewrite some cqls which have a better performance. 
 	
 
 **Version v.0.1.1(4/26/2018 9:48:56 PM )**
@@ -38,16 +41,17 @@ TODO: draw flow chart of the system.
 
 **Search Page**
 
-support search with keywords, ranking with `SARANK Algorithm`, and pagaination.  
-![](https://i.imgur.com/UDP1KV2.png)
+support search with keywords, author. rank with `SARANK Algorithm`,`Relevance Rank`, `Time Rank`, `Citation Rank` and pagaination. 
+![](https://i.imgur.com/8QOhOZA.png) 
+
 
 **Paper Details Page**
 detailed information for a specific paper
-![](https://i.imgur.com/Bq3ZQln.png)
+![](https://i.imgur.com/edNXzvf.png)
 
 **Author Details Page**
 detailed author information for a specific author
-![](https://i.imgur.com/iNWhd9L.png) 
+![](https://i.imgur.com/3GHVOdo.png)
 
 ## The Stack
 These are components of our Web Application: 
