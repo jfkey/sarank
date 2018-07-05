@@ -15,7 +15,7 @@ import com.jfkey.sarank.domain.PaperSimpleBean;
  * 
  * @author junfeng Liu
  * @time 4:28:23 PM Mar 4, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc this is paper details repository 
  */
 public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {

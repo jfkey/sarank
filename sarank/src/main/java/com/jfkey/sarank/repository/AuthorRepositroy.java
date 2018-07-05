@@ -15,7 +15,7 @@ import com.jfkey.sarank.domain.PaperSimpleBean;
  * 
  * @author junfeng Liu
  * @time 5:20:23 PM Apr 6, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc author repository
  */
 public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{

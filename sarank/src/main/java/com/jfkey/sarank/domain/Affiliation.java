@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
  * 
  * @author junfeng Liu
  * @time 11:13:55 PM Jan 18, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc this is Affiliation mapping neo4j NODE Affiliation
  */
 

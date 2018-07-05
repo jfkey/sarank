@@ -13,7 +13,7 @@ import com.jfkey.sarank.domain.Paper;
  * 
  * @author junfeng Liu
  * @time 10:30:37 AM Jan 19, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc this is PaperRespository, return search result
  */
 public interface PaperInfoRespository extends Neo4jRepository<Paper, Long> {

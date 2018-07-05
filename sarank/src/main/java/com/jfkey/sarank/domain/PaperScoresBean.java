@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 9:37:18 PM Apr 14, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc paper score bean, the filed is from slef_defined procedure. 
  * 
  */

@@ -9,8 +9,9 @@ import org.springframework.data.repository.query.Param;
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.Paper;
-import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.PaperInSearchBean;
+import com.jfkey.sarank.domain.PaperScoresBean;
+import com.jfkey.sarank.domain.SearchHits;
 
 public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 
@@ -56,13 +57,28 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 *            "originalTitle:graph AND originalTitle:database"
 	 * @return PaperScoresBean.
 	 */
-	// @Query("call jfkey.search('Paper', 'ft_pa', {queryParam}, 'paID')")
-	
-	// PaperScoresBean @Param("queryParam")
-
 	@Query("call jfkey.search('Paper', 'ft_pa', {queryParam}, 'paID')")
 	Iterable<PaperScoresBean> getScoresByKeywords(@Param("queryParam") String queryParam) ;
-
+	
+	
+	// @Name("fulltextName")String fulltextName, @Name("queryParam") String queryParam,
+	// @Name("limit")long limit, @Name("skip")long skip, @Name("type")String type, @Name("alpha")double alpha, @Name("nor")double nor
+	// call jfkey.search('ft_pa', 'originalTitle:data AND originalTitle:graph', 10, 0, '1', 0.2, 3000000000);
+	/**
+	 * 
+	 * @param queryParam search keywords like  'originalTitle:graph AND originalTitle:mining'
+	 * @param limit limit query result  
+	 * @param skip skip query result
+	 * @param rankType rank type  "1" -> default rank 
+	 * 			"2" -> relevance rank  "3" -> most citations rank "4" -> lastest year rank 
+	 * @param alpha only effect in relevance rank. 
+	 * @param nor only effect in relevance rank  
+	 * @return {@link com.jfkey.sarank.SearchHits}
+	 */
+	@Query("call jfkey.search('ft_pa', {queryParam}, {limit}, {skip}, {rankType}, {alpha}, {nor})")
+	Iterable<SearchHits> queryByKeywords(@Param("queryParam")String queryParam, @Param("limit")long limit, 
+			@Param("skip")long skip, @Param("rankType")String rankType, @Param("alpha")double alpha, @Param("nor") double nor);
+	
 	
 	/**
 	 * 

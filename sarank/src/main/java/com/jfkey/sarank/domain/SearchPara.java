@@ -6,7 +6,7 @@ import com.jfkey.sarank.utils.RankType;
  * 
  * @author junfeng Liu
  * @time 10:31:56 PM Apr 12, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc search parameters
  */
 public class SearchPara {
@@ -17,14 +17,6 @@ public class SearchPara {
 	/*search author year*/
 	private int year;
 	/*search page*/
-	
-//	private int page;
-//	/*rank type. In detail  default ranking is 1, relevance ranking is 2, most citations is 3, time ranking is 4 */
-//	private int rankType;
-//	/*the earliest published paper */
-//	private int startYear;
-//	/*the latest published paper*/
-//	private int endYear;
 	
 	/*current page. default is 0*/
 	private int page;

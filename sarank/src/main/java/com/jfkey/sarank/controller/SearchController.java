@@ -29,12 +29,12 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 10:35:30 PM Apr 12, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc search controller
  */
 @Controller
 public class SearchController {
-	
+	/*
 	private final int BUTTONS_TO_SHOW = 5;
 	private final int INITIAL_PAGE = 0;
 
@@ -151,4 +151,6 @@ public class SearchController {
 		System.out.println("model: " + model);
 		return "copy_main";
     }
+    
+    */
 }

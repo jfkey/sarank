@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
  * 
  * @author junfeng Liu
  * @time 11:37:33 PM Jan 18, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc this is NodeEntity AuthorIndexScore mapping neo4j NODE AuthorIndexScore 
  */
 @NodeEntity

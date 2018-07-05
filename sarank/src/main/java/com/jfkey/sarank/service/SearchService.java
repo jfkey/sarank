@@ -29,7 +29,7 @@ import com.jfkey.sarank.utils.TopKRank2;
  * 
  * @author junfeng Liu
  * @time 5:09:50 PM Apr 17, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc search paepr service.
  */
 @Service
@@ -112,7 +112,7 @@ public class SearchService {
 			changeOrder(iDs, searchedPaperList);
 			colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 			// 5.get ACJA information
-			List<String> paIDs = pagination(paperScoresList, 0, Constants.ACJA_SIZE );
+			List<String> paIDs = pagination(paperScoresList, 0, Constants.ACJA_SIZE ); 
 			// Iterable<ACJA> ACJAIt = searchRepository.getACJAInfo(paIDs);
 			// List<ACJA> ACJAList = getIteratorData(ACJAIt);
 			getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(paIDs));
@@ -472,16 +472,5 @@ public class SearchService {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
 
 

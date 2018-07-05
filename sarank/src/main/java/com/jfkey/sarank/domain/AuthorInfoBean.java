@@ -7,7 +7,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 5:25:39 PM Mar 20, 2018
- * @version v0.1.2
+ * @version v0.1.3
  * @desc details information of the author in a specific paper. we will statistic the author information, 
  * 		for example, citations of year, fields of study, research interest.
  */
