@@ -26,7 +26,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "WHERE p.paID= col "
 			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, "
 			+ "p.originalTitle as title, p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, "
-			+ "p.conID as conID, r.authorNumber as number, size((:Paper)-[:PaRef]->(p:Paper)) as citations, "
+			+ "p.conID as conID, r.authorNumber as number, size(()-[:PaRef]->(p)) as citations, "
 			+ "p.paDOI as doi, score.paperScore as score "
 			+ "ORDER BY toInteger(number) "
 			+ "WITH paID, title, venue, conID, jouID, year, "
@@ -40,7 +40,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "WHERE p.paID= col "
 			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, "
 			+ "p.originalTitle as title, p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, "
-			+ "p.conID as conID, r.authorNumber as number, size((:Paper)-[:PaRef]->(p:Paper)) as citations, "
+			+ "p.conID as conID, r.authorNumber as number, size(()-[:PaRef]->(p)) as citations, "
 			+ "p.paDOI as doi, score.paperScore as score "
 			+ "ORDER BY toInteger(number) "
 			+ "WITH paID, title, venue, conID, jouID, year, "
@@ -87,27 +87,13 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @return according paperIDs get ACJA {@link com.jfkey.sarank.domain.ACJA}
 	 *         information
 	 */
-	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
-			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore) "
-			+ "WHERE p.paID = col WITH DISTINCT ( p.paID ) as paID, a.athID as authorID, a.athName as author, "
-			+ "athScore.authorScore as athScore, p.paYear as year, r.paaAffID as affID, r.normalizedName as affName, "
-			+ "p.jouID as jouID, p.conID as conID "
-			+ "OPTIONAL match (ven:Venue)-[venScore:VenueYearScore]->(y:Years) "
-			+ "WHERE CASE  WHEN conID is not null THEN ven.venID = conID ELSE ven.venID = jouID END A"
-			+ "ND y.year = year "
-			+ "WITH  paID, authorID, author, athScore, conID, jouID, ven.venueName as venName, "
-			+ "venScore.score as venScore , year, affID "
-			+ "OPTIONAL MATCH (aff:Affiliation)-[affScore:AffYearScore]->(y:Years) "
-			+ "WHERE aff.affID = affID AND y.year = year "
-			+ "RETURN  paID, COLLECT(authorID)  as athIDs, COLLECT(author) as aths, COLLECT(athScore) as athScores,  "
-			+ "conID, jouID, venName,  venScore, COLLECT(affID ) as affIDs, COLLECT(aff.affName ) as affNames, "
-			+ "COLLECT (affScore.score) as affScores;")
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col  MATCH (p:Paper)<-[r:PaaAth]-(a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore) WHERE p.paID = col WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, athScore.authorScore AS athScore, p.paYear AS year, r.paaAffID AS affID, r.normalizedName AS affName, p.conID AS conID, p.jouID AS jouID, CASE p.conID  WHEN p.conID IS NOT NULL THEN p.conID ELSE p.jouID END AS venID MATCH (y :Years) WHERE y.year = year WITH  paID, authorID, author, athScore,  affID, affName , venID, conID, jouID, y OPTIONAL MATCH (ven:Venue)-[venScore:VenueYearScore]->(y) WHERE ven.venID = venID WITH  paID, authorID, author, athScore, venID, ven.venueName AS venName, venScore.score AS venScore, y ,affID, conID, jouID OPTIONAL MATCH (aff:Affiliation)-[affScore:AffYearScore]->(y) WHERE aff.affID = affID RETURN  paID, COLLECT(authorID)  AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, jouID, conID, venID, venName,  venScore, COLLECT(affID ) AS affIDs, COLLECT(aff.affName ) AS affNames, COLLECT (affScore.score) AS affScores ")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
 
 	
 	@Query("MATCH (a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore), (a)-[paa:PaaAth]->(p:Paper) "
 			+ "WHERE a.athName = {athName} AND paa.authorNumber = '1' "
-			+ "WITH  a.athName as athName, a.athID as athID, SIZE((a)-[:PaaAth]->(:Paper)) as paNumber, "
+			+ "WITH  a.athName as athName, a.athID as athID, SIZE((a)-[:PaaAth]->()) as paNumber, "
 			+ "COLLECT(paa)[0] as paa,  athScore.authorScore as athScore "
 			+ "ORDER BY athScore desc  "
 			+ "RETURN athName, athID, paNumber, paa.paaAffID as affID, paa.normalizedName as affName, athScore; ")

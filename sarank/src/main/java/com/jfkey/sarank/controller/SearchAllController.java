@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +35,10 @@ public class SearchAllController {
 	private final int BUTTONS_TO_SHOW = 5;
 	private final int INITIAL_PAGE = 0;
 
+	private static final String SEARCH_PARA = "SEARCH_PARA";
+	private static final String ACJA_SHOW = "ACJA_SHOW";
+	private static final Logger LOG = LoggerFactory.getLogger(SearchAllController.class);
+
 	// it will be used in pagination. and rank type. 
 	// as we wrote in front end, we can not get all search parameters, so we store in back end.
 	
@@ -40,7 +48,9 @@ public class SearchAllController {
 
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara, 
-			@RequestParam("page") Optional<Integer> page, @RequestParam("rankType") Optional<Integer> rankType) {
+			@RequestParam("page") Optional<Integer> page, @RequestParam("rankType") Optional<Integer> rankType,  HttpSession session ) {
+		
+		
 		
 		// 1. set current page, set rank type default
 		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
@@ -55,10 +65,20 @@ public class SearchAllController {
 		} else  {
 			rt = RankType.DEFAULT_RANK;
 		}
-		searchPara.setRt(rt);
-		searchPara.setPage(evalPage);
-		searchPara.setFormatStr(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
-		searchPara.setAuthor(searchPara.getAuthor().trim());
+		LOG.info("search Parameters : " + searchPara );
+		if (searchPara == null || searchPara.isNull() ) {
+			searchPara =(SearchPara) session.getAttribute(SEARCH_PARA); 
+			searchPara.setRt(rt);
+			searchPara.setPage(evalPage);
+		} else {
+			searchPara.setRt(rt);
+			searchPara.setPage(evalPage);
+			searchPara.setFormatStr(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
+			searchPara.setAuthor(searchPara.getAuthor().trim());
+		}
+				
+		
+		session.setAttribute(SEARCH_PARA, searchPara);
 		
 		
 		Map<String, Object> searchResult = null;
@@ -68,6 +88,13 @@ public class SearchAllController {
 		if ( searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS  ) {
 			ModelAndView mv= new ModelAndView("/copy_main");
 			mv.addAllObjects(searchResult);
+			
+			if (evalPage == 0) {
+				session.setAttribute(ACJA_SHOW, searchResult.get("acjaShow"));
+			} else {
+				mv.addObject("acjaShow", session.getAttribute(ACJA_SHOW));
+			}
+			
 			mv.addObject("para", searchPara );
 			return mv;
 		} else if  (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AUTHOR) {

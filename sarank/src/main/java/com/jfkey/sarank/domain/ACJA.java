@@ -27,6 +27,10 @@ public class ACJA {
  	private String conID;
  	/*journal ID*/
  	private String jouID;
+ 	
+ 	/*eithor conID or jouID*/
+ 	private String venID;
+ 	
  	/*venue name */
  	private String venName;
  	/*venue scores*/
@@ -37,6 +41,8 @@ public class ACJA {
  	private String[] affNames;
  	/*affiliation scores*/
  	private double[] affScores;
+ 	
+ 	
  	
 	public ACJA() {
 	}
@@ -58,6 +64,7 @@ public class ACJA {
 		this.affNames = affNames;
 		this.affScores = affScores;
 	}
+	
 	public String getPaID() {
 		return paID;
 	}
@@ -94,6 +101,15 @@ public class ACJA {
 	public void setJouID(String jouID) {
 		this.jouID = jouID;
 	}
+	
+	public String getVenID() {
+		return venID;
+	}
+
+	public void setVenID(String venID) {
+		this.venID = venID;
+	}
+
 	public String getVenName() {
 		return venName;
 	}

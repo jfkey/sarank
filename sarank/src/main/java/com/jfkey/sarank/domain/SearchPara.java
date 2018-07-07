@@ -111,7 +111,13 @@ public class SearchPara {
 				+ ", formatStr=" + formatStr + "]";
 	}
 
-	
+	public boolean isNull () {
+		if (keywords == null && author == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	
 	
