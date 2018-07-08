@@ -401,25 +401,25 @@ public class SearchService {
 	 * @return the information will be shown in front end. {@link com.jfkey.sarank.domain.ACJAShow}
 	 */
 	private ACJAShow getDetailACJAInfo(ACJAShow acjaShow, Iterable<ACJA> ACJAIt) {
-		ACJAShowFun fun = new ACJAShowFun(acjaShow);
-		ACJA acja = null;
-		int i = 0;
-		Iterator<ACJA> it = ACJAIt.iterator();
-		while (it.hasNext()) {
-			acja = it.next();
-			for (i = 0; i < acja.getAthScores().length; i ++ ) {
-				fun.findSetAth(acja.getAthScores()[i], acja.getAthIDs()[i], acja.getAths()[i]);
-			}
-			if (acja.getConID() != null) {
-				fun.findSetCon( acja.getVenScore(), acja.getConID(), acja.getVenName());
-			} 
-			if (acja.getJouID() != null) {
-				fun.findSetJou(acja.getVenScore(), acja.getJouID(), acja.getVenName());
-			}
-			for (i = 0; i < acja.getAffScores().length; i ++) {
-				fun.findSetAff(acja.getAffScores()[i], acja.getAffIDs()[i], acja.getAffNames()[i]);
-			}
-		}
+//		ACJAShowFun fun = new ACJAShowFun(acjaShow);
+//		ACJA acja = null;
+//		int i = 0;
+//		Iterator<ACJA> it = ACJAIt.iterator();
+//		while (it.hasNext()) {
+//			acja = it.next();
+//			for (i = 0; i < acja.getAthScores().length; i ++ ) {
+//				fun.findSetAth(acja.getAthScores()[i], acja.getAthIDs()[i], acja.getAths()[i]);
+//			}
+//			if (acja.getConID() != null) {
+//				fun.findSetCon( acja.getVenScore(), acja.getConID(), acja.getVenName());
+//			} 
+//			if (acja.getJouID() != null) {
+//				fun.findSetJou(acja.getVenScore(), acja.getJouID(), acja.getVenName());
+//			}
+//			for (i = 0; i < acja.getAffScores().length; i ++) {
+//				fun.findSetAff(acja.getAffScores()[i], acja.getAffIDs()[i], acja.getAffNames()[i]);
+//			}
+//		}
 		return acjaShow;
 	}
 	

@@ -87,7 +87,22 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @return according paperIDs get ACJA {@link com.jfkey.sarank.domain.ACJA}
 	 *         information
 	 */
-	@Query("WITH {paIDs} AS coll UNWIND coll AS col  MATCH (p:Paper)<-[r:PaaAth]-(a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore) WHERE p.paID = col WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, athScore.authorScore AS athScore, p.paYear AS year, r.paaAffID AS affID, r.normalizedName AS affName, p.conID AS conID, p.jouID AS jouID, CASE p.conID  WHEN p.conID IS NOT NULL THEN p.conID ELSE p.jouID END AS venID MATCH (y :Years) WHERE y.year = year WITH  paID, authorID, author, athScore,  affID, affName , venID, conID, jouID, y OPTIONAL MATCH (ven:Venue)-[venScore:VenueYearScore]->(y) WHERE ven.venID = venID WITH  paID, authorID, author, athScore, venID, ven.venueName AS venName, venScore.score AS venScore, y ,affID, conID, jouID OPTIONAL MATCH (aff:Affiliation)-[affScore:AffYearScore]->(y) WHERE aff.affID = affID RETURN  paID, COLLECT(authorID)  AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, jouID, conID, venID, venName,  venScore, COLLECT(affID ) AS affIDs, COLLECT(aff.affName ) AS affNames, COLLECT (affScore.score) AS affScores ")
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
+			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore) "
+			+ "WHERE p.paID = col "
+			+ "WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, athScore.authorScore AS athScore, "
+			+ "p.paYear AS year, r.paaAffID AS affID, r.normalizedName AS affName, p.conID AS conID, p.jouID AS jouID, CASE  "
+			+ "WHEN p.conID IS NOT NULL THEN p.conID ELSE p.jouID END AS venID MATCH (y :Years) "
+			+ "WHERE y.year = year "
+			+ "WITH  paID, authorID, author, athScore,  affID, affName , venID, conID, jouID, y "
+			+ "OPTIONAL MATCH (ven:Venue)-[venScore:VenueYearScore]->(y) "
+			+ "WHERE ven.venID = venID "
+			+ "WITH  paID, authorID, author, athScore, venID, ven.venueName AS venName, venScore.score AS venScore, y ,affID, conID, jouID "
+			+ "OPTIONAL MATCH (aff:Affiliation)-[affScore:AffYearScore]->(y) "
+			+ "WHERE aff.affID = affID "
+			+ "RETURN  paID, COLLECT(authorID)  AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, "
+			+ "jouID, conID, venID, venName,  venScore, COLLECT(affID ) AS affIDs, COLLECT(aff.affName ) AS affNames, COLLECT (affScore.score) AS affScores, "
+			+ "y.year as pubYear")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
 
 	

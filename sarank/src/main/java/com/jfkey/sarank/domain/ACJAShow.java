@@ -14,136 +14,162 @@ import com.jfkey.sarank.utils.Constants;
  * @desc some influential points in {@link com.jfkey.sarank.domain.ACJA}. And it will be shown in front end.
  */
 public class ACJAShow {
-	private String[] athID;
-	private String[] athName;
-	private double[] athScore;
+	private List<String> athID;
+	private List<String> athName;
+	private List<Double> athScore;
 	
-	private String[] conID;
-	private String[] conName;
-	private double[] conScore;
+	private List<String> conID;
+	private List<String> conName;
+	private List<Double> conScore;
 	
-	private String[] jouID;
-	private String[] jouName;
-	private double[] jouScore;
+	private List<String> jouID;
+	private List<String> jouName;
+	private List<Double> jouScore;
 	
-	private String[] affID;
-	private String[] affName;
-	private double[] affScore;
+	private List<String> affID;
+	private List<String> affName;
+	private List<Double> affScore;
 	
 	private List<String> years;
 	
 	private int allPaperNum;
 	
 	public ACJAShow() {
-		athID = new String[Constants.ACJA_SHOW];
-		athName = new String[Constants.ACJA_SHOW];
-		athScore = new double[Constants.ACJA_SHOW];
-		conID = new String[Constants.ACJA_SHOW];
-		conName = new String[Constants.ACJA_SHOW];
-		conScore = new double[Constants.ACJA_SHOW];
-		jouID = new String[Constants.ACJA_SHOW];
-		jouName= new String[Constants.ACJA_SHOW];
-		jouScore = new double[Constants.ACJA_SHOW];
-		affID = new String[Constants.ACJA_SHOW];
-		affName = new String[Constants.ACJA_SHOW];
-		affScore = new double[Constants.ACJA_SHOW];
+		athID = new ArrayList<String> ();
+		athName = new ArrayList<String>();
+		athScore = new ArrayList<Double>();
+		conID = new ArrayList<String>();
+		conName = new ArrayList<String>();
+		conScore =  new ArrayList<Double>();
+		jouID = new ArrayList<String>();
+		jouName= new ArrayList<String>();
+		jouScore =  new ArrayList<Double>();
+		affID = new ArrayList<String>();
+		affName = new ArrayList<String>();
+		affScore =  new ArrayList<Double>();
 		years = new ArrayList<String>();
 		allPaperNum = 0;
 	}
 	
-	public String[] getAthID() {
+	
+	
+	public ACJAShow(List<String> athID, List<String> athName,
+			List<Double> athScore, List<String> conID, List<String> conName,
+			List<Double> conScore, List<String> jouID, List<String> jouName,
+			List<Double> jouScore, List<String> affID, List<String> affName,
+			List<Double> affScore, List<String> years, int allPaperNum) {
+		super();
+		this.athID = athID;
+		this.athName = athName;
+		this.athScore = athScore;
+		this.conID = conID;
+		this.conName = conName;
+		this.conScore = conScore;
+		this.jouID = jouID;
+		this.jouName = jouName;
+		this.jouScore = jouScore;
+		this.affID = affID;
+		this.affName = affName;
+		this.affScore = affScore;
+		this.years = years;
+		this.allPaperNum = allPaperNum;
+	}
+
+
+
+	public List<String> getAthID() {
 		return athID;
 	}
 
-	public void setAthID(String[] athID) {
+	public void setAthID(List<String> athID) {
 		this.athID = athID;
 	}
 
-	public String[] getAthName() {
+	public List<String> getAthName() {
 		return athName;
 	}
 
-	public void setAthName(String[] athName) {
+	public void setAthName(List<String> athName) {
 		this.athName = athName;
 	}
 
-	public double[] getAthScore() {
+	public List<Double> getAthScore() {
 		return athScore;
 	}
 
-	public void setAthScore(double[] athScore) {
+	public void setAthScore(List<Double> athScore) {
 		this.athScore = athScore;
 	}
 
-	public String[] getConID() {
+	public List<String> getConID() {
 		return conID;
 	}
 
-	public void setConID(String[] conID) {
+	public void setConID(List<String> conID) {
 		this.conID = conID;
 	}
 
-	public String[] getConName() {
+	public List<String> getConName() {
 		return conName;
 	}
 
-	public void setConName(String[] conName) {
+	public void setConName(List<String> conName) {
 		this.conName = conName;
 	}
 
-	public double[] getConScore() {
+	public List<Double> getConScore() {
 		return conScore;
 	}
 
-	public void setConScore(double[] conScore) {
+	public void setConScore(List<Double> conScore) {
 		this.conScore = conScore;
 	}
 
-	public String[] getJouID() {
+	public List<String> getJouID() {
 		return jouID;
 	}
 
-	public void setJouID(String[] jouID) {
+	public void setJouID(List<String> jouID) {
 		this.jouID = jouID;
 	}
 
-	public String[] getJouName() {
+	public List<String> getJouName() {
 		return jouName;
 	}
 
-	public void setJouName(String[] jouName) {
+	public void setJouName(List<String> jouName) {
 		this.jouName = jouName;
 	}
 
-	public double[] getJouScore() {
+	public List<Double> getJouScore() {
 		return jouScore;
 	}
 
-	public void setJouScore(double[] jouScore) {
+	public void setJouScore(List<Double> jouScore) {
 		this.jouScore = jouScore;
 	}
 
-	public String[] getAffID() {
+	public List<String> getAffID() {
 		return affID;
 	}
 
-	public void setAffID(String[] affID) {
+	public void setAffID(List<String> affID) {
 		this.affID = affID;
 	}
 
-	public String[] getAffName() {
+	public List<String> getAffName() {
 		return affName;
 	}
 
-	public void setAffName(String[] affName) {
+	public void setAffName(List<String> affName) {
 		this.affName = affName;
 	}
 
-	public double[] getAffScore() {
+	public List<Double> getAffScore() {
 		return affScore;
 	}
 
-	public void setAffScore(double[] affScore) {
+	public void setAffScore(List<Double> affScore) {
 		this.affScore = affScore;
 	}
 
@@ -163,22 +189,20 @@ public class ACJAShow {
 		this.allPaperNum = allPaperNum;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "ACJAShow [athID=" + Arrays.toString(athID) + ", athName="
-				+ Arrays.toString(athName) + ", athScore="
-				+ Arrays.toString(athScore) + ", conID="
-				+ Arrays.toString(conID) + ", conName="
-				+ Arrays.toString(conName) + ", conScore="
-				+ Arrays.toString(conScore) + ", jouID="
-				+ Arrays.toString(jouID) + ", jouName="
-				+ Arrays.toString(jouName) + ", jouScore="
-				+ Arrays.toString(jouScore) + ", affID="
-				+ Arrays.toString(affID) + ", affName="
-				+ Arrays.toString(affName) + ", affScore="
-				+ Arrays.toString(affScore) + ", years=" + years
-				+ ", allPaperNum=" + allPaperNum + "]";
+		return "ACJAShow [athID=" + athID + ", athName=" + athName
+				+ ", athScore=" + athScore + ", conID=" + conID + ", conName="
+				+ conName + ", conScore=" + conScore + ", jouID=" + jouID
+				+ ", jouName=" + jouName + ", jouScore=" + jouScore
+				+ ", affID=" + affID + ", affName=" + affName + ", affScore="
+				+ affScore + ", years=" + years + ", allPaperNum="
+				+ allPaperNum + "]";
 	}
+	
+	
 
 		
 }

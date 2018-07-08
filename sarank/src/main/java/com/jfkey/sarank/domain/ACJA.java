@@ -41,6 +41,8 @@ public class ACJA {
  	private String[] affNames;
  	/*affiliation scores*/
  	private double[] affScores;
+ 	/*published year */
+ 	private String pubYear;
  	
  	
  	
@@ -48,9 +50,9 @@ public class ACJA {
 	}
 	
 	public ACJA(String paID, String[] athIDs, String[] aths,
-			double[] athScores, String conID, String jouID, String venName,
-			double venScore, String[] affIDs, String[] affNames,
-			double[] affScores) {
+			double[] athScores, String conID, String jouID, String venID,
+			String venName, double venScore, String[] affIDs,
+			String[] affNames, double[] affScores, String pubYear) {
 		super();
 		this.paID = paID;
 		this.athIDs = athIDs;
@@ -58,13 +60,14 @@ public class ACJA {
 		this.athScores = athScores;
 		this.conID = conID;
 		this.jouID = jouID;
+		this.venID = venID;
 		this.venName = venName;
 		this.venScore = venScore;
 		this.affIDs = affIDs;
 		this.affNames = affNames;
 		this.affScores = affScores;
+		this.pubYear = pubYear;
 	}
-	
 	public String getPaID() {
 		return paID;
 	}
@@ -101,15 +104,12 @@ public class ACJA {
 	public void setJouID(String jouID) {
 		this.jouID = jouID;
 	}
-	
 	public String getVenID() {
 		return venID;
 	}
-
 	public void setVenID(String venID) {
 		this.venID = venID;
 	}
-
 	public String getVenName() {
 		return venName;
 	}
@@ -140,15 +140,25 @@ public class ACJA {
 	public void setAffScores(double[] affScores) {
 		this.affScores = affScores;
 	}
+	public String getPubYear() {
+		return pubYear;
+	}
+	public void setPubYear(String pubYear) {
+		this.pubYear = pubYear;
+	}
 	@Override
 	public String toString() {
 		return "ACJA [paID=" + paID + ", athIDs=" + Arrays.toString(athIDs)
 				+ ", aths=" + Arrays.toString(aths) + ", athScores="
 				+ Arrays.toString(athScores) + ", conID=" + conID + ", jouID="
-				+ jouID + ", venName=" + venName + ", venScore=" + venScore
-				+ ", affIDs=" + Arrays.toString(affIDs) + ", affNames="
+				+ jouID + ", venID=" + venID + ", venName=" + venName
+				+ ", venScore=" + venScore + ", affIDs="
+				+ Arrays.toString(affIDs) + ", affNames="
 				+ Arrays.toString(affNames) + ", affScores="
-				+ Arrays.toString(affScores) + "]";
+				+ Arrays.toString(affScores) + ", pubYear=" + pubYear + "]";
 	}
+ 	
+ 	
+
  	
 }

@@ -1,9 +1,8 @@
 package com.jfkey.sarank.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +18,15 @@ import org.springframework.stereotype.Service;
 
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.ACJAShow;
-import com.jfkey.sarank.domain.ACJAShowFun;
 import com.jfkey.sarank.domain.Pager;
 import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.SearchHits;
 import com.jfkey.sarank.domain.SearchPara;
+import com.jfkey.sarank.domain.SortAff;
+import com.jfkey.sarank.domain.SortAuthor;
+import com.jfkey.sarank.domain.SortCon;
+import com.jfkey.sarank.domain.SortJou;
 import com.jfkey.sarank.repository.SearchRepository;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.RankType;
@@ -95,15 +97,13 @@ public class SearchAllService {
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 		
 		// 2. get ACJA info
-		// Iterable<ACJA> ACJAIt = searchRepository.getACJAInfo(paIDs);
-		// List<ACJA> ACJAList = getIteratorData(ACJAIt);
 		ACJAShow acjaShow = new ACJAShow();
 		if (searchPara.getPage() == 0) {
 			t1 = System.currentTimeMillis();
 			Iterable<ACJA> info = searchRepository.getACJAInfo(allIDs);
 			t2 = System.currentTimeMillis();
 			LOG.info("search ajca spends : " + (t2-t1) + " ms");
-			getDetailACJAInfo(acjaShow, info);
+			getDetailACJAInfo(acjaShow, info, allNumber);
 			LOG.info("sort ajca info spends : " + (System.currentTimeMillis() - t2) + " ms");
 			
 		}
@@ -245,29 +245,71 @@ public class SearchAllService {
 		}
 	}
 
-	private ACJAShow getDetailACJAInfo(ACJAShow acjaShow, Iterable<ACJA> ACJAIt) {
-		ACJAShowFun fun = new ACJAShowFun(acjaShow);
-		ACJA acja = null;
-		int i = 0;
-		Iterator<ACJA> it = ACJAIt.iterator();
-		while (it.hasNext()) {
-			acja = it.next();
-			for (i = 0; i < acja.getAthScores().length; i++) {
-				fun.findSetAth(acja.getAthScores()[i], acja.getAthIDs()[i],
-						acja.getAths()[i]);
+	private ACJAShow getDetailACJAInfo(ACJAShow acjaShow, Iterable<ACJA> ACJAIt, int paperSize) {
+		if (ACJAIt == null) {
+			return new ACJAShow();
+		} else {
+			Iterator<ACJA> it = ACJAIt.iterator();
+			ACJA acja = null;
+			Set<SortAff> setAff = new HashSet<SortAff>();
+			Set<SortAuthor> setAth = new HashSet<SortAuthor>();
+			Set<SortCon> setCon = new HashSet<SortCon>();
+			Set<SortJou> setJou = new HashSet<SortJou>();
+			Set<String> years = new HashSet<String>();
+			
+			while (it.hasNext()) {
+				acja = it.next();
+				for (int i = 0; i < acja.getAffIDs().length; i ++) {
+					setAff.add(new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]));
+				}
+				for (int i = 0; i < acja.getAthIDs().length; i ++) {
+					setAth.add(new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i]) );
+				}
+				if (acja.getConID() != null) {
+					setCon.add( new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) );
+				}
+				if (acja.getJouID() != null) {
+					setJou.add( new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) );
+				}
+				years.add(acja.getPubYear());
 			}
-			if (acja.getConID() != null) {
-				fun.findSetCon(acja.getVenScore(), acja.getConID(),
-						acja.getVenName());
-			}
-			if (acja.getJouID() != null) {
-				fun.findSetJou(acja.getVenScore(), acja.getJouID(),
-						acja.getVenName());
-			}
-			for (i = 0; i < acja.getAffScores().length; i++) {
-				fun.findSetAff(acja.getAffScores()[i], acja.getAffIDs()[i],
-						acja.getAffNames()[i]);
-			}
+//			Object[] affArr = setAff.stream().sorted().toArray();
+//			Object[] athArr = setAth.stream().sorted().toArray();
+//			Object[] conArr = setCon.stream().sorted().toArray();
+//			Object[] jouArr = setJou.stream().sorted().toArray();
+			
+			int size = (setAff.size() > Constants.ACJA_SHOW)  ? Constants.ACJA_SHOW : setAff.size();  
+			setAff.stream().sorted().limit(size).forEach( item ->{
+				acjaShow.getAffID().add(item.getAffID());
+				acjaShow.getAffName().add(item.getAffName());
+				acjaShow.getAffScore().add(item.getScore());
+			});
+			
+			setAth.stream().sorted().limit(size).forEach(item ->{
+				acjaShow.getAthID().add(item.getAthID());
+				acjaShow.getAthName().add(item.getAthName());
+				acjaShow.getAthScore().add(item.getScore());
+				
+			});
+			
+			setCon.stream().sorted().limit(size).forEach(item -> {
+				acjaShow.getConID().add(item.getConID());
+				acjaShow.getConName().add(item.getConName());
+				acjaShow.getConScore().add(item.getScore());
+			});
+			
+			setJou.stream().sorted().limit(size).forEach(item -> {
+				acjaShow.getJouID().add(item.getJouID());
+				acjaShow.getJouName().add(item.getJouName());
+				acjaShow.getJouScore().add(item.getScore());
+			});
+			
+			years.stream().sorted().forEach(item -> { 
+				acjaShow.getYears().add(item);
+			});
+			
+			acjaShow.setAllPaperNum(paperSize);
+			
 		}
 		return acjaShow;
 	}
@@ -286,7 +328,6 @@ public class SearchAllService {
 							+ colorType + "\">" + str + "</span>");
 				}
 				tmp.setTitle(title);
-				;
 			}
 		} else if (type == 2) {
 			// color Author.
