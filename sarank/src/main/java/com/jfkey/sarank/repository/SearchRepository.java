@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.jfkey.sarank.domain.ACJA;
+import com.jfkey.sarank.domain.AffHit;
 import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.Paper;
 import com.jfkey.sarank.domain.PaperInSearchBean;
@@ -114,6 +115,14 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "RETURN athName, athID, paNumber, paa.paaAffID as affID, paa.normalizedName as affName, athScore; ")
 	Iterable<AuthorHit> searchAuthor(@Param("athName") String athName);
 	
+	/**
+	 * 
+	 * @param affReg  regular expression of affiliation 
+	 * @return {@link com.jfkey.sarank.domain.AffHit} AffHit
+	 * for example if affReg = "city university.*" it will return all affiliation starting with "city university"
+	 */
+	@Query("match  (a:Affiliation) 	where a.affName  =~ {affReg}  return a.affID as affID, a.affName as affName , size (()-[:PaPAA]->()-[:PAAAff]->(a)) as paperNum order by paperNum desc skip {skip} limit {limit}")
+	Iterable<AffHit> getAffInfo(@Param("affReg")String affReg, @Param("skip")int skip, @Param("limit")int limit);
 	
 	
 }

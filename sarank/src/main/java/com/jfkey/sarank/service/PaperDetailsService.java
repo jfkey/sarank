@@ -35,14 +35,21 @@ public class PaperDetailsService {
 		return new PaperDetailBean();
 	}
 	
+	public String getPaperTitleByID (String paID) {
+		return getIteratorData( paperDetailsRepository.getPaperTitleByID(paID)).get(0);
+	}
+	
 	/**
 	 * 
 	 * @param paID paper ID
+	 * @param pageNumber current page number . value starts 0.
 	 * @return get Reference ({@link com.jfkey.sarank.domain.PaperSimpleBean})   by current paper ID 
 	 */
-	public List<PaperSimpleBean> getPaperRef(String paID){
+	public List<PaperSimpleBean> getPaperRef(String paID, int pageNumber){
 	//		Constants.REF_CITE_SIZE
-		return getIteratorData(paperDetailsRepository.getPaperRef(paID, Constants.REF_CITE_SIZE));
+		int limit = (pageNumber + 1) * Constants.REF_CITE_SIZE;
+		int skip =  pageNumber * Constants.REF_CITE_SIZE;
+		return getIteratorData(paperDetailsRepository.getPaperRef(paID, limit, skip));
 	}
 	
 	/**
@@ -50,9 +57,20 @@ public class PaperDetailsService {
 	 * @param paID paper ID
 	 * @return get Citations ({@link com.jfkey.sarank.domain.PaperSimpleBean})   by current paper ID 
 	 */
-	public List<PaperSimpleBean> getPaperCite(String paID) {
-		return getIteratorData(paperDetailsRepository.getPaperCite(paID, Constants.REF_CITE_SIZE));
+	public List<PaperSimpleBean> getPaperCite(String paID, int pageNumber) {
+		int limit = (pageNumber + 1) * Constants.REF_CITE_SIZE;
+		int skip =  pageNumber * Constants.REF_CITE_SIZE;
+		return getIteratorData(paperDetailsRepository.getPaperCite(paID,limit, skip));
 	}
+	
+	public int getRefNumber(String paID) {
+		return getIteratorData(paperDetailsRepository.getPaperRefNumber(paID)).get(0);
+	}
+	
+	public int getCiteNumber(String paID)  {
+		return getIteratorData(paperDetailsRepository.getPaperCiteNumber(paID)).get(0);
+	}
+	
 	
 	/**
 	 * 

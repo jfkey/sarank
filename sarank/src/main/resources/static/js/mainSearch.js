@@ -50,7 +50,7 @@ $(document).ready(function() {
 		} 
 	}
 	
-	// 
+// 
           
 //    	var content1 = $("#search_input").text().trim();
 //    	var content2 = $("#title").text().trim();

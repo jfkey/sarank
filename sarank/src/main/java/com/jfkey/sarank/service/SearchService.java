@@ -62,6 +62,7 @@ public class SearchService {
 		
 		SearchType type = getSearchType(searchPara);
 		if (type == SearchType.AUTHOR) {
+			/*
 			// 1. search author. contains 4 types e.g. author; author keywords; author year; author keywords year 
 			if ( !searchPara.getKeywords().equals("")  &&  searchPara.getKeywords() != null && searchPara.getYear() > 1800 && searchPara.getYear() < 2100) {
 				// author keywords year
@@ -88,7 +89,7 @@ public class SearchService {
 				result.put("authors", getIteratorData(searchRepository.searchAuthor(searchPara.getAuthor())));
 				return result;
 			}
-			
+			*/
 			
 		} else if (type == SearchType.KEYWORDS) {
 			// search keywords 

@@ -50,8 +50,6 @@ public class SearchAllController {
 	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara, 
 			@RequestParam("page") Optional<Integer> page, @RequestParam("rankType") Optional<Integer> rankType,  HttpSession session ) {
 		
-		
-		
 		// 1. set current page, set rank type default
 		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
 		int evalRt = (rankType.isPresent()) ? rankType.get() : 1;
@@ -65,7 +63,6 @@ public class SearchAllController {
 		} else  {
 			rt = RankType.DEFAULT_RANK;
 		}
-		LOG.info("search Parameters : " + searchPara );
 		if (searchPara == null || searchPara.isNull() ) {
 			searchPara =(SearchPara) session.getAttribute(SEARCH_PARA); 
 			searchPara.setRt(rt);
@@ -103,17 +100,10 @@ public class SearchAllController {
 			mv.addObject("para", searchPara );
 			return mv;
 		} else if (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AFFILIATION) {
-			ModelAndView mv= new ModelAndView("/copy_main");
-			mv.addObject("acjaShow", new ACJAShow());
-			mv.addObject("paperList", new ArrayList<PaperInSearchBean>());
-			Map<String, Object> paper = new HashMap<String,Object>();
-			paper.put("totalPages", 23);
-			paper.put("number", 0);
-			mv.addObject("paper", paper);
-			Pager pager = new Pager(23, 0, BUTTONS_TO_SHOW);
-			mv.addObject("pager", pager);
-			mv.addObject("para", searchPara);
-			
+
+			ModelAndView mv= new ModelAndView("/affs");
+			mv.addAllObjects(searchResult);
+
 			return mv;
 		} else {
 			return null;
@@ -129,7 +119,6 @@ public class SearchAllController {
 		model.addAttribute("paperList", new ArrayList<PaperInSearchBean>());
 		SearchPara para = new SearchPara();
 		para.setRt(RankType.DEFAULT_RANK);
-		para.setYear(10);
 		model.addAttribute("para", para);
 
 		// init pagination

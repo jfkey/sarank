@@ -14,10 +14,14 @@ public class SearchPara {
 	private String keywords;
 	/*search author name*/
 	private String author;
-	/*search author year*/
-	private int year;
-	/*search page*/
 	
+	/*search author year*/
+//	private int year;
+	
+	/*search affiliation name*/
+	private String affName;
+	
+	/*search page*/
 	/*current page. default is 0*/
 	private int page;
 	
@@ -26,18 +30,16 @@ public class SearchPara {
 	
 	/*keywords after formate*/
 	private String formatStr;
-	
-	
+
 	public SearchPara() {
 	}
 
-
-	public SearchPara(String keywords, String author, int year, int page,
+	public SearchPara(String keywords, String author, String affName, int page,
 			RankType rt, String formatStr) {
 		super();
 		this.keywords = keywords;
 		this.author = author;
-		this.year = year;
+		this.affName = affName;
 		this.page = page;
 		this.rt = rt;
 		this.formatStr = formatStr;
@@ -64,15 +66,13 @@ public class SearchPara {
 	}
 
 
-	public int getYear() {
-		return year;
+	public String getAffName() {
+		return affName;
 	}
 
-
-	public void setYear(int year) {
-		this.year = year;
+	public void setAffName(String affName) {
+		this.affName = affName;
 	}
-
 
 	public int getPage() {
 		return page;
@@ -103,11 +103,14 @@ public class SearchPara {
 		this.formatStr = formatStr;
 	}
 
+	
+	
+	
 
 	@Override
 	public String toString() {
 		return "SearchPara [keywords=" + keywords + ", author=" + author
-				+ ", year=" + year + ", page=" + page + ", rt=" + rt
+				+ ", affName=" + affName + ", page=" + page + ", rt=" + rt
 				+ ", formatStr=" + formatStr + "]";
 	}
 
@@ -118,7 +121,6 @@ public class SearchPara {
 			return false;
 		}
 	}
-	
 	
 	
 }

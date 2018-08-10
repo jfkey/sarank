@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.ACJAShow;
+import com.jfkey.sarank.domain.AffHit;
 import com.jfkey.sarank.domain.Pager;
 import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperScoresBean;
@@ -132,11 +133,30 @@ public class SearchAllService {
 	}
 
 	private Map<String, Object> searchAff(SearchPara searchPara) {
-		return null;
+		int skip = 0;
+		int limit = 20;
+		
+		String searchIntent = searchPara.getAffName().trim();
+		String affReg = searchIntent + Constants.AFF_REG_SUFFIX;
+		List<AffHit> searchedAffs = getIteratorData(searchRepository.getAffInfo(affReg, skip, limit));
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("affs", searchedAffs);
+		result.put("intent", searchIntent);
+		// indicate search type
+		result.put(Constants.SEARCH_TYPE, SearchType.AFFILIATION);
+		return result;
 	}
 
 	private SearchType getSearchType(SearchPara para) {
-		return SearchType.KEYWORDS;
+		if (para.getAffName() != null && !para.getAffName().equals("")) {
+			return SearchType.AFFILIATION;
+		} else if (para.getAuthor() != null && !para.getAuthor().equals("") ) {
+			return SearchType.AUTHOR;
+		} else if ( para.getKeywords() != null && !para.getKeywords().equals("")) { 
+			return SearchType.KEYWORDS;
+		}else {
+			return SearchType.KEYWORDS;
+		}
 	}
 
 	private String getRtString(RankType rt) {
@@ -311,6 +331,9 @@ public class SearchAllService {
 			acjaShow.setAllPaperNum(paperSize);
 			
 		}
+		
+		
+		LOG.info("conference ID : " + acjaShow.getConID() + " , conference score : " + acjaShow.getConScore() + ", name : " + acjaShow.getConName() );
 		return acjaShow;
 	}
 

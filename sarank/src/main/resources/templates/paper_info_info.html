@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+
+		<link href="css/mricode.pagination.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/header.css" />
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
+		<link rel="stylesheet" type="text/css" href="css/footer.css"/>
+		<link rel="stylesheet" type="text/css" href="css/paper_details.css"/>
+		
+		
+		<title></title>
+		<script>
+			
+		</script>
+	</head>
+	<body>
+
+
+		
+		
+		<header class="site-header">
+			<nav class="navbar" id="top">
+						
+						<!--这是导航图标-->
+						<div class="col-md-3 col-sm-12 header-nav-icon">
+							<div class="navbar-header">
+								DAO HANG
+							</div>
+						</div>
+						
+						<!-- 这是中间搜索部分-->
+						<form class="form-inline col-md-6 col-sm-12 header-search" action="/search">
+							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
+								<label class="sr-only" for="keywords">keywords</label>
+								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database" name="k">
+							</div>
+						
+							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
+								<div class="form-group  ">
+									<label class="sr-only" for="title">title</label>
+									<input type="text" class="form-control " id="title" placeholder="keywords" name="k">
+								</div>
+								<div class="form-group">
+									<label class="sr-only" for="authorname">authorname</label>
+									<input type="text" class="form-control " id="name" placeholder="author name" name="a">
+								</div>
+								<div class="form-group ">
+									<label class="sr-only" for="year">year</label>
+									<input type="text" class="form-control " id="year" placeholder="published year" name="y">
+								</div>
+						
+							</div>
+						
+							<button id="btn_search" class="btn btn-success" type="submit">
+											<span class="glyphicon glyphicon-search "></span>
+										</button>
+							<button id="btn_advanced" class="btn btn-success  ">
+											<span class="glyphicon glyphicon-edit "></span>
+										</button>
+						</form>						
+						
+						
+						
+						<!--这是右边菜单-->
+						<div class="col-md-3 col-sm-12" >
+							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
+								<ul class="nav navbar-nav navbar-right">
+									<li>
+										<a href="#" target="_blank">API</a>
+									</li>
+									<li>
+										<a href="#" target="_blank">博客</a>
+									</li>
+									<li>
+										<a href="#">关于</a>
+									</li>
+								</ul>
+							</nav>
+							
+						</div>
+						
+			</nav>
+		</header>
+		
+		
+		<!--左边的div-->
+		<div id="div_left_container" class="col-md-1" style="background-color: silver; margin-top: 50px;">
+			
+		</div>
+		
+		<!--中间展示数据-->
+		<div class="row ">
+		
+			<div class="col-md-9" style="height:auto; margin-top: 50px; background-color: rgb(250,250,240);">
+				<div class="col-md-12" style="margin-bottom: 10px; margin-top: 10px;">
+					<font size="6" face="book antiqua" th:text="${details.title}">this is paper title graph database </font>
+				</div>
+		
+				<div class="col-md-8 col-sm-12" style="background-color: white;">
+					<ul id="myTab" class="nav nav-pills">
+						<li id="tab_info" class="active">
+							<a th:href="@{/paper(paid=${paID},type=info)}" > <span class="font-theme-lg"> Info</span></a>
+						</li>
+						<li id= "tab_ref" class="">
+							<a th:href="@{/paper(paid=${paID},type=ref)}"  ><span class="font-theme-lg"> References</span></a>
+						</li>
+						<li id="tab_cite" class="">
+							<a th:href="@{/paper(paid=${paID},type=cite)}" ><span class="font-theme-lg">Citations</span></a>
+						</li>
+						<li id="tab_sim" class="">
+							<a href="#sim" data-toggle="tab"><span class="font-theme-lg">Similar </span></a>
+						</li>
+						
+						
+						
+					</ul>
+		
+					<div id="paperTabContent" class="tab-content">
+						<div class="tab-pane fade in active" id="info">
+							<div class="panel panel-default">
+								<div class="panel-heading" > Basic infomation </div>
+								<div class="panel-body">
+									<strong>Authors:</strong>
+									<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${details.athName}">
+										<a th:text="${details.athName[nameStat.index]}" th:href="@{/author(athid=${details.athID[nameStat.index]})}">author1</a>,&nbsp;
+									</li>
+									<br />
+		
+									<strong>Venue:</strong>
+										<a th:text="${details.conID != null} ? ${#strings.toUpperCase(details.venName)} : ${details.venName}  " href="#">TKDE</a>
+									<br/>
+		
+									<strong>Year:</strong>
+									<span th:text="${details.date}">2001</span>
+									<br />
+									<strong>paper DOI:</strong>
+									<a th:text="${details.doi}" , th:href="@{https://www.doi.org/${details.doi}}">2001.TKDE.2000001</a>
+									<br />
+		
+									<strong>NormalizedTitle:</strong>
+									<span th:text="${details.norTitle}">this is normalized title</span>
+									<br />
+		
+									<strong>Citations:</strong>
+									<span th:text="${details.cite}">10</span>
+									<br />
+									<strong>Abstract:</strong>
+									<span>this is abstract </span>
+									<br/>
+		
+									<strong>Versions:</strong>
+		
+									<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#demo">
+								    	    <span class="glyphicon glyphicon-eye-open"></span>
+								  	    </button>
+		
+									<div id="demo" class="collapse">
+										<li style="list-style-type: none; display: inline; margin-left: 10px;" th:each=" tmp : ${details.paUrl}">
+											<a th:text="${tmp}" th:href="${tmp}">this is paper url</a> <br />
+										</li>
+									</div>
+		
+									<div>
+										<strong> Paper keywords :</strong>
+										<li style="list-style-type: none; margin-left: 10px;" th:each=" tmp : ${details.keywords}">
+											<a th:text="${tmp}" href="#">data mining </a> <br />
+										</li>
+									</div>
+		
+									<div>
+										<strong>Fields Of Study:</strong>
+										<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName1}">
+											<a th:text="${fos}" href="#">data mining </a> <br />
+										</li>
+										<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName2}">
+											<a th:text="${fos}" href="#">data mining </a> <br />
+										</li>
+									</div>
+		
+								</div>
+							</div>
+						</div>
+		
+						
+					</div>
+				</div>
+		
+				<div class="col-md-4 col-sm-12" style="background-color: green;">
+		
+				</div>
+		
+			</div>
+		</div>
+		
+		
+		<div class="page-container">
+			
+			<div id="page" class="m-pagination"></div>
+		
+		</div>
+				 
+		<footer class="page-footer font-small blue pt-4 mt-4">
+			<!--Footer Links-->
+			<div id="div_footer_1" class="container-fluid text-center text-md-left">
+				<div class="row">
+		
+					<div class="footer-about col-md-4 col-sm-4">
+						<a href="#">About Us</a>
+					</div>
+					<div class="footer-links col-md-4  col-sm-4">
+						<a href="#">Links</a>
+					</div>
+		
+					<div class="footer-sug col-md-4 col-sm-4">
+						<a href="#">Suggestion</a>
+					</div>
+					
+				</div>
+		
+			</div>
+			</div>
+			<!--/.Footer Links-->
+		
+			<!--Copyright-->
+			<div id="div_footer_2" class="footer-copyright py-3 text-center">
+				© 2018 Copyright:
+				<a href="http://www.buaa.edu.cn/"> Beihang University </a>
+			</div>
+		
+		</footer>
+		
+		
+		<!--<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>-->
+		<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+		<script src="js/mricode.pagination.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+
+	</body>
+</html>
+ 

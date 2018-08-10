@@ -46,8 +46,8 @@
 									<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}" >
 								</div>
 								<div class="form-group ">
-									<label class="sr-only" for="year">year</label>
-									<input type="text" class="form-control " id="year" placeholder="published year" th:field="*{year}" >
+									<label class="sr-only" for="year">affiliation</label>
+									<input type="text" class="form-control " id="year" placeholder="affiliation" th:field="*{affName}" >
 								</div>
 						
 							</div>
@@ -151,7 +151,7 @@
 									
 										<div class="div-paper-item">
 		
-											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID})}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
+											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 											<br />
 											
 											<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>

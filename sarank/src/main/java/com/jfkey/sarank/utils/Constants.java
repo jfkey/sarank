@@ -80,4 +80,6 @@ public interface Constants {
 	/** button numbers be shown in pagination*/
 	public final int BUTTONS_TO_SHOW = 5;
 	
+	/**affiliation search regular expression suffix*/
+	public final String AFF_REG_SUFFIX =".*";
 }
