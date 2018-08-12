@@ -12,7 +12,7 @@ import com.jfkey.sarank.domain.PaperSimpleBean;
  * 
  * @author junfeng Liu
  * @time 4:28:23 PM Mar 4, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc this is paper details repository 
  */
 public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
@@ -21,19 +21,18 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 	 * @param paID paper id 
 	 * @return get paper detailed information, return {@link com.jfkey.sarank.domain.PaperDetailBean}
 	 */
-	@Query("MATCH (p:Paper)<-[r:PaaAth]-(a:Author)  WHERE p.paID = {paID} "
-			+ "WITH p.originalTitle as title, p.paID as paID, p.paDOI as doi, p.paDate as date, p.NormalizedName as venName, "
-			+ "p.jouID as jouID, p.conID as conID, p.normalizedTitle as norTitle, 	SIZE(()-[:PaRef]->(p)) as cite, "
-			+ "SIZE( (p)-[:PaRef]->() ) as ref, a.athName as athName, a.athID as athID, r.authorNumber as number, p "
-			+ "ORDER BY number WITH title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, "
-			+ "COLLECT(athName) as athName, COLLECT(athID) as athID, p "
-			+ "OPTIONAL MATCH  (p:Paper)-[kw:Pkw]->(fos1:FOS)-[fosH:FosHierarchy]->(fos2:FOS) "
-			+ "WITH title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, athName, athID, "
-			+ "COLLECT(distinct kw.pkwName) as keywords,  COLLECT(distinct fos1.fosName) as fosName1, "
-			+ "COLLECT(distinct fos1.fosID) as fosID1, COLLECT(distinct fos2.fosName) as fosName2, COLLECT(distinct fos2.fosID) as fosID2  "
-			+ "OPTIONAL MATCH  (paUrl:PaperUrl) "
-			+ "WHERE paUrl.paID = paID "
-			+ "RETURN title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, athName, athID, keywords, fosName1,  fosID1, fosName2,  fosID2,  COLLECT( DISTINCT paUrl.paUrl) as paUrl ")
+	@Query("MATCH (p:Paper)-[:PaPAA]->(paa:PAA)-[:PAAAth]->(a:Author) "
+			+ "WHERE p.paID = {paID} "
+			+ "WITH p.originalTitle AS title, p.paID AS paID, p.paDOI AS doi, p.paDate AS date, p.NormalizedName AS venName, "
+			+ "p.jouID AS jouID, p.conID AS conID, p.normalizedTitle AS norTitle, "
+			+ "SIZE(()-[:PaRef]->(p)) AS cite, SIZE( (p)-[:PaRef]->() ) AS ref, SIZE((p)-[:PaPaurl]-()) AS paUrl, "
+			+ "a.athName AS athName, a.athID AS athID, paa.authorNumber AS number, p "
+			+ "ORDER BY number "
+			+ "WITH title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, paUrl, "
+			+ "COLLECT(athName) AS athName, COLLECT(athID) AS athID, p "
+			+ "OPTIONAL MATCH (p)-[kw:Pkw]->(fos1:FOS)-[fosH:FosHierarchy]->(fos2:FOS) "
+			+ "RETURN title, paID, doi, date, venName, jouID, conID, norTitle, cite, ref, athName, athID, "
+			+ "COLLECT(distinct fos1.fosID) AS fosID1, COLLECT(distinct fos2.fosName) AS fosName2, COLLECT(distinct fos2.fosID) AS fosID2, paUrl")
 	Iterable<PaperDetailBean> getPaperInfo(@Param("paID") String paID);
 	
 	

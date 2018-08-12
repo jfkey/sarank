@@ -9,7 +9,7 @@ import com.jfkey.sarank.domain.PaperScoresBean;
  * 
  * @author junfeng Liu
  * @time 5:29:13 PM Mar 16, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc TopK Ranking of PaperScoresBean
  */
 public class TopKRank2{

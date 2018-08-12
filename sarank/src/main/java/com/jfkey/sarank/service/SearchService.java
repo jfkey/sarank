@@ -29,7 +29,7 @@ import com.jfkey.sarank.utils.TopKRank2;
  * 
  * @author junfeng Liu
  * @time 5:09:50 PM Apr 17, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc search paepr service.
  */
 @Service
@@ -95,7 +95,8 @@ public class SearchService {
 			// search keywords 
 			ACJAShow acjaShow = new ACJAShow();
 			// 1.get paperSocres and get ACJAShow year
-			Iterable<PaperScoresBean> paperScoresIt= searchRepository.getScoresByKeywords(searchPara.getFormatStr());
+//			Iterable<PaperScoresBean> paperScoresIt= searchRepository.getScoresByKeywords(searchPara.getFormatStr());
+			Iterable<PaperScoresBean> paperScoresIt = null;
 			List<String> years = new ArrayList<String>();
 			List<PaperScoresBean> paperScoresList = getIteratorDataAndYears(paperScoresIt, years);
 			acjaShow.setYears(years);

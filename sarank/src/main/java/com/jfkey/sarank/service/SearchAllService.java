@@ -37,7 +37,7 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 5:53:16 PM Jul 3, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc
  */
 @Service

@@ -1,12 +1,14 @@
 package com.jfkey.sarank.domain;
 
+import java.util.Arrays;
+
 import org.springframework.data.neo4j.annotation.QueryResult;
 
 /**
  * 
  * @author junfeng Liu
  * @time 3:26:56 PM Apr 20, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc search author information. contains author name, author's affiliation, and paper numbers.
  *  
  */
@@ -19,9 +21,9 @@ public class AuthorHit {
 	/*paper numbers*/
 	private int paNumber;
 	/*the author affName*/
-	private String affName;
+	private String[] affName;
 	/*affID*/
-	private String affID;
+	private String[] affID;
 	/*author score*/
 	private double athScore;
 	
@@ -29,7 +31,7 @@ public class AuthorHit {
 	}
 
 	public AuthorHit(String athName, String athID, int paNumber,
-			String affName, String affID, double athScore) {
+			String[] affName, String[] affID, double athScore) {
 		super();
 		this.athName = athName;
 		this.athID = athID;
@@ -63,19 +65,19 @@ public class AuthorHit {
 		this.paNumber = paNumber;
 	}
 
-	public String getAffName() {
+	public String[] getAffName() {
 		return affName;
 	}
 
-	public void setAffName(String affName) {
+	public void setAffName(String[] affName) {
 		this.affName = affName;
 	}
 
-	public String getAffID() {
+	public String[] getAffID() {
 		return affID;
 	}
 
-	public void setAffID(String affID) {
+	public void setAffID(String[] affID) {
 		this.affID = affID;
 	}
 
@@ -86,13 +88,13 @@ public class AuthorHit {
 	public void setAthScore(double athScore) {
 		this.athScore = athScore;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AuthorHit [athName=" + athName + ", athID=" + athID
-				+ ", paNumber=" + paNumber + ", affName=" + affName
-				+ ", affID=" + affID + ", athScore=" + athScore + "]";
+				+ ", paNumber=" + paNumber + ", affName="
+				+ Arrays.toString(affName) + ", affID="
+				+ Arrays.toString(affID) + ", athScore=" + athScore + "]";
 	}
 
-	
 }

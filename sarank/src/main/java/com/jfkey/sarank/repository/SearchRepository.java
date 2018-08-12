@@ -14,53 +14,52 @@ import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.SearchHits;
 
+/**
+ * 
+ * @author junfeng Liu
+ * @time 5:14:39 PM Aug 12, 2018
+ * @version v0.2.0
+ * @desc search repository. 
+ */
 public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 
 	/**
 	 * @param paIDs
 	 *            a list of paper ID.
-	 * @return SearchedPaper {@link com.jfkey.sarank.domain.PaperInSearchBean}
+	 * @return get searched paper information by list of paper IDs {@link com.jfkey.sarank.domain.PaperInSearchBean}
 	 */
-	
-	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
-			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
-			+ "WHERE p.paID= col "
-			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, "
-			+ "p.originalTitle as title, p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, "
-			+ "p.conID as conID, r.authorNumber as number, size(()-[:PaRef]->(p)) as citations, "
-			+ "p.paDOI as doi, score.paperScore as score "
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
+			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author) "
+			+ "WHERE p.paID= col  "
+			+ "WITH DISTINCT ( p.paID ) AS paID , a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, "
+			+ "p.NormalizedName AS venue, p.paYear AS year, p.jouID AS jouID, p.conID AS conID, r.authorNumber AS number, "
+			+ "size(()-[:PaRef]->(p)) AS citations, size((p)-[:PaPaurl]->()) AS versions, p.paDOI AS doi, p.paScore AS score "
 			+ "ORDER BY toInteger(number) "
-			+ "WITH paID, title, venue, conID, jouID, year, "
-			+ "COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations, doi,  score "
-			+ "OPTIONAL MATCH (paUrl:PaperUrl) WHERE paUrl.paID = paID "
-			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations,count(paUrl) as versions, doi, score;")
+			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations,versions, doi, score "
+			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations, versions, doi, score; ")
 	Iterable<PaperInSearchBean> getPaperByIDs(@Param("paIDs") List<String> paIDs);
 
-	@Query("WITH {paIDs} AS coll UNWIND coll AS col  "
-			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
-			+ "WHERE p.paID= col "
-			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors, "
-			+ "p.originalTitle as title, p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, "
-			+ "p.conID as conID, r.authorNumber as number, size(()-[:PaRef]->(p)) as citations, "
-			+ "p.paDOI as doi, score.paperScore as score "
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
+			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author) "
+			+ "WHERE p.paID= col  "
+			+ "WITH DISTINCT ( p.paID ) AS paID , a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, "
+			+ "p.NormalizedName AS venue, p.paYear AS year, p.jouID AS jouID, p.conID AS conID, r.authorNumber AS number, "
+			+ "size(()-[:PaRef]->(p)) AS citations, size((p)-[:PaPaurl]->()) AS versions, p.paDOI AS doi, p.paScore AS score "
 			+ "ORDER BY toInteger(number) "
-			+ "WITH paID, title, venue, conID, jouID, year, "
-			+ "COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations, doi,  score "
-			+ "OPTIONAL MATCH (paUrl:PaperUrl) WHERE paUrl.paID = paID "
-			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations,count(paUrl) as versions, doi, score "
+			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations,versions, doi, score "
+			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations, versions, doi, score "
 			+ "ORDER BY citations DESC;")
 	Iterable<PaperInSearchBean> getCitationByIDs(@Param("paIDs") List<String> paIDs);
 	
 	
-	/**
-	 * @param keywords
-	 *            search keywords in `Paper` node `originalTitle` property, like
-	 *            "originalTitle:graph AND originalTitle:database"
-	 * @return PaperScoresBean.
-	 */
-	@Query("call jfkey.search('Paper', 'ft_pa', {queryParam}, 'paID')")
-	Iterable<PaperScoresBean> getScoresByKeywords(@Param("queryParam") String queryParam) ;
-	
+//	/**
+//	 * @param keywords
+//	 *            search keywords in `Paper` node `originalTitle` property, like
+//	 *            "originalTitle:graph AND originalTitle:database"
+//	 * @return PaperScoresBean.
+//	 */
+//	@Query("call jfkey.search('Paper', 'ft_pa', {queryParam}, 'paID')")
+//	Iterable<PaperScoresBean> getScoresByKeywords(@Param("queryParam") String queryParam) ;
 	
 	// @Name("fulltextName")String fulltextName, @Name("queryParam") String queryParam,
 	// @Name("limit")long limit, @Name("skip")long skip, @Name("type")String type, @Name("alpha")double alpha, @Name("nor")double nor
@@ -76,7 +75,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @param nor only effect in relevance rank  
 	 * @return {@link com.jfkey.sarank.SearchHits}
 	 */
-	@Query("call jfkey.search('ft_pa', {queryParam}, {limit}, {skip}, {rankType}, {alpha}, {nor})")
+	@Query("CALL jfkey.search('ft_pa_title', {queryParam}, {limit}, {skip}, {rankType}, {alpha}, {nor})")
 	Iterable<SearchHits> queryByKeywords(@Param("queryParam")String queryParam, @Param("limit")long limit, 
 			@Param("skip")long skip, @Param("rankType")String rankType, @Param("alpha")double alpha, @Param("nor") double nor);
 	
@@ -89,30 +88,35 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 *         information
 	 */
 	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
-			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore) "
+			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author), "
+			+ "(p)-[:PaVenue]->(ven), (r)-[:PAAAff]->(aff:Affiliation) "
 			+ "WHERE p.paID = col "
-			+ "WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, athScore.authorScore AS athScore, "
-			+ "p.paYear AS year, r.paaAffID AS affID, r.normalizedName AS affName, p.conID AS conID, p.jouID AS jouID, CASE  "
-			+ "WHEN p.conID IS NOT NULL THEN p.conID ELSE p.jouID END AS venID MATCH (y :Years) "
-			+ "WHERE y.year = year "
-			+ "WITH  paID, authorID, author, athScore,  affID, affName , venID, conID, jouID, y "
-			+ "OPTIONAL MATCH (ven:Venue)-[venScore:VenueYearScore]->(y) "
-			+ "WHERE ven.venID = venID "
-			+ "WITH  paID, authorID, author, athScore, venID, ven.venueName AS venName, venScore.score AS venScore, y ,affID, conID, jouID "
-			+ "OPTIONAL MATCH (aff:Affiliation)-[affScore:AffYearScore]->(y) "
-			+ "WHERE aff.affID = affID "
-			+ "RETURN  paID, COLLECT(authorID)  AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, "
-			+ "jouID, conID, venID, venName,  venScore, COLLECT(affID ) AS affIDs, COLLECT(aff.affName ) AS affNames, COLLECT (affScore.score) AS affScores, "
-			+ "y.year as pubYear")
+			+ "WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, a.athScore AS athScore, p.paYear AS paYear, "
+			+ "aff.affID AS affID, aff.affName AS affName, aff.affScore AS affScore,"
+			+ " p.conID AS conID, p.jouID AS jouID, p.NormalizedName AS venName, p.venueType AS venueType, ven "
+			+ "MATCH(ven)-[vs:VenueYearScore]->(y:Years{year:paYear}) "
+			+ "USING INDEX y:Years(year) "
+			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, "
+			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
+			+ "COLLECT (affScore) AS affScores, paYear AS pubYear;")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
 
 	
-	@Query("MATCH (a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore), (a)-[paa:PaaAth]->(p:Paper) "
-			+ "WHERE a.athName = {athName} AND paa.authorNumber = '1' "
-			+ "WITH  a.athName as athName, a.athID as athID, SIZE((a)-[:PaaAth]->()) as paNumber, "
-			+ "COLLECT(paa)[0] as paa,  athScore.authorScore as athScore "
-			+ "ORDER BY athScore desc  "
-			+ "RETURN athName, athID, paNumber, paa.paaAffID as affID, paa.normalizedName as affName, athScore; ")
+	/**
+	 * 
+	 * @param athName author name
+	 * @return get author information {@link com.jfkey.sarank.domain.AuthorHit} by author name
+	 */
+	@Query("MATCH (ath:Author)<-[:PAAAth]-(paa:PAA) "
+			+ "WHERE ath.athName = {athName} "
+			+ "WITH ath, COUNT(paa.paID) AS paNumber,  COLLECT(paa) AS paaS "
+			+ "UNWIND paaS AS paa "
+			+ "WITH ath, paNumber, paa "
+			+ "WHERE paa.authorNumber = '1' "
+			+ "OPTIONAL MATCH (paa) -[:PAAAff]->(aff:Affiliation) "
+			+ "RETURN ath.athName AS athName, ath.athID AS athID, ath.athScore AS athScore, paNumber, "
+			+ "COLLECT(aff.affID) AS affID, COLLECT(aff.affName ) AS affName "
+			+ "ORDER BY ath.athScore DESC")
 	Iterable<AuthorHit> searchAuthor(@Param("athName") String athName);
 	
 	/**
@@ -121,7 +125,10 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @return {@link com.jfkey.sarank.domain.AffHit} AffHit
 	 * for example if affReg = "city university.*" it will return all affiliation starting with "city university"
 	 */
-	@Query("match  (a:Affiliation) 	where a.affName  =~ {affReg}  return a.affID as affID, a.affName as affName , size (()-[:PaPAA]->()-[:PAAAff]->(a)) as paperNum order by paperNum desc skip {skip} limit {limit}")
+	@Query("MATCH (paa:PAA)-[:PAAAff]->(aff:Affiliation) "
+			+ "WHERE aff.affName =~ {affReg} "
+			+ "RETURN aff.affID AS affID, aff.affName AS affName, COUNT(DISTINCT(paa.paID)) AS paperNum "
+			+ "ORDER BY paperNum DESC SKIP {skip} LIMIT {limit}")
 	Iterable<AffHit> getAffInfo(@Param("affReg")String affReg, @Param("skip")int skip, @Param("limit")int limit);
 	
 	

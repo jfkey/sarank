@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * @author junfeng Liu
  * @time 3:57:42 PM Mar 4, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc the details of paper in paper_info page
  */
 public class BasicInfoBean {

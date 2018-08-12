@@ -13,7 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jfkey.sarank.domain.PaperSimpleBean;
 import com.jfkey.sarank.service.AuthorService;
 
-
+/**
+ * 
+ * @author junfeng Liu
+ * @time 10:40:06 AM Aug 10, 2018
+ * @version v0.2.0
+ * @desc author search controller . 
+ */
 @Controller
 public class AuthorController {
 	@Autowired

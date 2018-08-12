@@ -10,7 +10,7 @@ import com.jfkey.sarank.utils.Constants;
  * 
  * @author junfeng Liu
  * @time 9:51:02 PM Apr 17, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc some influential points in {@link com.jfkey.sarank.domain.ACJA}. And it will be shown in front end.
  */
 public class ACJAShow {

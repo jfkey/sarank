@@ -20,7 +20,7 @@ import com.jfkey.sarank.utils.RankType;
  * 
  * @author junfeng Liu
  * @time 10:35:41 AM Aug 10, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc Affiliation search interface .
  */
 @Controller

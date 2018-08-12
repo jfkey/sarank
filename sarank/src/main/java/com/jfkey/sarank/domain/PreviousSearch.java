@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * @author junfeng Liu
  * @time 10:58:12 AM Apr 15, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc it holds previous search contents.
  */
 public class PreviousSearch {

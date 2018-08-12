@@ -8,7 +8,7 @@ import org.neo4j.ogm.annotation.Relationship;
  * 
  * @author junfeng Liu
  * @time 9:30:01 AM Jan 19, 2018
- * @version v0.1.3
+ * @version v0.2.0
  * @desc this is Paper entity mapping NODE Paper in noe4j
  */
 
