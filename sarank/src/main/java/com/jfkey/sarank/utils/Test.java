@@ -1,11 +1,8 @@
 package com.jfkey.sarank.utils;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.jfkey.sarank.domain.SortAuthor;
 
 public class Test {
 	public static void main(String[] args) {
@@ -21,9 +18,24 @@ public class Test {
 //		Stream<SortAuthor> sorted = set.stream().sorted();
 //		
 //		sorted .forEach(System.out ::  println);
-		int a = 5;
-		int b = 10;
-		System.out.println(a/b);
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("A");
+		list.add("B");
+		list.add("C");
+		list.add("D");
+		list.add("E");
+		list.add("F");
+		list.add("G");
+		list.add("H");
+
+		int i[] = {1,3,5};
+
+		for (int j = i.length-1; j >= 0; j--) {
+		    list.remove(i[j]);
+		}
+		for (int x = 0; x < list.size(); x ++) {
+			System.out.println(list.get(x));
+		}
 		
 	}
 }

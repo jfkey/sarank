@@ -1,5 +1,6 @@
 package com.jfkey.sarank.repository;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.neo4j.annotation.Query;
@@ -7,7 +8,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.jfkey.sarank.domain.Author;
-import com.jfkey.sarank.domain.AuthorHit;
+import com.jfkey.sarank.domain.AuthorIDNumbers;
 import com.jfkey.sarank.domain.AuthorInfoBean;
 import com.jfkey.sarank.domain.PaperSimpleBean;
 
@@ -24,17 +25,28 @@ public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{
 	 * @param athID author id  
 	 * @return get {@link com.jfkey.sarank.domain.AuthorInfoBean} by author id .
 	 */
-	@Query("MATCH (a:Author)-[r:PaaAth ]->(p:Paper)-[:PaperIndex]->(score:PaperIndexScore), "
-			+ "(p)-[pkw :Pkw]->(fos1:FOS)-[fosH:FosHierarchy]->(fos2:FOS) "
-			+ "WHERE a.athID = {athID} AND  fosH.parentLevel = 'L1' "
-			+ "WITH  p, r.paaAffID as affID, COLLECT(fos2.fosName) as fos, COLLECT(fos2.fosID) as fosID, "
-			+ "r.originalName as aff, size(()-[:PaRef]->(p)) as cite, r.authorNumber as number, score "
-			+ "MATCH (a1:Author)-[r1:PaaAth]->(p) "
-			+ "WITH p, aff, affID, COLLECT(a1.athName) as authors, "
-			+ "COLLECT(a1.athID) as authorsID, fos, fosID, cite, number, score "
-			+ "RETURN  p.paID as nodeID, p.NormalizedName as venue, p.jouID as jouID, p.conID as conID, aff, affID, "
-			+ "p.paYear as year, authors, authorsID, fos, fosID, cite, number, score.paperScore as score ")
+	@Query("MATCH(a:Author)<-[:PAAAth]-()<-[:PaPAA]-(p:Paper) "
+			+ "WHERE a.athID = {athID} "
+			+ "WITH p "
+			+ "OPTIONAL MATCH (p)-[:Pkw]->(:FOS)-[:FosHierarchy{parentLevel:'L1'}]->(fos2:FOS) "
+			+ "WITH p, COLLECT(fos2.fosName) AS fos, COLLECT(fos2.fosID) AS fosID "
+			+ "OPTIONAL MATCH (p)-[:PaPAA]->(paa)-[:PAAAth]->(a1:Author) "
+			+ "RETURN  p.paID AS nodeID, p.NormalizedName AS venue, p.venueType AS venueType, p.jouID AS jouID, p.conID AS conID, "
+			+ "p.paYear AS year, COLLECT (paa.normalizedName) AS aff, COLLECT(paa.affID) AS affID, "
+			+ "COLLECT(a1.athName) AS authors, COLLECT(a1.athID) AS authorsID, COLLECT(paa.authorNumber) AS authorNumber, "
+			+ "fos, fosID, size(()-[:PaRef]->(p)) AS cite, p.paScore AS score;")
 	Iterable<AuthorInfoBean> getAllPapers(@Param("athID")String athID);
+	
+	
+	/**
+	 * 
+	 * @param listID a list of paper ID
+	 * @return author ID and author paper numbers.
+	 */
+	@Query("WITH {listID} AS coll UNWIND coll AS col "
+			+ "MATCH(a:Author{athID:col}) "
+			+ "RETURN a.athID AS athID, SIZE((a)-[:PAAAth]-()) AS numbers;")
+	Iterable<AuthorIDNumbers> getPaperNumbersByAuthorIDs(@Param("listID")List<String> listID);
 	
 	
 	/**
@@ -42,18 +54,15 @@ public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{
 	 * @param listID a list of Paper. 
 	 * @return get {@link com.jfkey.sarank.domain.PaperSimpleBean} by a list of paper ID.
 	 */
-	@Query ("WITH {listID} AS coll "
-			+ "UNWIND coll AS col  "
-			+ "MATCH (p:Paper)<-[r:PaaAth]-(a:Author), (p:Paper)-[:PaperIndex]->(score:PaperIndexScore) "
-			+ "WHERE p.paID= col "
-			+ "WITH DISTINCT ( p.paID ) as paID , a.athID as authorsID, a.athName as authors,  p.originalTitle as title, "
-			+ "p.NormalizedName as venue, p.paYear as year, p.jouID as jouID, p.conID as conID, r.authorNumber as number, "
-			+ "SIZE(()-[:PaRef]->(p) ) as citations, score.paperScore as score  "
+	@Query ("WITH {listID} AS coll UNWIND coll AS col "
+			+ "MATCH (p:Paper{paID:col})-[:PaPAA]->(paa:PAA)-[:PAAAth]-(a:Author) "
+			+ "WITH DISTINCT (p.paID) AS paID, a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, p.NormalizedName AS venue, "
+			+ "p.paYear AS year, p.jouID AS jouID, p.conID AS conID, p.venueType AS venueType, paa.authorNumber AS number, "
+			+ "size(()-[:PaRef]->(p)) AS citations, p.paScore AS score "
 			+ "ORDER BY toInteger(number) "
-			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID , COLLECT(authors) AS authors, "
-			+ " citations, score "
+			+ "WITH paID, title, venueType, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID , COLLECT(authors) AS authors, citations, score "
 			+ "ORDER BY score DESC "
-			+ "RETURN  title, paID, authors, authorsID, year, venue, jouID, conID, citations, score;")
+			+ "RETURN  title, paID, authors, authorsID, year, venueType, venue, jouID, conID, citations, score;")
 	Iterable<PaperSimpleBean> getPaperPerPage(@Param("listID") String[] listID);
 	
 	/**
@@ -70,15 +79,12 @@ public interface AuthorRepositroy extends Neo4jRepository<Author,Long>{
 	 * @param athIDs Co-Authors IDs
 	 * @return get {@link com.jfkey.sarank.domain.AuthorHit} by author IDs
 	 */
-	@Query("WITH {athIDs} AS coll "
-			+ "UNWIND coll as col "
-			+ "MATCH (a:Author)-[:AuthorIndex]->(athScore:AuthorIndexScore), (a)-[paa:PaaAth]->(p:Paper) "
-			+ "WHERE a.athID=col AND paa.authorNumber = '1' "
-			+ "WITH  a.athName as athName, a.athID as athID, SIZE((a)-[:PaaAth]->()) as paNumber, "
-			+ "COLLECT(paa)[0] as paa,  athScore.authorScore as athScore "
-			+ "ORDER BY athScore desc  "
-			+ "RETURN athName, athID, paNumber, paa.paaAffID as affID, paa.normalizedName as affName, athScore; ")
-	Iterable<AuthorHit> getCoAuthorInfo(@Param("athIDs") String[] athIDs);
-	
+//	@Query("WITH {athIDs} AS coll UNWIND coll AS col "
+//			+ "MATCH(a:Author)<-[:PAAAth]-(paa:PAA)<-[PaPAA]-(p:Paper) "
+//			+ "WHERE a.athID=col AND paa.authorNumber = '1' "
+//			+ "RETURN a.athName AS athName, a.athID AS athID, SIZE((a)<-[:PAAAth]-()) AS paNumber, "
+//			+ "COLLECT(DISTINCT paa.affID) AS affID, COLLECT(DISTINCT paa.normalizedName) AS affName,  a.athScore AS athScore "
+//			+ "ORDER BY athScore DESC ")
+//	Iterable<AuthorHit> getCoAuthorInfo(@Param("athIDs") String[] athIDs);
 	
 }

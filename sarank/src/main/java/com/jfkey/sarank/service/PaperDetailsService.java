@@ -27,7 +27,8 @@ public class PaperDetailsService {
 	private PaperDetailsRepository paperDetailsRepository;
 	
 	public PaperDetailBean getPaperDetails(String paID) {
-		List<PaperDetailBean> paperDetailList = getIteratorData(paperDetailsRepository.getPaperInfo(paID));
+		Iterable<PaperDetailBean> it = paperDetailsRepository.getPaperInfo(paID);
+		List<PaperDetailBean> paperDetailList = getIteratorData(it);
 		if (paperDetailList != null && paperDetailList.size() > 0) {
 			return paperDetailList.get(0);
 		}

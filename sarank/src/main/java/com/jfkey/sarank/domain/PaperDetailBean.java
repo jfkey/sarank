@@ -9,7 +9,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * @author junfeng Liu
  * @time 9:27:03 PM Apr 26, 2018
  * @version v0.2.0 
- * @desc paper details information Bean 
+ * @desc paper details information Bean. will be shown in search page.
  */
 @QueryResult
 public class PaperDetailBean {

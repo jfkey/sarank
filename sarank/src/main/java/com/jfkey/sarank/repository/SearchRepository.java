@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.AffHit;
-import com.jfkey.sarank.domain.AuthorHit;
+import com.jfkey.sarank.domain.AuthorSimpleDesc;
 import com.jfkey.sarank.domain.Paper;
 import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperScoresBean;
@@ -105,7 +105,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	/**
 	 * 
 	 * @param athName author name
-	 * @return get author information {@link com.jfkey.sarank.domain.AuthorHit} by author name
+	 * @return get author information {@link com.jfkey.sarank.domain.AuthorSimpleDesc} by author name
 	 */
 	@Query("MATCH (ath:Author)<-[:PAAAth]-(paa:PAA) "
 			+ "WHERE ath.athName = {athName} "
@@ -117,7 +117,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "RETURN ath.athName AS athName, ath.athID AS athID, ath.athScore AS athScore, paNumber, "
 			+ "COLLECT(aff.affID) AS affID, COLLECT(aff.affName ) AS affName "
 			+ "ORDER BY ath.athScore DESC")
-	Iterable<AuthorHit> searchAuthor(@Param("athName") String athName);
+	Iterable<AuthorSimpleDesc> searchAuthor(@Param("athName") String athName);
 	
 	/**
 	 * 

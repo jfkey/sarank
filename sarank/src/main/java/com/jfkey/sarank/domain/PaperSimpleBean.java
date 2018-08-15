@@ -25,6 +25,8 @@ public class PaperSimpleBean {
 	private String[] authorsID;
 	/*published year*/
 	private String year; 
+	/*venue type, while 0 for null, 1 for journal, 2 for conference, 3 for both of them.*/
+	private String venueType;
 	/*published in*/
 	private String venue;
 	/*journal id */
@@ -42,8 +44,8 @@ public class PaperSimpleBean {
 	}
 
 	public PaperSimpleBean(String title, String paID, String[] authors,
-			String[] authorsID, String year, String venue, String jouID,
-			String conID, int citations, double score) {
+			String[] authorsID, String year, String venue, String venueType,
+			String jouID, String conID, int citations, double score) {
 		super();
 		this.title = title;
 		this.paID = paID;
@@ -51,6 +53,7 @@ public class PaperSimpleBean {
 		this.authorsID = authorsID;
 		this.year = year;
 		this.venue = venue;
+		this.venueType = venueType;
 		this.jouID = jouID;
 		this.conID = conID;
 		this.citations = citations;
@@ -105,6 +108,14 @@ public class PaperSimpleBean {
 		this.venue = venue;
 	}
 
+	public String getVenueType() {
+		return venueType;
+	}
+
+	public void setVenueType(String venueType) {
+		this.venueType = venueType;
+	}
+
 	public String getJouID() {
 		return jouID;
 	}
@@ -139,13 +150,13 @@ public class PaperSimpleBean {
 
 	@Override
 	public String toString() {
-		return "SearchInfoBean [title=" + title + ", paID=" + paID
+		return "PaperSimpleBean [title=" + title + ", paID=" + paID
 				+ ", authors=" + Arrays.toString(authors) + ", authorsID="
 				+ Arrays.toString(authorsID) + ", year=" + year + ", venue="
-				+ venue + ", jouID=" + jouID + ", conID=" + conID
-				+ ", citations=" + citations + ", score=" + score + "]";
+				+ venue + ", venueType=" + venueType + ", jouID=" + jouID
+				+ ", conID=" + conID + ", citations=" + citations + ", score="
+				+ score + "]";
 	}
-	
 	
 	
 }
