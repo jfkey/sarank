@@ -3,15 +3,21 @@ package com.jfkey.sarank.controller;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.aop.target.HotSwappableTargetSource;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.PaperSimpleBean;
+import com.jfkey.sarank.domain.SearchPara;
+import com.jfkey.sarank.service.AuthorMorePaperService;
 import com.jfkey.sarank.service.AuthorService;
+import com.jfkey.sarank.utils.RankType;
 
 /**
  * 
@@ -25,24 +31,81 @@ public class AuthorController {
 	@Autowired
 	private AuthorService authorService;
 	
+	@Autowired
+	private AuthorMorePaperService authorMorePaper;
+	
 	@RequestMapping("/author") 
-	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid) {
+	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid, HttpSession session) {
 		
 		ModelAndView mv= new ModelAndView("/author");
-		long s1 = System.currentTimeMillis();
 		List<PaperSimpleBean> hotPapers = authorService.getHotPapers(athid);
-		System.out.println("search author "+ athid + " hot paper service spends : " +(System.currentTimeMillis() - s1)/1000 + " s.");
-		
-		s1 = System.currentTimeMillis();
-		mv.addAllObjects(authorService.getCoAuthorAndSimpleInfo(athid));
-		System.out.println("search co-auhtor info service spends : " + (System.currentTimeMillis() - s1)/1000 + " s.");
-
-		authorService.colorAuthor(hotPapers);
-		
 		mv.addObject("hotPapers", hotPapers);
+		authorService.colorAuthor(hotPapers, athid);
+		
+		mv.addAllObjects(authorService.getCoAuthorAndSimpleInfo(athid));
+		// store acja information in session
+		session.setAttribute("acjaShow", authorService.getACJAShow());
+		
+		// get and set search parameter
+		SearchPara searchPara = new SearchPara();
+		searchPara.setAuthorID(athid);
+		searchPara.setRt(RankType.DEFAULT_RANK);
+		searchPara.setPage(0);
+		searchPara.setAuthor(authorService.getAthName());
+		mv.addObject("para", searchPara);
 		
 		return mv;
 	}
 
+	@RequestMapping("/athpas") 
+	public ModelAndView findMorePaper(@ModelAttribute(value="para") SearchPara para, HttpSession session) {
+		// searchPara athid, RankType, curpage
+		Object attribute = session.getAttribute("para");
+
+		
+		ModelAndView mv = new ModelAndView("/ath_papers");
+		int paperNum = 0; 
+		// get acja information through session
+		ACJAShow acjaShow = (ACJAShow)session.getAttribute("acjaShow");
+		mv.addObject("acjaShow", acjaShow);
+		if (acjaShow != null) {
+			paperNum = acjaShow.getAllPaperNum();
+		}
+		
+		Map<String, Object> findResult = authorMorePaper.findMorePaper(para, paperNum);
+		mv.addAllObjects(findResult);
+		mv.addObject("para", para);
+		return mv;
+	}
 	
+	/**
+	 * 
+	 * @param authorID
+	 * @param page  
+	 * @param rt
+	 * @return  author more papers, and 
+	 */
+	@RequestMapping("/athpage") 
+	public ModelAndView page (@RequestParam(value="authorID",required=true)String authorID, 
+			@RequestParam(value="page", required=true)int page, @RequestParam(value="rt")RankType rt, HttpSession session) {
+		// construct search parameter
+		SearchPara para = new SearchPara();
+		para.setAuthorID(authorID);
+		para.setPage(page);
+		para.setRt(rt);
+		
+		ModelAndView mv = new ModelAndView("/ath_papers");
+		int paperNum = 0; 
+		// get acja information through session
+		ACJAShow acjaShow = (ACJAShow)session.getAttribute("acjaShow");
+		mv.addObject("acjaShow", acjaShow);
+		if (acjaShow != null) {
+			paperNum = acjaShow.getAllPaperNum();
+		}
+		
+		Map<String, Object> findResult = authorMorePaper.findMorePaper(para, paperNum);
+		mv.addAllObjects(findResult);
+		mv.addObject("para", para);
+		return mv;
+	}
 }

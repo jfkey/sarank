@@ -85,18 +85,18 @@
 			</nav>
 		</header>
 		
-		
+	
 		
 		
 		<!--中间展示数据-->
 		<div class="row ">
 			<!--左边的div-->
-			<div class="col-md-2" style="background-color: ; margin-top: 50px; height: 400px;">
+			<div class="col-md-2" style="background-color: ; margin-top: 50px; height: 400px; ">
 				
 			</div>
 		
 		
-			<div class="col-md-8" style="height:auto; margin-top: 50px; background-color:;">
+			<div class="col-md-8" style="height:auto; margin-top: 50px; background-color:; ">
 				<div class="col-md-7 col-sm-12" style="height: 550px; background-color: ;" >
 					<div class=" col-md-5 col-sm-6"style="background-color: ;">
 						<!--<img src="img/avatar.jpg" style=" margin-top:20px;"/>-->
@@ -267,7 +267,18 @@
 				</div>
 		
 					<div class="panel-footer text-right">
-						<a  href="asdf">find more papers ... </a>
+						<form action="/athpas" th:object="${para}" method="get" id="more_paper_form">
+							
+								<input type="hidden" class="form-control" th:value="7D450159" th:field="*{authorID}">
+								<input type="hidden" class="form-control" th:value="junfeng" th:field="*{rt}">
+								<input type="hidden" class="form-control" th:value="1" th:filed="*{page}" >
+								<a  id="h-submitBtn" onclick="document:more_paper_form.submit();">
+									find more
+									<span class="glyphicon glyphicon-option-horizontal" aria-hidden="false"></span>
+								</a>
+							
+						</form>
+						
 					</div>
 		
 					</div>
@@ -296,7 +307,7 @@
 			
 			
 			
-			<div class="col-md-2" style="background-color: ; margin-top: 50px; height: 400px;">
+			<div class="col-md-2" style="background-color: ; margin-top: 50px; height: 400px; ">
 				
 			</div>
 			

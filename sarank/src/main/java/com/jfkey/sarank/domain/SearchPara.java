@@ -15,11 +15,14 @@ public class SearchPara {
 	/*search author name*/
 	private String author;
 	
-	/*search author year*/
-//	private int year;
+	/*search author ID*/
+	private String authorID;
 	
 	/*search affiliation name*/
 	private String affName;
+	
+	/*search affiliation ID*/
+	private String affID;
 	
 	/*search page*/
 	/*current page. default is 0*/
@@ -33,18 +36,7 @@ public class SearchPara {
 
 	public SearchPara() {
 	}
-
-	public SearchPara(String keywords, String author, String affName, int page,
-			RankType rt, String formatStr) {
-		super();
-		this.keywords = keywords;
-		this.author = author;
-		this.affName = affName;
-		this.page = page;
-		this.rt = rt;
-		this.formatStr = formatStr;
-	}
-
+	
 
 	public String getKeywords() {
 		return keywords;
@@ -66,13 +58,35 @@ public class SearchPara {
 	}
 
 
+	public String getAuthorID() {
+		return authorID;
+	}
+
+
+	public void setAuthorID(String authorID) {
+		this.authorID = authorID;
+	}
+
+
 	public String getAffName() {
 		return affName;
 	}
 
+
 	public void setAffName(String affName) {
 		this.affName = affName;
 	}
+
+
+	public String getAffID() {
+		return affID;
+	}
+
+
+	public void setAffID(String affID) {
+		this.affID = affID;
+	}
+
 
 	public int getPage() {
 		return page;
@@ -104,15 +118,15 @@ public class SearchPara {
 	}
 
 	
-	
-	
 
 	@Override
 	public String toString() {
 		return "SearchPara [keywords=" + keywords + ", author=" + author
-				+ ", affName=" + affName + ", page=" + page + ", rt=" + rt
+				+ ", authorID=" + authorID + ", affName=" + affName
+				+ ", affID=" + affID + ", page=" + page + ", rt=" + rt
 				+ ", formatStr=" + formatStr + "]";
 	}
+
 
 	public boolean isNull () {
 		if (keywords == null && author == null) {

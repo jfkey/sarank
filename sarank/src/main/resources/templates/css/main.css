@@ -154,3 +154,7 @@ a:hover, .ul-paper-item-actions a:hover, .ul-paper-item-aths a:hover{
 	margin-top: 4px; 
 	margin-bottom: 8px;
 }
+
+.red {
+	color: red;
+}
