@@ -36,6 +36,7 @@ public class AuthorController {
 	
 	@RequestMapping("/author") 
 	public ModelAndView searchPaper(@RequestParam(value="athid",required=true)String athid, HttpSession session) {
+		String ACJASHOW_ATHID = athid;
 		
 		ModelAndView mv= new ModelAndView("/author");
 		List<PaperSimpleBean> hotPapers = authorService.getHotPapers(athid);
@@ -44,7 +45,7 @@ public class AuthorController {
 		
 		mv.addAllObjects(authorService.getCoAuthorAndSimpleInfo(athid));
 		// store acja information in session
-		session.setAttribute("acjaShow", authorService.getACJAShow());
+		session.setAttribute(ACJASHOW_ATHID, authorService.getACJAShow());
 		
 		// get and set search parameter
 		SearchPara searchPara = new SearchPara();
@@ -60,13 +61,14 @@ public class AuthorController {
 	@RequestMapping("/athpas") 
 	public ModelAndView findMorePaper(@ModelAttribute(value="para") SearchPara para, HttpSession session) {
 		// searchPara athid, RankType, curpage
-		Object attribute = session.getAttribute("para");
+		String AJCASHOW_ATHID = para.getAuthorID();
+		
 
 		
 		ModelAndView mv = new ModelAndView("/ath_papers");
 		int paperNum = 0; 
 		// get acja information through session
-		ACJAShow acjaShow = (ACJAShow)session.getAttribute("acjaShow");
+		ACJAShow acjaShow = (ACJAShow)session.getAttribute(AJCASHOW_ATHID );
 		mv.addObject("acjaShow", acjaShow);
 		if (acjaShow != null) {
 			paperNum = acjaShow.getAllPaperNum();
@@ -88,6 +90,8 @@ public class AuthorController {
 	@RequestMapping("/athpage") 
 	public ModelAndView page (@RequestParam(value="authorID",required=true)String authorID, 
 			@RequestParam(value="page", required=true)int page, @RequestParam(value="rt")RankType rt, HttpSession session) {
+		String ACJASHOW_ATHID = authorID;
+		
 		// construct search parameter
 		SearchPara para = new SearchPara();
 		para.setAuthorID(authorID);
@@ -97,7 +101,7 @@ public class AuthorController {
 		ModelAndView mv = new ModelAndView("/ath_papers");
 		int paperNum = 0; 
 		// get acja information through session
-		ACJAShow acjaShow = (ACJAShow)session.getAttribute("acjaShow");
+		ACJAShow acjaShow = (ACJAShow)session.getAttribute(ACJASHOW_ATHID);
 		mv.addObject("acjaShow", acjaShow);
 		if (acjaShow != null) {
 			paperNum = acjaShow.getAllPaperNum();

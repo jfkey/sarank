@@ -103,7 +103,8 @@ public class SearchAllController {
 
 			ModelAndView mv= new ModelAndView("/affs");
 			mv.addAllObjects(searchResult);
-
+			mv.addObject("para", searchPara );
+			
 			return mv;
 		} else {
 			return null;

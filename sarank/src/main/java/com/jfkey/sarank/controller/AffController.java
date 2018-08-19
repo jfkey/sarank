@@ -1,20 +1,22 @@
 package com.jfkey.sarank.controller;
 
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.SearchPara;
 import com.jfkey.sarank.service.AffService;
-import com.jfkey.sarank.utils.RankType;
+import com.jfkey.sarank.service.SearchAllService;
 
 /**
  * 
@@ -27,41 +29,26 @@ import com.jfkey.sarank.utils.RankType;
 public class AffController {
 	@Autowired
 	private AffService affService;
-	
-	private final int BUTTONS_TO_SHOW = 5;
-	private final int INITIAL_PAGE = 0;
-	private final String ACJA_SHOW = "ACJA_SHOW";
-	
+//	private final String AFF_ACJA_SHOW = "AFF_ACJA_SHOW";
+	 private static final Logger LOG = LoggerFactory.getLogger(AffController.class);
 	
 	@RequestMapping("/aff") 
-	public ModelAndView searchPaper(@RequestParam(value="affid",required=true)String affid, @RequestParam("page") Optional<Integer> page,
-			@RequestParam("rankType") Optional<Integer> rankType,  HttpSession session, @ModelAttribute(value = "searchPara") SearchPara searchPara ) {
-		
-		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
-		int evalRt = (rankType.isPresent()) ? rankType.get() : 1;
-		RankType rt = RankType.DEFAULT_RANK; 
-		if (evalRt == 2) {
-			rt = RankType.RELEVANCE_RANK;
-		} else if (evalRt == 3) {
-			rt = RankType.MOST_CITATION;
-		} else if (evalRt == 4) {
-			rt = RankType.LATEST_YEAR;
-		} else  {
-			rt = RankType.DEFAULT_RANK;
-		}
+	public ModelAndView searchPaper(@ModelAttribute(value = "para") SearchPara para, HttpSession session) {
+		String ACJASHOW_AFFID = para.getAffID();
 		
 		ModelAndView mv= new ModelAndView("/affiliation");
-		Map<String, Object> searchResult = affService.getAffByID(affid);
+		LOG.info("para:" + para);
+		ACJAShow acjaShow = (ACJAShow)session.getAttribute(ACJASHOW_AFFID );
+		LOG.info("acjaShow : " + acjaShow); 
+		if ( acjaShow == null) {
+			acjaShow = affService.getACJAShow(para);
+			session.setAttribute(ACJASHOW_AFFID , acjaShow);
+		}
+		mv.addObject("acjaShow", acjaShow);
+		Map<String, Object> searchResult = affService.getAffByID(para, acjaShow);
 		mv.addAllObjects(searchResult);
 		
-		if (evalPage == 0) {
-			session.setAttribute(ACJA_SHOW, searchResult.get("acjaShow"));
-		} else {
-			mv.addObject("acjaShow", session.getAttribute(ACJA_SHOW));
-		}
-		
-		searchPara.setRt(RankType.DEFAULT_RANK);
-		mv.addObject("para", searchPara );
+		mv.addObject("para", para );
 		return mv;
 	}
 }
