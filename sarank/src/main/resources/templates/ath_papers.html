@@ -25,7 +25,7 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								Author Papers 
+								Author Papers
 							</div>
 						</div>
 						
@@ -70,10 +70,10 @@
 										<a href="#" target="_blank">API</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">博客</a>
+										<a href="#" target="_blank">BLOG</a>
 									</li>
 									<li>
-										<a href="#">关于</a>
+										<a href="#">ABOUT</a>
 									</li>
 								</ul>
 							</nav>
@@ -235,7 +235,7 @@
 						<ul id="ul_aff" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.affName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affid=${acjaShow.affID[nameStat.index]})}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 						</ul>
@@ -252,7 +252,7 @@
 						<ul id="ul_jou" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/jou(jouid=${acjaShow.jouID[nameStat.index]})}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 								
@@ -270,7 +270,7 @@
 						<ul id="ul_con" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.conName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/con(conid=${acjaShow.conID[nameStat.index]})}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 								

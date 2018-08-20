@@ -128,8 +128,9 @@ public interface AffRepository extends Neo4jRepository<Paper, Long> {
 	
 	
 	@Query("MATCH(paa:PAA{affID:{affID}}) "
-			+ "WITH DISTINCT paa.paID AS papers "
-			+ "RETURN COUNT(*) AS numbers;")
-	Iterable<Map<String, Object>> getAllNumber(@Param("affID")String affID);
+			+ "WITH paa WITH COUNT( (paa)<-[:PaPAA]-()) AS numbers "
+			+ "MATCH (a:Affiliation{affID:{affID}}) "
+			+ "RETURN numbers, a.affName AS affName;" )
+	Iterable<Map<String, Object>> getAllNumberAndName(@Param("affID")String affID);
 	
 }

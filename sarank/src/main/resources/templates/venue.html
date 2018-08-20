@@ -11,6 +11,7 @@
 		<link rel="stylesheet" type="text/css" href="css/header.css" />
 		<link rel="stylesheet" type="text/css" href="css/main.css" />
 		<link rel="stylesheet" type="text/css" href="css/footer.css"/>
+	
 		<title></title>
 	</head>
 	<body>
@@ -24,7 +25,7 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								<span th:text="${acjaShow.itemName}">Affiliation</span>
+								<span th:text="${acjaShow.itemName}">Venue Name(ICDE)</span>
 							</div>
 						</div>
 						
@@ -69,10 +70,10 @@
 										<a href="#" target="_blank">API</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">博客</a>
+										<a href="#" target="_blank">BLOG</a>
 									</li>
 									<li>
-										<a href="#">关于</a>
+										<a href="#">ABOUT</a>
 									</li>
 								</ul>
 							</nav>
@@ -116,19 +117,19 @@
 							<h4>Ranking Type</h4><br />
 							<ul class="ul-style-type" id="ul_rank_type">
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/aff(affID=${para.affID}, rt='DEFAULT_RANK', page=1)}">
+									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{ven(venID=${para.venID}, rt='DEFAULT_RANK', page=1)}">
 										<span>SARank</span>
 									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/aff(affID=${para.affID}, rt='DEFAULT_RANK', page=1)}"><span>relevance ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{ven(venID=${para.venID}, rt='DEFAULT_RANK', page=1)}"><span>relevance ranking</span></a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/aff(affID=${para.affID}, rt='MOST_CITATION', page=1)}" ><span>most citations</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{ven(venID=${para.venID}, rt='MOST_CITATION', page=1)}" ><span>most citations</span></a>
 								</li>
 							
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/aff(affID=${para.affID}, rt='LATEST_YEAR', page=1)}" ><span>time ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{ven(venID=${para.venID}, rt='LATEST_YEAR', page=1)}" ><span>time ranking</span></a>
 								</li>
 							</ul>
 												
@@ -156,8 +157,8 @@
 											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 											<br />
 											
-											<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
-		
+											<span class="red" th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+											
 											<br />
 		
 											<ul class="ul-paper-item-aths">
@@ -295,20 +296,20 @@
                 <ul class="pagination">
             	
                 <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt}, page=1)}">&laquo;</a>
+                    <a class="pageLink" th:href="@{ven(venID=${para.venID}, rt=${para.rt}, page=1)}">&laquo;</a>
                 </li>
                 <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${paper.number})}">&larr;</a>
+                    <a class="pageLink" th:href="@{ven(venID=${para.venID}, rt=${para.rt},page=${paper.number})}">&larr;</a>
                 </li>
                 <li th:class="${paper.number == (page - 1)} ? 'active pointer-disabled'"
                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${page})}" th:text="${page}"></a>
+                    <a class="pageLink" th:href="@{ven(venID=${para.venID}, rt=${para.rt},page=${page})}" th:text="${page}"></a>
                 </li>
                 <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink"th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${paper.number + 2})}">&rarr;</a>
+                    <a class="pageLink"th:href="@{ven(venID=${para.venID}, rt=${para.rt},page=${paper.number + 2})}">&rarr;</a>
                 </li>
                 <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${paper.totalPages})}">&raquo;</a>
+                    <a class="pageLink" th:href="@{ven(venID=${para.venID}, rt=${para.rt},page=${paper.totalPages})}">&raquo;</a>
                 </li>
             </ul>
         </div>

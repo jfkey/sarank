@@ -8,10 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.AffHit;
-import com.jfkey.sarank.domain.AuthorSimpleDesc;
+import com.jfkey.sarank.domain.AuthorAffiliation;
 import com.jfkey.sarank.domain.Paper;
 import com.jfkey.sarank.domain.PaperInSearchBean;
-import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.SearchHits;
 
 /**
@@ -117,7 +116,7 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "RETURN ath.athName AS athName, ath.athID AS athID, ath.athScore AS athScore, paNumber, "
 			+ "COLLECT(aff.affID) AS affID, COLLECT(aff.affName ) AS affName "
 			+ "ORDER BY ath.athScore DESC")
-	Iterable<AuthorSimpleDesc> searchAuthor(@Param("athName") String athName);
+	Iterable<AuthorAffiliation> searchAuthor(@Param("athName") String athName);
 	
 	/**
 	 * 

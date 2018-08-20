@@ -34,6 +34,9 @@ public class ACJAShow {
 	
 	private int allPaperNum;
 	
+	/*venue name, affiliation name, author name. and etc.*/
+	private String itemName;
+	
 	public ACJAShow() {
 		athID = new ArrayList<String> ();
 		athName = new ArrayList<String>();
@@ -48,34 +51,11 @@ public class ACJAShow {
 		affName = new ArrayList<String>();
 		affScore =  new ArrayList<Double>();
 		years = new ArrayList<String>();
+		itemName = "";
 		allPaperNum = 0;
 	}
 	
 	
-	
-	public ACJAShow(List<String> athID, List<String> athName,
-			List<Double> athScore, List<String> conID, List<String> conName,
-			List<Double> conScore, List<String> jouID, List<String> jouName,
-			List<Double> jouScore, List<String> affID, List<String> affName,
-			List<Double> affScore, List<String> years, int allPaperNum) {
-		super();
-		this.athID = athID;
-		this.athName = athName;
-		this.athScore = athScore;
-		this.conID = conID;
-		this.conName = conName;
-		this.conScore = conScore;
-		this.jouID = jouID;
-		this.jouName = jouName;
-		this.jouScore = jouScore;
-		this.affID = affID;
-		this.affName = affName;
-		this.affScore = affScore;
-		this.years = years;
-		this.allPaperNum = allPaperNum;
-	}
-
-
 
 	public List<String> getAthID() {
 		return athID;
@@ -189,7 +169,13 @@ public class ACJAShow {
 		this.allPaperNum = allPaperNum;
 	}
 
+	public String getItemName() {
+		return itemName;
+	}
 
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
 
 	@Override
 	public String toString() {
@@ -199,10 +185,11 @@ public class ACJAShow {
 				+ ", jouName=" + jouName + ", jouScore=" + jouScore
 				+ ", affID=" + affID + ", affName=" + affName + ", affScore="
 				+ affScore + ", years=" + years + ", allPaperNum="
-				+ allPaperNum + "]";
+				+ allPaperNum + ", itemName=" + itemName + "]";
 	}
+
 	
-	
+
 
 		
 }

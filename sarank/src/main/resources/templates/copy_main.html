@@ -25,12 +25,16 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								DAO HANG
+								Search
 							</div>
 						</div>
 						
-						<!-- 这是中间搜索部分-->
+						<!-- 搜索表单部分-->
 						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${searchPara}" method="get">
+							<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
+							<input type="hidden" class="form-control" value="1" name="page">
+							
+							
 							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
 								<label class="sr-only" for="keywords">keywords</label>
 								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database"  th:field="*{keywords}">
@@ -51,7 +55,7 @@
 								</div>
 						
 							</div>
-						
+							
 							<button id="btn_search" class="btn btn-success" type="submit">
 											<span class="glyphicon glyphicon-search "></span>
 										</button>
@@ -70,10 +74,10 @@
 										<a href="#" target="_blank">API</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">博客</a>
+										<a href="#" target="_blank">BLOG</a>
 									</li>
 									<li>
-										<a href="#">关于</a>
+										<a href="#">ABOUT</a>
 									</li>
 								</ul>
 							</nav>
@@ -117,19 +121,19 @@
 							<h4>Ranking Type</h4><br />
 							<ul class="ul-style-type" id="ul_rank_type">
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" href="/search?rankType=1" >
-										<span>default ranking</span>
+									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+										<span>SARank</span>
 									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  href="/search?rankType=2"><span>relevance ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" ><span>relevance ranking</span></a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  href="/search?rankType=3" ><span>most citations</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" ><span>most citations</span></a>
 								</li>
 							
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  href="/search?rankType=4" ><span>time ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" ><span>time ranking</span></a>
 								</li>
 							</ul>
 												
@@ -232,7 +236,7 @@
 						<ul id="ul_aff" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.affName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affid=${acjaShow.affID[nameStat.index]})}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 						</ul>
@@ -249,7 +253,7 @@
 						<ul id="ul_jou" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/jou(jouid=${acjaShow.jouID[nameStat.index]})}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 								
@@ -267,7 +271,7 @@
 						<ul id="ul_con" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.conName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/con(conid=${acjaShow.conID[nameStat.index]})}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 								
@@ -293,20 +297,20 @@
             <ul class="pagination">
             	
                 <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{ search(page=1)}">&laquo;</a>
+                    <a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}">&laquo;</a>
                 </li>
                 <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{search(page=${paper.number})}">&larr;</a>
+                    <a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${paper.number})}">&larr;</a>
                 </li>
                 <li th:class="${paper.number == (page - 1)} ? 'active pointer-disabled'"
                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                    <a class="pageLink" th:href="@{search(page=${page})}" th:text="${page}"></a>
+                    <a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${page})}" th:text="${page}"></a>
                 </li>
                 <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink"th:href="@{search(page=${paper.number + 2})}">&rarr;</a>
+                    <a class="pageLink"th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${paper.number + 2})}">&rarr;</a>
                 </li>
                 <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink" th:href="@{search(page=${paper.totalPages})}">&raquo;</a>
+                    <a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${paper.totalPages})}">&raquo;</a>
                 </li>
             </ul>
         </div>

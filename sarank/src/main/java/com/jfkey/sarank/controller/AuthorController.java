@@ -95,7 +95,7 @@ public class AuthorController {
 		// construct search parameter
 		SearchPara para = new SearchPara();
 		para.setAuthorID(authorID);
-		para.setPage(page);
+		para.setPage(page - 1);
 		para.setRt(rt);
 		
 		ModelAndView mv = new ModelAndView("/ath_papers");

@@ -50,7 +50,7 @@ public class AuthorMorePaperService {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String athID = para.getAuthorID();
 		RankType rt = para.getRt();
-		int curPage = para.getPage() - 1;
+		int curPage = para.getPage();
 		int skip = curPage * Constants.PRE_PAGE_SIZE; 
 		int limit = Constants.PRE_PAGE_SIZE;
 		

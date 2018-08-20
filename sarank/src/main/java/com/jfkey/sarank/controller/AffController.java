@@ -35,6 +35,7 @@ public class AffController {
 	@RequestMapping("/aff") 
 	public ModelAndView searchPaper(@ModelAttribute(value = "para") SearchPara para, HttpSession session) {
 		String ACJASHOW_AFFID = para.getAffID();
+		para.setPage( para.getPage() - 1);
 		
 		ModelAndView mv= new ModelAndView("/affiliation");
 		LOG.info("para:" + para);

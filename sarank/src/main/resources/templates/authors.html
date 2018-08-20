@@ -25,12 +25,16 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								DAO HANG
+								<span th:text="${searchPara.author}"></span>
 							</div>
 						</div>
 						
-						<!-- 这是中间搜索部分-->
+							<!-- 搜索表单部分-->
 						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${searchPara}" method="get">
+							<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
+							<input type="hidden" class="form-control" value="1" name="page">
+							
+							
 							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
 								<label class="sr-only" for="keywords">keywords</label>
 								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database"  th:field="*{keywords}">
@@ -46,12 +50,12 @@
 									<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}" >
 								</div>
 								<div class="form-group ">
-									<label class="sr-only" for="year">year</label>
-									<input type="text" class="form-control " id="year" placeholder="published year" th:field="*{year}" >
+									<label class="sr-only" for="year">affiliation</label>
+									<input type="text" class="form-control " id="year" placeholder="affiliation" th:field="*{affName}" >
 								</div>
 						
 							</div>
-						
+							
 							<button id="btn_search" class="btn btn-success" type="submit">
 											<span class="glyphicon glyphicon-search "></span>
 										</button>
@@ -98,8 +102,7 @@
  				<div class="col-md-7 col-sm-12" style="margin-top: 50px; height: 1000px;">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<span th:text="|authors you want to find:  ${authors[0].athName}|">authors you want to find </span>
-							
+							<span th:text="|authors you want to find:  ${searchPara.author}|">authors you want to find </span>
 						</div>
 						
 						<table class="table table-hover">
@@ -119,7 +122,7 @@
 											</a>
 										</td>
 										<td >
-											<a th:text="${hit.affName}" th:href="@{/aff(affid=${hit.affID})}">
+											<a th:text="${hit.affName}" th:href="@{/aff(affID=${hit.affID}, rt='DEFAULT_RANK', page='1')}">
 												affiliation name
 											</a>
 										</td>

@@ -1,15 +1,16 @@
 package com.jfkey.sarank.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.AffHit;
+import com.jfkey.sarank.domain.AuthorAffiliation;
+import com.jfkey.sarank.domain.AuthorHit;
 import com.jfkey.sarank.domain.Pager;
 import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperScoresBean;
@@ -60,23 +63,41 @@ public class SearchAllService {
 		}
 	}
 
+	public ACJAShow getACJAShow (SearchPara searchPara) {
+		String queryParam = searchPara.getFormatStr();
+		// String rankType = getRtString(searchPara.getRt());
+		String rankType = "1";
+		int skip = 0;
+		int limit  = Constants.PRE_PAGE_SIZE * 3;
+		double alpha = Constants.RELEVANCE_LOW;
+		double nor = Constants.C;
+		
+		List<String> acjaIDs = new ArrayList<String>();
+		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, limit, skip, rankType, alpha, nor);
+		int allNumber = getHitsID(queryKeywords, acjaIDs);
+
+		ACJAShow acjaShow = new ACJAShow();
+		getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(acjaIDs), allNumber);
+		return acjaShow;
+	}
+	
 	private Map<String, Object> searchKeywords(SearchPara searchPara) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		String queryParam = searchPara.getFormatStr();
 		String rankType = getRtString(searchPara.getRt());
-		int skip = Constants.PRE_PAGE_SIZE * searchPara.getPage();
-//		int limit =  Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
-		int limit  = Constants.PRE_PAGE_SIZE;
+		int skip = Constants.PRE_PAGE_SIZE * (searchPara.getPage());
+		int limit  = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
 		double alpha = Constants.RELEVANCE_LOW;
 		double nor = Constants.C;
-		if(searchPara.getPage() == 0) {
-			// search acja info  
-			limit = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 3);
-		} else {
-			// needn't get acja info
-			limit = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
-		}
+		
+//		if(searchPara.getPage() == 0) {
+//			// search acja info  
+//			limit = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 3);
+//		} else {
+//			// needn't get acja info
+//			limit = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
+//		}
 		
 		
 		// 1. search and get paper info 
@@ -84,32 +105,19 @@ public class SearchAllService {
 		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, limit, skip, rankType, alpha, nor);
 		long t2 = System.currentTimeMillis();
 		LOG.info("search " + queryParam + ", spends " + (t2-t1) + " ms" );
-		List<String> allIDs = new ArrayList<String>();
-		int allNumber = getHitsID(queryKeywords, allIDs);
-		Stream<String> st = allIDs.stream().limit(Constants.PRE_PAGE_SIZE).map(id  -> id);
-		List<String> paperInfoIDs = st.collect(Collectors.toList());
+		
+		List<String> paIDs = new ArrayList<String>();
+		int allNumber = getHitsID(queryKeywords, paIDs);
 		
 		t1 = System.currentTimeMillis();
-		Iterable<PaperInSearchBean> searchedPaperIt = searchRepository.getPaperByIDs(paperInfoIDs);
+		Iterable<PaperInSearchBean> searchedPaperIt = searchRepository.getPaperByIDs(paIDs);
 		t2 = System.currentTimeMillis();
 		LOG.info("search paper detailed info, spends " + (t2-t1) + " ms" );
 		List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
-		changeOrder(paperInfoIDs, searchedPaperList);
+		changeOrder(paIDs, searchedPaperList);
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 		
-		// 2. get ACJA info
-		ACJAShow acjaShow = new ACJAShow();
-		if (searchPara.getPage() == 0) {
-			t1 = System.currentTimeMillis();
-			Iterable<ACJA> info = searchRepository.getACJAInfo(allIDs);
-			t2 = System.currentTimeMillis();
-			LOG.info("search ajca spends : " + (t2-t1) + " ms");
-			getDetailACJAInfo(acjaShow, info, allNumber);
-			LOG.info("sort ajca info spends : " + (System.currentTimeMillis() - t2) + " ms");
-			
-		}
 		
-		result.put("acjaShow", acjaShow);
 		result.put("paperList", searchedPaperList);
 		
 		// 3. get pagination info
@@ -127,8 +135,59 @@ public class SearchAllService {
 
 	private Map<String, Object> searchAuthor(SearchPara searchPara) {
 		Map<String, Object> result = new HashMap<String, Object>();
+		List<AuthorAffiliation> aaList = getIteratorData(searchRepository.searchAuthor(searchPara.getAuthor()));
+		List<AuthorHit> listHits = new ArrayList<AuthorHit>();
+		
+		if (aaList.size() != 0) {
+			// sort aff [ID, times]
+			Map<String, Integer> affTimes = new HashMap<String, Integer>();
+			String key = "";
+			String affID = "";
+			String affName = "";
+			List<Map.Entry<String, Integer>> idTimeList = null;
+			for (AuthorAffiliation aa: aaList) {
+				affTimes.clear();
+				for(int i = 0; i < aa.getAffID().length; i ++) {
+					key = aa.getAffID()[i];
+					if (affTimes.containsKey(key)) {
+						affTimes.put(key, affTimes.get(key) + 1);
+					} else {
+						affTimes.put(key, 1);
+					}
+				}
+				// sort ... 
+				idTimeList = new ArrayList<Map.Entry<String, Integer>>(affTimes.entrySet());
+				Collections.sort(idTimeList, new Comparator<Map.Entry<String, Integer>>() {
+					@Override
+					public int compare(Entry<String, Integer> o1,
+							Entry<String, Integer> o2) {
+						// TODO Auto-generated method stub
+						return o2.getValue().compareTo(o1.getValue());
+					}
+				});
+				if (idTimeList.size() == 0) {
+					affID = "";
+					affName = "";
+				} else {
+					affID = idTimeList.get(0).getKey();
+					for (int i = 0; i < aa.getAffID().length; i ++) {
+						if (affID.equals(aa.getAffID()[i])) {
+							affName = aa.getAffName()[i];
+							break;
+						}
+					}
+				}
+				listHits.add(new AuthorHit(aa.getAthID(), aa.getAthName(), affID, affName, 1, aa.getPaNumber()));
+			
+			}
+		} 
+	
+		
+		
+		
+		result.put("authors", listHits);
+		
 		result.put(Constants.SEARCH_TYPE, SearchType.AUTHOR);
-		result.put("authors", getIteratorData(searchRepository.searchAuthor(searchPara.getAuthor())));
 		return result;
 	}
 

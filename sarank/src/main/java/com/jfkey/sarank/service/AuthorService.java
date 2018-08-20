@@ -326,37 +326,50 @@ public class AuthorService {
 		max = 0;
 		maxAuthorAff = null;
 		affYear = new ArrayList<AffYear>();
-		
-		List<Entry<String, AuthorSimpleAff>> firstAuthorAff = new ArrayList<Map.Entry<String, AuthorSimpleAff>>(list.get(0).getValue().getIdAff().entrySet());
-		
-		Collections.sort(firstAuthorAff, new Comparator<Map.Entry<String, AuthorSimpleAff>>() {
-			@Override
-			public int compare(Entry<String, AuthorSimpleAff> o1,
-					Entry<String, AuthorSimpleAff> o2) {
-				return o1.getValue().getYear().compareTo(o2.getValue().getYear());
-				// return o2.getValue().getAuthorCnt() - o1.getValue().getAuthorCnt();
-			}
-		});
-		
-		
-		for (Entry<String, AuthorSimpleAff> entry : firstAuthorAff) {
-			affYear.add(new AffYear(entry.getValue().getAffName(), entry.getValue().getAffID(), entry.getValue().getYear()));
-			if (entry.getValue().getCnt() > max) {
-				max = entry.getValue().getCnt() ;
-				maxAuthorAff = entry.getValue();
-			}
-		}
-		aff = maxAuthorAff.getAffID() + "#" + maxAuthorAff.getAffName();
-		// limit affYear size 
-		for ( i = affYear.size() -1 ; i >= Constants.AFF_NUMBER; i --) {
-			affYear.remove(i);
-		}
-		
-		// Map<String, AuthorSimpleAff> idAff = list.get(0).getValue().getIdAff();
-		// athIDName store author ID as Key, author name as value
 		Map<String, String> athIDName = new HashMap<String, String>();
-		athName = list.get(0).getValue().getAthName();
-		athIDName.put(list.get(0).getValue().getAthID(), athName);
+		if (list.size() > 0) {
+			List<Entry<String, AuthorSimpleAff>> firstAuthorAff = new ArrayList<Map.Entry<String, AuthorSimpleAff>>(list.get(0).getValue().getIdAff().entrySet());
+			
+			Collections.sort(firstAuthorAff, new Comparator<Map.Entry<String, AuthorSimpleAff>>() {
+				@Override
+				public int compare(Entry<String, AuthorSimpleAff> o1,
+						Entry<String, AuthorSimpleAff> o2) {
+					return o1.getValue().getYear().compareTo(o2.getValue().getYear());
+					// return o2.getValue().getAuthorCnt() - o1.getValue().getAuthorCnt();
+				}
+			});
+			
+			
+			for (Entry<String, AuthorSimpleAff> entry : firstAuthorAff) {
+				affYear.add(new AffYear(entry.getValue().getAffName(), entry.getValue().getAffID(), entry.getValue().getYear()));
+				if (entry.getValue().getCnt() > max) {
+					max = entry.getValue().getCnt() ;
+					maxAuthorAff = entry.getValue();
+				}
+			}
+			aff = maxAuthorAff.getAffID() + "#" + maxAuthorAff.getAffName();
+			// limit affYear size 
+			for ( i = affYear.size() -1 ; i >= Constants.AFF_NUMBER; i --) {
+				affYear.remove(i);
+			}
+			// Map<String, AuthorSimpleAff> idAff = list.get(0).getValue().getIdAff();
+			// athIDName store author ID as Key, author name as value
+			
+		} else {
+			aff = "#";
+		}
+		
+		Iterable<Map<String, Object>> IDNameIt= authorRepository.getAuthorName(athid);
+		Iterator<Map<String, Object>> idIt = IDNameIt.iterator();
+		Map<String, Object> idNameMap = null;
+		while (idIt.hasNext()) {
+			idNameMap = idIt.next();
+		}
+		String athName = (String)idNameMap.get("name");
+		athIDName.put(athID, athName);
+		
+//		athName = list.get(0).getValue().getAthName();
+//		athIDName.put(list.get(0).getValue().getAthID(), athName);
 		
 		result.put("papers", allPapers.size());
 		result.put("cite", cite);

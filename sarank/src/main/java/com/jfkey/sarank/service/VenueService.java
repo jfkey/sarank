@@ -20,84 +20,61 @@ import com.jfkey.sarank.domain.SortAff;
 import com.jfkey.sarank.domain.SortAuthor;
 import com.jfkey.sarank.domain.SortCon;
 import com.jfkey.sarank.domain.SortJou;
-import com.jfkey.sarank.repository.AffRepository;
+import com.jfkey.sarank.repository.VenueRepository;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.RankType;
+
 /**
  * 
  * @author junfeng Liu
- * @time 5:39:55 PM Aug 18, 2018
+ * @time 12:01:34 PM Aug 20, 2018
  * @version v0.2.0
- * @desc affiliation service 
+ * @desc Venue Service. get paper through venue information
  */
-
 @Service
-public class AffService {
+public class VenueService {
 	@Autowired
-	private AffRepository affRespository;
+	private VenueRepository venueRepository;
 	
-	public ACJAShow getACJAShow(SearchPara para) {
-		ACJAShow acjaShow = new ACJAShow();
-		String affID = para.getAffID();
-		// get first 30 paper to generate acjaShow
-		int skip = 0;
-		int limit = 30;
-		// get and set author conference journal affiliation information
-		getACJAShowByACJA(acjaShow, affRespository.getACJAShowByAffID(affID, skip, limit));
-		
-		long numberSize = 0;
-		String affName = "";
-		Iterable<Map<String, Object>> numIt = affRespository.getAllNumberAndName(affID);
-		Iterator<Map<String, Object>> iterator = numIt.iterator();
-		Map<String, Object> numMap = null;
-		while (iterator.hasNext()) {
-			numMap = iterator.next();
-		}
-		if (numMap != null) {
-			numberSize = (long)numMap.get("numbers");
-			affName = (String)numMap.get("affName");
-		}
-		acjaShow.setAllPaperNum((int)numberSize);
-		acjaShow.setItemName(affName);
-		
-		return acjaShow;
-	}
-	
-	
-	public Map<String, Object> getAffByID(SearchPara para, ACJAShow acjaShow) {
-		Map<String, Object> result = new HashMap<String,Object>();
-		String affID = para.getAffID();
+	public Map<String, Object> findVenuePaper(SearchPara para, ACJAShow acjaShow) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int allNumber = acjaShow.getAllPaperNum();
+		String venueID = para.getVenID();
 		int page = para.getPage();
 		RankType rt = para.getRt();
-		int allNumber = acjaShow.getAllPaperNum();
-		
 		int limit = Constants.PRE_PAGE_SIZE;
 		int skip = (page ) * Constants.PRE_PAGE_SIZE;
-		if (rt == RankType.DEFAULT_RANK || rt == RankType.RELEVANCE_RANK) {
-			List<PaperInSearchBean> allPapers = getIteratorData(affRespository.getPapersByAffID_DefaultRank(affID, skip, limit));
-			result.put("paperList", allPapers );
-		} else if (rt == RankType.LATEST_YEAR) {
-			List<PaperInSearchBean> allPapers = getIteratorData(affRespository.getPapersByAffID_LatestYear(affID, skip, limit));
-			result.put("paperList", allPapers);
-			
-		} else if (rt == RankType.MOST_CITATION) {
-			int skip1, skip2, limit1, limit2;
-			if (page <= 2) {
-				skip1 = 0;
-				limit1 = 20;
-				skip2= skip;
-				limit2 = limit;
+		
+		
+		if (venueID != null) {
+			if (rt == RankType.DEFAULT_RANK || rt == RankType.RELEVANCE_RANK) {
+				
+				List<PaperInSearchBean> papers = getIteratorData(venueRepository.findVenuePaperByID_DefaultRank(venueID,skip, limit ));
+				result.put("paperList", papers );
+			} else if (rt == RankType.MOST_CITATION) {
+				int skip1, skip2, limit1, limit2;
+				if (page <= 2) {
+					skip1 = 0;
+					limit1 = 20;
+					skip2= skip;
+					limit2 = limit;
+				} else {
+					skip1 = skip;
+					limit1 = limit;
+					skip2 = 0;
+					limit2 = limit;
+				}
+				List<PaperInSearchBean> papers = getIteratorData(venueRepository.findVenuePaperByID_MostCitation(venueID, skip1, limit1, skip2, limit2));
+				result.put("paperList", papers);
+			} else if (rt == RankType.LATEST_YEAR) {
+				List<PaperInSearchBean> papers = getIteratorData(venueRepository.findVenuePaperByID_LatestYear(venueID, skip, limit));
+				result.put("paperList", papers);
 			} else {
-				skip1 = skip;
-				limit1 = limit;
-				skip2 = 0;
-				limit2 = limit;
+				result.put("paperList", new ArrayList<PaperInSearchBean>());
 			}
-			List<PaperInSearchBean> allPapers = getIteratorData(affRespository.getPapersByAffID_MostCitation(affID, skip1, limit1, skip2, limit2));
-			result.put("paperList", allPapers);
-		} else {
-			return null;
-		}
+			
+		}		
+		
 		
 		result.put("pager", new Pager(allNumber, para.getPage(), Constants.BUTTONS_TO_SHOW));
 		Map<String, Object> paper = new HashMap<String, Object>();
@@ -107,6 +84,33 @@ public class AffService {
 		
 		return result;
 	}
+	
+	public ACJAShow getACJAShow(SearchPara para) {
+		ACJAShow acjaShow = new ACJAShow();
+		String venID = para.getVenID();
+		int skip = 0; 
+		int limit = 30;
+		getACJAShowByACJA(acjaShow, venueRepository.getACJAByVenID(venID, skip, limit));
+		
+		// set paper number
+		long numberSize = 0;
+		String itemName = "";
+		Iterable<Map<String, Object>> numIt = venueRepository.getVenueNameAndPaperNumber(venID);
+		Iterator<Map<String, Object>> iterator = numIt.iterator();
+		Map<String, Object> resultMap = null;
+		while (iterator.hasNext()) {
+			resultMap = iterator.next();
+		}
+		if (resultMap != null) {
+			numberSize = (long)resultMap.get("numbers");
+			itemName = (String)resultMap.get("venName");
+		}
+		acjaShow.setAllPaperNum((int)numberSize);
+		acjaShow.setItemName(itemName);
+		
+		return acjaShow;
+	}
+	
 	
 	
 	
@@ -173,7 +177,7 @@ public class AffService {
 				years.add(acja.getPubYear());
 			}
 			// cover latest ten year.
-			String[] latestTenYear = {"2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015" }; 
+			String[] latestTenYear = {"2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016" }; 
 			for (String tmp : latestTenYear) {
 				years.add(tmp);
 			}
@@ -216,4 +220,5 @@ public class AffService {
 		
 		return acjaShow;
 	}
+
 }

@@ -13,9 +13,8 @@
 		<link rel="stylesheet" href="css/author.css" />
 		
 		<title></title>
-		<script>
-			
-		</script>
+		
+		
 	</head>
 	<body>
 
@@ -28,7 +27,10 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								DAO HANG
+								<th:block th:each="entry:${author}">
+									
+										<span th:text="${entry.value}">xindong wu</span><br />
+								</th:block>
 							</div>
 						</div>
 						
