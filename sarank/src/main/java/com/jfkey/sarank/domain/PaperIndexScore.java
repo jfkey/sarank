@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
  * 
  * @author junfeng Liu
  * @time 10:17:10 PM Jan 18, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc PaperIndexScore is a node, connect Paper and PaperIndexScore using PaperIndex 
  * 
  */

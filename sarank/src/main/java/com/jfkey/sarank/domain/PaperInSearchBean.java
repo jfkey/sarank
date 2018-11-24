@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 5:43:26 PM Apr 13, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * 
  * @desc searched paper information in search page
  */

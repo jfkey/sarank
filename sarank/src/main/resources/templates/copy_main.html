@@ -23,9 +23,11 @@
 			<nav class="navbar" id="top">
 						
 						<!--这是导航图标-->
-						<div class="col-md-3 col-sm-12 header-nav-icon">
+						<div class="col-md-3 col-sm-12 header-nav-icon ">
 							<div class="navbar-header">
-								Search
+								<img style="width: 36px; height: 36px;" src="img/A.png"/>
+								&nbsp;<h5 style="color: RGB(91,171,214); font-size: larger;">Athena</h5>
+								
 							</div>
 						</div>
 						
@@ -53,7 +55,11 @@
 									<label class="sr-only" for="year">affiliation</label>
 									<input type="text" class="form-control " id="year" placeholder="affiliation" th:field="*{affName}" >
 								</div>
-						
+								<div class="form-group ">
+									<label class="sr-only" for="year">venue</label>
+									<input type="text" class="form-control " id="ven" placeholder="venue" th:field="*{venName}" >
+								</div>
+								
 							</div>
 							
 							<button id="btn_search" class="btn btn-success" type="submit">
@@ -68,16 +74,16 @@
 						
 						<!--这是右边菜单-->
 						<div class="col-md-3 col-sm-12" >
-							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
+							<nav id="bs-navbar" class="collapse navbar-left navbar-collapse">
 								<ul class="nav navbar-nav navbar-right">
 									<li>
 										<a href="#" target="_blank">API</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">BLOG</a>
+										<a href="#" target="_blank">Blog</a>
 									</li>
 									<li>
-										<a href="#">ABOUT</a>
+										<a href="#">About</a>
 									</li>
 								</ul>
 							</nav>
@@ -97,12 +103,12 @@
 				<!--左边的筛选条件-->
 				<div id="div_left_container" class="col-md-2 col-sm-12" style=" margin-top: 80px; ">
 					<div class="div-left-condition">
-						<div>
+						<!-- <div>
 							<h4>Filter Conditations &nbsp;</h4><img style="width: 32px; height: 32px;" src="img/filterconditions.png" />
-						</div>
+						</div> -->
 						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
 						<div class="div-left-date-range">
-							<h4>Date Range </h4><br />
+							<h4>Year Range </h4><br />
 							
 							<select id="select_start">
                          		<option th:each="entry : ${acjaShow.years}"
@@ -121,19 +127,31 @@
 							<h4>Ranking Type</h4><br />
 							<ul class="ul-style-type" id="ul_rank_type">
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
-										<span>SARank</span>
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+										<span>Relevance</span>
 									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" ><span>relevance ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='IMPORTANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+										<span>Importance</span>
+									</a>									
+								</li>
+								
+								<li>
+									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
+										<span>Relevant Importance </span>
+									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" ><span>most citations</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" >
+										<span>Citation counts</span>
+									</a>
 								</li>
 							
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" ><span>time ranking</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
+										<span>Publish time</span>
+									</a>
 								</li>
 							</ul>
 												
@@ -192,7 +210,7 @@
 													</li>													
 													<li>
 														<img src="img/version.png" />
-														<a th:text="|All ${item.versions} Versions|" >all .. versions</a>
+														<a th:text="|all ${item.versions} versions|" >all .. versions</a>
 													</li>
 													
 												</ul>
@@ -211,78 +229,88 @@
 				</div>
 				
 				
-				<!--右边的一些ranking-->
-				<div id="div_right_container" class="col-md-3 "style="background-color:; margin-top: 80px; " >
-					
+			<!--右边的一些ranking-->
+			<div id="div_right_container" class="col-md-3 " style="background-color:; margin-top: 80px; ">
+			
+			<div class="container-fluid">
+			<div class="row">
+				
 					<!--some Authors-->
-					<div id="div_right_author" class="col-sm-12 col-md-12"> 
-						<img class="img_right_icon" src="img/ath-ac.png"/> <h4>Prestige Author</h4>
+					<div id="div_right_author" class="col-sm-6 col-md-6" >
+						<img class="img_right_icon" src="img/ath-ac.png" />
+						<h4>Top Authors</h4>
 						<ul id="ul_ath" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.athName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
 								</li>
 							</th:block>
-							
+			
 						</ul>
-						<a  onclick="showMore('ath')"><span >More Authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<a onclick="showMore('ath')"><span>More Authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
 					</div>
-					
-					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
-					
+			
 					<!--Affiliations-->
-					<div id="div_right_aff" class="col-sm-12 col-md-12">
-						<img class="img_right_icon" src="img/venue-ac.png"/> <h4>Influential Affiliation</h4>
+					<div id="div_right_aff" class="col-sm-6 col-md-6" >
+						<img class="img_right_icon" src="img/venue-ac.png" />
+						<h4>Top Affiliations</h4>
 						<ul id="ul_aff" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.affName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 						</ul>
-						
-						<a onclick="showMore('aff')"><span >More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						
+			
+						<a onclick="showMore('aff')"><span>More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">	
 					</div>
-					
-					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
-					
-					<!--some Journal -->
-					<div id="div_right_jou" class="col-sm-12 col-md-12">
-						<img class="img_right_icon" src="img/jou-ac.png"/> <h4>Famous Journals</h4>
-						<ul id="ul_jou" class="ul-style-type">
-							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
-								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
-								</li>
-							</th:block>
-								
-						</ul>
-						<a onclick="showMore('jou')"><span >More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-							
-							
-					</div>
-					
-					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
-					
+				</div>			
+			</div>
+			
+			<div class="container-fluid">
+				<div class="row">
+			
 					<!--some conference -->
-					<div id="div_right_con" class="col-sm-12 col-md-12"> 
-						<img class="img_right_icon" src="img/conf-ac.png"/> <h4>Famous Conferences</h4>
+					<div id="div_right_con" class="col-sm-6 col-md-6">
+						<img class="img_right_icon" src="img/conf-ac.png" />
+						<h4>Top Conferences</h4>
 						<ul id="ul_con" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.conName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
-								
 						</ul>
-						<a onclick="showMore('con')"><span >More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						
+						<a onclick="showMore('con')"><span>More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
 					</div>
-					
-					
+			
+					<!--some Journal -->
+					<div id="div_right_jou" class="col-sm-6 col-md-6">
+						<img class="img_right_icon" src="img/jou-ac.png" />
+						<h4>Top Journals</h4>
+						<ul id="ul_jou" class="ul-style-type">
+							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
+								<li>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+								</li>
+							</th:block>
+			
+						</ul>
+						<a onclick="showMore('jou')"><span>More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
+					</div>
+			
 				</div>
-				
+			</div>
+			
+			</div>
 
 			</div>
 		

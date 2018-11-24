@@ -13,7 +13,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
  * 
  * @author junfeng Liu
  * @time 10:14:16 PM Jan 31, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc use IKAnalyzer to split input
  */
 public class InputIKAnalyzer {

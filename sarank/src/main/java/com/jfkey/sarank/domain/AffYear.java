@@ -4,7 +4,7 @@ package com.jfkey.sarank.domain;
  * 
  * @author junfeng Liu
  * @time 8:59:57 PM Apr 30, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc it contains affiliation name, affiliation id and year. it will be shown in author page.
  */
 public class AffYear {

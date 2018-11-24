@@ -74,10 +74,10 @@
 										<a href="#" target="_blank">API</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">博客</a>
+										<a href="#" target="_blank">BLOG</a>
 									</li>
 									<li>
-										<a href="#">关于</a>
+										<a href="#">ABOUT</a>
 									</li>
 								</ul>
 							</nav>
@@ -177,7 +177,7 @@
 												</a>
 											</td>
 											<td>
-												<a th:text="${hit.affName}" th:href="@{/aff(affid=${hit.affID})}">
+												<a th:text="${hit.affName}" th:href="@{/aff(affID=${hit.affID},rt='DEFAULT_RANK',page=1)}">
 													affiliation name
 												</a>
 											</td>
@@ -205,7 +205,7 @@
 									<th:block th:each="tmp : ${affYear}">
 										<tr>
 											<td>
-												<a th:text="${tmp.affName}" th:href="@{/aff(affid=${tmp.affID})}">
+												<a th:text="${tmp.affName}" th:href="@{/aff(affID=${tmp.affID},rt='DEFAULT_RANK', page=1)}">
 													affiliation Name
 												</a>
 											</td>

@@ -29,7 +29,7 @@ import com.jfkey.sarank.utils.TopKRank2;
  * 
  * @author junfeng Liu
  * @time 5:09:50 PM Apr 17, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc search paepr service.
  */
 @Service

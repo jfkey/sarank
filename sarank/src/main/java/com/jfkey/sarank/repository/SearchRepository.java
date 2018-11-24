@@ -17,7 +17,7 @@ import com.jfkey.sarank.domain.SearchHits;
  * 
  * @author junfeng Liu
  * @time 5:14:39 PM Aug 12, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc search repository. 
  */
 public interface SearchRepository extends Neo4jRepository<Paper, Long> {
@@ -115,8 +115,8 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "OPTIONAL MATCH (paa) -[:PAAAff]->(aff:Affiliation) "
 			+ "RETURN ath.athName AS athName, ath.athID AS athID, ath.athScore AS athScore, paNumber, "
 			+ "COLLECT(aff.affID) AS affID, COLLECT(aff.affName ) AS affName "
-			+ "ORDER BY ath.athScore DESC")
-	Iterable<AuthorAffiliation> searchAuthor(@Param("athName") String athName);
+			+ "ORDER BY ath.athScore DESC SKIP {skip} LIMIT {limit} ")
+	Iterable<AuthorAffiliation> searchAuthor(@Param("athName") String athName, @Param("skip")int skip, @Param("limit")int limit);
 	
 	/**
 	 * 

@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 9:20:44 PM Feb 1, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc this is search hit including fields of NodeID and node score
  */
 @QueryResult

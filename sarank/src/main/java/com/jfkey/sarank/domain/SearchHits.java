@@ -7,7 +7,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 5:18:31 PM Jul 3, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc 
  *  rewrite search procedure, map to query results
  */

@@ -85,7 +85,13 @@ public class SearchAllController {
 			mv.addObject("para", searchPara );
 			
 			return mv;
-		} else {
+		} else if(searchResult.get(Constants.SEARCH_TYPE) == SearchType.VENUE) {
+			ModelAndView mv = new ModelAndView("vens");
+			mv.addAllObjects(null);
+			mv.addObject("para", searchPara);
+			
+			return mv;
+		}else {
 			return null;
 		}
 		

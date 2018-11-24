@@ -5,7 +5,7 @@ package com.jfkey.sarank.domain;
  * 
  * @author junfeng Liu
  * @time 11:15:35 PM Jul 7, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc sort affiliation information
  */
 public class SortAff implements Comparable<SortAff>{

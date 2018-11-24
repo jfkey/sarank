@@ -14,7 +14,7 @@ import com.jfkey.sarank.domain.PaperInSearchBean;
  * 
  * @author junfeng Liu
  * @time 11:21:02 AM Aug 20, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc venue repository. search venue papers and ACJA information
  */
 public interface VenueRepository extends Neo4jRepository<Paper, Long>{

@@ -11,7 +11,7 @@ import org.neo4j.ogm.annotation.StartNode;
  * 
  * @author junfeng Liu
  * @time 9:42:59 AM Jan 19, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc Paper_Affiliation_Author connect Paper and Author named as PaaAth, which is a rich Relationship 
  */
 

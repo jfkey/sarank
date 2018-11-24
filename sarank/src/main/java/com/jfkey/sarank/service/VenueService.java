@@ -28,7 +28,7 @@ import com.jfkey.sarank.utils.RankType;
  * 
  * @author junfeng Liu
  * @time 12:01:34 PM Aug 20, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc Venue Service. get paper through venue information
  */
 @Service

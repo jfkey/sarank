@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 9:27:03 PM Apr 26, 2018
- * @version v0.2.0 
+ * @version v0.2.1 
  * @desc paper details information Bean. will be shown in search page.
  */
 @QueryResult

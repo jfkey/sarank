@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jfkey.sarank.service.AuthorService;
 
+/**
+ * 
+ * @author junfeng Liu
+ * @time 1:26:11 AM Nov 25, 2018
+ * @version v0.2.1
+ * @desc visualization operations 
+ */
 @RestController
 public class AuthorRestController {
 	@Autowired

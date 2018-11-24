@@ -27,7 +27,7 @@ import com.jfkey.sarank.utils.RankType;
  * 
  * @author junfeng Liu
  * @time 5:39:55 PM Aug 18, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc affiliation service 
  */
 

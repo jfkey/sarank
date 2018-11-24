@@ -16,7 +16,7 @@ import com.jfkey.sarank.domain.PaperInSearchBean;
  * 
  * @author junfeng Liu
  * @time 9:37:46 PM Jul 25, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc search affiliation info
  */
 public interface AffRepository extends Neo4jRepository<Paper, Long> {

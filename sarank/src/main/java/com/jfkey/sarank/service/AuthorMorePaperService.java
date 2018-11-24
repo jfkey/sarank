@@ -24,7 +24,7 @@ import com.jfkey.sarank.utils.RankType;
  * 
  * @author junfeng Liu
  * @time 4:27:01 PM Aug 17, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc  find author more papers, and pagination
  */
 @Service

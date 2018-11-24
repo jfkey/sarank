@@ -22,7 +22,7 @@ import com.jfkey.sarank.utils.Constants;
  * 
  * @author junfeng Liu
  * @time 2:16:56 PM Jan 19, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc service of search paper info 
  */
 @Service

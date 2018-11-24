@@ -39,7 +39,7 @@ import com.jfkey.sarank.utils.TopKRank;
  * 
  * @author junfeng Liu
  * @time 5:08:28 PM Apr 6, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc author information service, some business code. 
  */
 @Service
@@ -452,7 +452,9 @@ public class AuthorService {
 		int []citations = new int[Constants.YEARS_CITE];
 		for(int i = Constants.YEARS_CITE; i >0; i -- ) {
 			years[Constants.YEARS_CITE - i] = String.valueOf(curYear - i);
-			citations[Constants.YEARS_CITE - i] = citeYear.get( years[Constants.YEARS_CITE - i]);
+			if (citeYear.get(years[Constants.YEARS_CITE - i]) != null) {
+				citations[Constants.YEARS_CITE - i] = citeYear.get( years[Constants.YEARS_CITE - i]);
+			}
 		}
 		citePerYear.put("years", years);
 		citePerYear.put("citations", citations);

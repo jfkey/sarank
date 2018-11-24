@@ -40,7 +40,7 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 5:53:16 PM Jul 3, 2018
- * @version v0.2.0
+ * @version v0.2.1
  * @desc
  */
 @Service
@@ -58,7 +58,9 @@ public class SearchAllService {
 			return searchAuthor(searchPara);
 		} else if (type == SearchType.AFFILIATION) {
 			return searchAff(searchPara);
-		} else {
+		} else if (type == SearchType.VENUE) { 
+			return searchVenue(searchPara);
+		}else {
 			return null;
 		}
 	}
@@ -135,7 +137,9 @@ public class SearchAllService {
 
 	private Map<String, Object> searchAuthor(SearchPara searchPara) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<AuthorAffiliation> aaList = getIteratorData(searchRepository.searchAuthor(searchPara.getAuthor()));
+		int skip = 0;
+		int limit = 20;
+		List<AuthorAffiliation> aaList = getIteratorData(searchRepository.searchAuthor(searchPara.getAuthor(), skip, limit));
 		List<AuthorHit> listHits = new ArrayList<AuthorHit>();
 		
 		if (aaList.size() != 0) {
@@ -205,13 +209,20 @@ public class SearchAllService {
 		result.put(Constants.SEARCH_TYPE, SearchType.AFFILIATION);
 		return result;
 	}
+	
+	private Map<String, Object> searchVenue(SearchPara searchPara) {
+	
+		return null;
+	}
 
 	private SearchType getSearchType(SearchPara para) {
 		if (para.getAffName() != null && !para.getAffName().equals("")) {
 			return SearchType.AFFILIATION;
 		} else if (para.getAuthor() != null && !para.getAuthor().equals("") ) {
 			return SearchType.AUTHOR;
-		} else if ( para.getKeywords() != null && !para.getKeywords().equals("")) { 
+		} else if (para.getVenName() != null && !para.getVenName().equals("")) {
+			return SearchType.VENUE;
+		}else if ( para.getKeywords() != null && !para.getKeywords().equals("")) { 
 			return SearchType.KEYWORDS;
 		}else {
 			return SearchType.KEYWORDS;
