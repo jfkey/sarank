@@ -68,8 +68,12 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @param queryParam search keywords like  'originalTitle:graph AND originalTitle:mining'
 	 * @param limit limit query result  
 	 * @param skip skip query result
-	 * @param rankType rank type  "1" -> default rank 
-	 * 			"2" -> relevance rank  "3" -> most citations rank "4" -> lastest year rank 
+	 * @param rankType rank type 
+	 * 		"1" -> default rank 
+	 * 		"2" -> relevance rank
+	 * 		"3" -> importance ranking   
+	 * 		"4" -> citation counts; 
+	 * 		"5" -> publish time 
 	 * @param alpha only effect in relevance rank. 
 	 * @param nor only effect in relevance rank  
 	 * @return {@link com.jfkey.sarank.SearchHits}

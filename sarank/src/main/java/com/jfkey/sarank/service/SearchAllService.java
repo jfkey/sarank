@@ -40,7 +40,7 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 5:53:16 PM Jul 3, 2018
- * @version v0.2.1
+ * @version v0.2.0
  * @desc
  */
 @Service
@@ -80,6 +80,8 @@ public class SearchAllService {
 
 		ACJAShow acjaShow = new ACJAShow();
 		getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(acjaIDs), allNumber);
+		// acjaShow upper. 
+		acjaUpper(acjaShow);
 		return acjaShow;
 	}
 	
@@ -92,15 +94,6 @@ public class SearchAllService {
 		int limit  = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
 		double alpha = Constants.RELEVANCE_LOW;
 		double nor = Constants.C;
-		
-//		if(searchPara.getPage() == 0) {
-//			// search acja info  
-//			limit = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 3);
-//		} else {
-//			// needn't get acja info
-//			limit = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
-//		}
-		
 		
 		// 1. search and get paper info 
 		long t1 = System.currentTimeMillis();
@@ -117,8 +110,10 @@ public class SearchAllService {
 		LOG.info("search paper detailed info, spends " + (t2-t1) + " ms" );
 		List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
 		changeOrder(paIDs, searchedPaperList);
+		// title to upper
+		capitalize(searchedPaperList);
+		// color searched keywords
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
-		
 		
 		result.put("paperList", searchedPaperList);
 		
@@ -186,9 +181,6 @@ public class SearchAllService {
 			}
 		} 
 	
-		
-		
-		
 		result.put("authors", listHits);
 		
 		result.put(Constants.SEARCH_TYPE, SearchType.AUTHOR);
@@ -211,38 +203,42 @@ public class SearchAllService {
 	}
 	
 	private Map<String, Object> searchVenue(SearchPara searchPara) {
-	
+		
 		return null;
 	}
-
+	
 	private SearchType getSearchType(SearchPara para) {
 		if (para.getAffName() != null && !para.getAffName().equals("")) {
 			return SearchType.AFFILIATION;
 		} else if (para.getAuthor() != null && !para.getAuthor().equals("") ) {
 			return SearchType.AUTHOR;
-		} else if (para.getVenName() != null && !para.getVenName().equals("")) {
-			return SearchType.VENUE;
-		}else if ( para.getKeywords() != null && !para.getKeywords().equals("")) { 
+		} else if ( para.getKeywords() != null && !para.getKeywords().equals("")) { 
 			return SearchType.KEYWORDS;
 		}else {
 			return SearchType.KEYWORDS;
 		}
 	}
 
+	// default ranking -- 1
+	// relevance ranking -- 2
+	// importance ranking -- 3
+	// citation counts -- 4
+	// publish time -- 5
 	private String getRtString(RankType rt) {
-		if (rt == RankType.DEFAULT_RANK) {
+		if (rt == RankType.DEFAULT_RANK) {	
 			return "1";
 		} else if (rt == RankType.RELEVANCE_RANK) {
 			return "2";
-		} else if (rt == RankType.MOST_CITATION) {
+		} else if (rt == RankType.IMPORTANCE_RANK) { 
 			return "3";
-		} else if (rt == RankType.LATEST_YEAR) {
+		}else if (rt == RankType.MOST_CITATION) {
 			return "4";
+		} else if (rt == RankType.LATEST_YEAR) {
+			return "5";
 		} else {
 			return "1";
 		}
 	}
-
 	/**
 	 * 
 	 * @param it
@@ -334,8 +330,9 @@ public class SearchAllService {
 			}
 		}
 	}
-
+	
 	private ACJAShow getDetailACJAInfo(ACJAShow acjaShow, Iterable<ACJA> ACJAIt, int paperSize) {
+	int ai = 0;
 		if (ACJAIt == null) {
 			return new ACJAShow();
 		} else {
@@ -346,22 +343,86 @@ public class SearchAllService {
 			Set<SortCon> setCon = new HashSet<SortCon>();
 			Set<SortJou> setJou = new HashSet<SortJou>();
 			Set<String> years = new HashSet<String>();
-			
+			SortAff tmpA = null;
+			SortAuthor tmpAth = null;
+			SortCon tmpC = null;
+			SortJou tmpJ = null;
 			while (it.hasNext()) {
 				acja = it.next();
+				tmpA = null;
 				for (int i = 0; i < acja.getAffIDs().length; i ++) {
+//					tmpA = new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]);
+//					LOG.info("aff: " + tmpA.getAffID() + " , affName: " + tmpA.getAffName() + " score : " + tmpA.getScore());
+//					if ( setAff.contains(tmpA) ){
+//						Iterator<SortAff> ita = setAff.iterator();
+//						SortAff itS = null;
+//						while(ita.hasNext()) {
+//							itS = ita.next();
+//							if (itS.equals(tmpA)) { 
+//								itS.setScore(itS.getScore() + tmpA.getScore());
+//							}
+//						}
+//					} else {
+//						setAff.add(tmpA);
+//					}
 					setAff.add(new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]));
 				}
-				for (int i = 0; i < acja.getAthIDs().length; i ++) {
-					setAth.add(new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i]) );
+				ai ++;
+				for (int i = 0; i < acja.getAthIDs().length && ai < 5; i ++) {
+					tmpAth = new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i]);
+					if (setAth.contains(tmpAth)) {
+						Iterator<SortAuthor> itAth = setAth.iterator();
+						SortAuthor itS = null;
+						while (itAth.hasNext()) {
+							itS = itAth.next();
+							if (itS.equals(tmpAth)) {
+//								itS.setScore(itS.getScore() + tmpAth.getScore());
+							}
+						}
+						
+					} else {
+						setAth.add(tmpAth);
+					}
 				}
 				if (acja.getConID() != null) {
-					setCon.add( new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) );
+					tmpC = new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) ;
+					if (setCon.contains(tmpC)) {
+						Iterator<SortCon> itC = setCon.iterator();
+						SortCon itS = null;
+						while (itC.hasNext()){
+							itS = itC.next();
+							if (itS.equals(tmpC)) {
+								itS.setScore(itS.getScore() + tmpC.getScore()); 
+							}
+						}
+					} else {
+						setCon.add(tmpC);
+					}
+					
 				}
 				if (acja.getJouID() != null) {
-					setJou.add( new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) );
+					if (!acja.getVenName().equalsIgnoreCase("VLDB")){
+					
+					
+					tmpJ = new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear());
+					if (setJou.contains(tmpJ)) {
+						Iterator<SortJou> itJ = setJou.iterator();
+						SortJou itS = null; 
+						while (itJ.hasNext()) {
+							itS = itJ.next();
+							if (itS.equals(tmpJ)) {
+//								itS.setScore(itS.getScore() +  tmpJ.getScore());
+								
+							}
+						}
+						
+					} else {
+						setJou.add(tmpJ);
+					}
+				}
 				}
 				years.add(acja.getPubYear());
+				
 			}
 //			Object[] affArr = setAff.stream().sorted().toArray();
 //			Object[] athArr = setAth.stream().sorted().toArray();
@@ -402,11 +463,35 @@ public class SearchAllService {
 			
 		}
 		
+		List<String> jouName = acjaShow.getJouName();
+		acjaShow.getJouScore();
+		int dest = -1;
+		for (int i = 0; i < jouName.size(); i++) {
+			if (jouName.get(i).equalsIgnoreCase("SIGMOD")) {
+				jouName.remove(i);
+				dest = i;
+				break;
+			}
+		}
+		if (dest != -1) {
+			acjaShow.getJouID().remove(dest);
+			acjaShow.getJouScore().remove(dest);
+			dest = -1;
+		}
 		
 		LOG.info("conference ID : " + acjaShow.getConID() + " , conference score : " + acjaShow.getConScore() + ", name : " + acjaShow.getConName() );
+		LOG.info("journal ID : " + acjaShow.getJouID() + " , journal score : " + acjaShow.getJouScore() + ", name : " + acjaShow.getJouName() );
+		LOG.info("author ID: " + acjaShow.getAthID() + ", author score: " + acjaShow.getAthScore() + ", name: " + acjaShow.getAthName());
+		LOG.info("affiliation: " + acjaShow.getAffID() + ", affName score : " + acjaShow.getAffScore() +", name : " + acjaShow.getAffName() );
 		return acjaShow;
 	}
-
+	
+	/**
+	 * 
+	 * @param list
+	 * @param colored color the string
+	 * @param type
+	 */
 	private void colorTitle(List<PaperInSearchBean> list, String colored,
 			int type) {
 		long start = System.currentTimeMillis();
@@ -417,6 +502,7 @@ public class SearchAllService {
 			for (PaperInSearchBean tmp : list) {
 				title = tmp.getTitle();
 				for (String str : split) {
+					str = upperWordFirstChar(str);
 					title = title.replaceAll("(?i)" + str, "<span class=\""
 							+ colorType + "\">" + str + "</span>");
 				}
@@ -430,5 +516,87 @@ public class SearchAllService {
 		System.out.println("color title spends : " + (end - start) + " ms");
 
 	}
+	
+	private void acjaUpper(ACJAShow acja) {
+		List<String> affName = acja.getAffName();
+		for (int i = 0; i < affName.size(); i ++) {
+			affName.set(i, sentenceToUpper(affName.get(i)));
+		}
+		List<String> conName = acja.getConName();
+		for (int i = 0; i < conName.size(); i++) {
+			conName.set(i, upperAllChar(conName.get(i)));
+		}
+		List<String> jouName = acja.getJouName();
+		for (int i = 0; i < jouName.size(); i ++) {
+			if (jouName.get(i).equalsIgnoreCase("sigmod")) {
+				jouName.set(i, "SIGMOD RECORD");
+			}
+			jouName.set(i, upperAllChar(jouName.get(i)));
+		}
+		List<String> athName = acja.getAthName();
+		for (int i = 0; i < athName.size(); i ++) {
+			athName.set(i, sentenceToUpper(athName.get(i)));
+		}
+		
+	}
+	
+	private void capitalize (List<PaperInSearchBean> list) {
+		for (PaperInSearchBean tmp : list) {
+			tmp.setTitle(sentenceToUpper(tmp.getTitle()));
+			String[] authors = tmp.getAuthors();
+			for (int i = 0; i < authors.length; i ++) {
+				authors[i] = sentenceToUpper(authors[i]);
+			}
+			tmp.setAuthors(authors);
+		}
+	}
 
+	/**
+	 * 
+	 * @param tar
+	 * @return sentence level toUpper First Char
+	 */
+	private String sentenceToUpper(String tar) {
+		// a-z：97-122  	A-Z：65-90 0-9：48-57
+		StringBuilder sb = new StringBuilder();
+		
+		String[] arr = tar.split(" ");
+		String[] lowerCase = {"and", "or", "of", "a", "in", "for"};
+		for (String tmpArr: arr) {
+			if (tmpArr.equals(lowerCase[0]) || tmpArr.equals(lowerCase[1]) || tmpArr.equals(lowerCase[2]) || tmpArr.equals(lowerCase[3]) ||tmpArr.equals(lowerCase[4]) ||tmpArr.equals(lowerCase[5]) ){
+			} else{
+				tmpArr = upperWordFirstChar(tmpArr);
+			}	
+			sb.append(tmpArr + " ");
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * 
+	 * @param string
+	 * @return to upper word
+	 */
+	private String upperWordFirstChar(String string) {
+		char[] charArray = string.toCharArray();
+		if (charArray[0] >= 97 && charArray[0] <= 122 ) {
+			charArray[0] -= 32;
+		}
+		return String.valueOf(charArray);
+	}
+	
+	private String upperAllChar(String string) {
+		char[] charArray = string.toCharArray();
+		for (int i = 0; i < charArray.length; i ++) {
+			if (charArray[i] >= 97 && charArray[i] <= 122 ) {
+				charArray[i] -= 32;
+			}	
+		}
+		return String.valueOf(charArray);
+	}
+	
 }
+
+
+
+

@@ -18,7 +18,9 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
  */
 public class InputIKAnalyzer {
 	public static void main(String[] args) {
-		System.out.println(analyzerAndFormat("data mining and database or data", Constants.PAPER_TITLE));
+		//System.out.println(analyzerAndFormat("data mining and database or data", Constants.PAPER_TITLE));
+		String inputStr = "Multidisciplinary consultation in child protection: a clinical data‐mining evaluation";
+		System.out.println(analyzer(inputStr));
 	}
 
 	
