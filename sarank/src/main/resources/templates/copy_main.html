@@ -123,22 +123,23 @@
 						</div>
 						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
 						
+						
 						<div class="div-left-rank-type">
 							<h4>Ranking Type</h4><br />
 							<ul class="ul-style-type" id="ul_rank_type">
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
 										<span>Relevance</span>
 									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='IMPORTANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+									<a th:style="'color:' + @{ (${para.rt.name()=='IMPORTANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='IMPORTANCE_RANK', page=1)}" >
 										<span>Importance</span>
 									</a>									
 								</li>
 								
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
+									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
 										<span>Relevant Importance </span>
 									</a>
 								</li>
@@ -287,7 +288,6 @@
 							</th:block>
 						</ul>
 						<a onclick="showMore('con')"><span>More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
 					</div>
 			
 					<!--some Journal -->

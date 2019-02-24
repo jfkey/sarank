@@ -78,9 +78,15 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @param nor only effect in relevance rank  
 	 * @return {@link com.jfkey.sarank.SearchHits}
 	 */
-	@Query("CALL jfkey.search('ft_pa_title', {queryParam}, {limit}, {skip}, {rankType}, {alpha}, {nor})")
-	Iterable<SearchHits> queryByKeywords(@Param("queryParam")String queryParam, @Param("limit")long limit, 
-			@Param("skip")long skip, @Param("rankType")String rankType, @Param("alpha")double alpha, @Param("nor") double nor);
+	// @Query("CALL jfkey.search('ft_pa_title', {queryParam}, {limit}, {skip}, {rankType}, {alpha}, {nor})")
+
+//	@Query("call jfkey.search('ft_pa_title', 'originalTitle:data AND originalTitle:mining', \"['data', 'mining']\", 20, 0, '1', 'wikimodel', 0.2);")
+//	Iterable<SearchHits> queryByKeywords(@Param("queryParam")String queryParam, @Param("limit")long limit, 
+//			@Param("skip")long skip, @Param("rankType")String rankType, @Param("alpha")double alpha, @Param("nor") double nor);
+	
+	@Query("call jfkey.search('ft_pa_title', {queryParam}, {wordList}, {limit}, {skip}, {rankType}, {model}, {alpha});")
+	Iterable<SearchHits> queryByKeywords(@Param("queryParam")String queryParam, @Param("wordList")String wordList, @Param("limit")long limit, 
+			@Param("skip")long skip, @Param("rankType")String rankType, @Param("model")String model, @Param("alpha")double alpha);
 	
 	
 	/**
@@ -90,18 +96,27 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 * @return according paperIDs get ACJA {@link com.jfkey.sarank.domain.ACJA}
 	 *         information
 	 */
+//	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
+//			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author), "
+//			+ "(p)-[:PaVenue]->(ven), (r)-[:PAAAff]->(aff:Affiliation) "
+//			+ "WHERE p.paID = col "
+//			+ "WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, a.athScore AS athScore, p.paYear AS paYear, "
+//			+ "aff.affID AS affID, aff.affName AS affName, aff.affScore AS affScore,"
+//			+ " p.conID AS conID, p.jouID AS jouID, p.NormalizedName AS venName, p.venueType AS venueType, ven "
+//			+ "MATCH(ven)-[vs:VenueYearScore]->(y:Years{year:paYear}) "
+//			+ "USING INDEX y:Years(year) "
+//			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, "
+//			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
+//			+ "COLLECT (affScore) AS affScores, paYear AS pubYear;")
 	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
-			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author), "
-			+ "(p)-[:PaVenue]->(ven), (r)-[:PAAAff]->(aff:Affiliation) "
-			+ "WHERE p.paID = col "
-			+ "WITH  DISTINCT ( p.paID ) AS paID, a.athID AS authorID, a.athName AS author, a.athScore AS athScore, p.paYear AS paYear, "
-			+ "aff.affID AS affID, aff.affName AS affName, aff.affScore AS affScore,"
-			+ " p.conID AS conID, p.jouID AS jouID, p.NormalizedName AS venName, p.venueType AS venueType, ven "
-			+ "MATCH(ven)-[vs:VenueYearScore]->(y:Years{year:paYear}) "
-			+ "USING INDEX y:Years(year) "
-			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, "
+			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author), (r)-[:PAAAff]->(aff:Affiliation) "
+			+ "WHERE p.paID = col WITH  DISTINCT ( p.paID ) AS paID, a.athID  AS authorID, a.athName AS author, a.athScore * (SIZE(()-[:PAAAth]->(a))) AS athScore, p.paYear AS paYear, aff.affID AS affID, aff.affName AS affName, aff.affScore AS affScore, p.conID AS conID, p.jouID AS jouID, p.paScore as score,  p "
+			+ "optional match(p)-[:PaVenue]->(ven) "
+			+ "with paID, authorID,  author, athScore, paYear, affID, affName, affScore, conID, jouID,  p.NormalizedName AS venName, p.venueType AS venueType, ven, score "
+			+ "optional MATCH(ven)-[vs:VenueYearScore]->(y:Years{year:paYear})  USING INDEX y:Years(year)  "
+			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores,  "
 			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
-			+ "COLLECT (affScore) AS affScores, paYear AS pubYear;")
+			+ "COLLECT (affScore) AS affScores, paYear AS pubYear, score order by score desc")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
 
 	
@@ -133,6 +148,5 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "RETURN aff.affID AS affID, aff.affName AS affName, COUNT(DISTINCT(paa.paID)) AS paperNum "
 			+ "ORDER BY paperNum DESC SKIP {skip} LIMIT {limit}")
 	Iterable<AffHit> getAffInfo(@Param("affReg")String affReg, @Param("skip")int skip, @Param("limit")int limit);
-	
-	
+ 	
 }

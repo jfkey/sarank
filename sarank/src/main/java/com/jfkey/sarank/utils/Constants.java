@@ -82,4 +82,7 @@ public interface Constants {
 	
 	/**affiliation search regular expression suffix*/
 	public final String AFF_REG_SUFFIX =".*";
+	
+	/** word2vec model*/
+	public final String MODEL = "wikimodel";
 }

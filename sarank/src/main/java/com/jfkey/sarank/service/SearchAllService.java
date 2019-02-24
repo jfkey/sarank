@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.stereotype.Service;
 
 import com.jfkey.sarank.domain.ACJA;
@@ -58,24 +59,25 @@ public class SearchAllService {
 			return searchAuthor(searchPara);
 		} else if (type == SearchType.AFFILIATION) {
 			return searchAff(searchPara);
-		} else if (type == SearchType.VENUE) { 
+		} else if (type == SearchType.VENUE) {
 			return searchVenue(searchPara);
-		}else {
-			return null;
 		}
+		return null; 
 	}
 
 	public ACJAShow getACJAShow (SearchPara searchPara) {
 		String queryParam = searchPara.getFormatStr();
 		// String rankType = getRtString(searchPara.getRt());
-		String rankType = "1";
+		String rankType = "3";
 		int skip = 0;
 		int limit  = Constants.PRE_PAGE_SIZE * 3;
 		double alpha = Constants.RELEVANCE_LOW;
 		double nor = Constants.C;
 		
 		List<String> acjaIDs = new ArrayList<String>();
-		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, limit, skip, rankType, alpha, nor);
+		String wordList = "['data', 'mining']";
+		String model = Constants.MODEL;
+		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
 		int allNumber = getHitsID(queryKeywords, acjaIDs);
 
 		ACJAShow acjaShow = new ACJAShow();
@@ -94,10 +96,12 @@ public class SearchAllService {
 		int limit  = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
 		double alpha = Constants.RELEVANCE_LOW;
 		double nor = Constants.C;
-		
+		String wordList = "['data', 'mining']";
+		String model = Constants.MODEL;
 		// 1. search and get paper info 
 		long t1 = System.currentTimeMillis();
-		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, limit, skip, rankType, alpha, nor);
+		
+		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
 		long t2 = System.currentTimeMillis();
 		LOG.info("search " + queryParam + ", spends " + (t2-t1) + " ms" );
 		
@@ -201,14 +205,16 @@ public class SearchAllService {
 		result.put(Constants.SEARCH_TYPE, SearchType.AFFILIATION);
 		return result;
 	}
-	
+
 	private Map<String, Object> searchVenue(SearchPara searchPara) {
 		
 		return null;
 	}
 	
 	private SearchType getSearchType(SearchPara para) {
-		if (para.getAffName() != null && !para.getAffName().equals("")) {
+		if (para.getVenName() != null && !para.getVenName().equals("")) {
+			return SearchType.VENUE;
+		} else if (para.getAffName() != null && !para.getAffName().equals("")) {
 			return SearchType.AFFILIATION;
 		} else if (para.getAuthor() != null && !para.getAuthor().equals("") ) {
 			return SearchType.AUTHOR;
@@ -218,27 +224,27 @@ public class SearchAllService {
 			return SearchType.KEYWORDS;
 		}
 	}
-
-	// default ranking -- 1
-	// relevance ranking -- 2
-	// importance ranking -- 3
-	// citation counts -- 4
-	// publish time -- 5
-	private String getRtString(RankType rt) {
-		if (rt == RankType.DEFAULT_RANK) {	
-			return "1";
-		} else if (rt == RankType.RELEVANCE_RANK) {
-			return "2";
-		} else if (rt == RankType.IMPORTANCE_RANK) { 
-			return "3";
-		}else if (rt == RankType.MOST_CITATION) {
-			return "4";
-		} else if (rt == RankType.LATEST_YEAR) {
-			return "5";
-		} else {
-			return "1";
+		// default ranking -- 1
+		// relevance ranking -- 2
+		// importance ranking -- 3
+		// citation counts -- 4
+		// publish time -- 5
+		private String getRtString(RankType rt) {
+			if (rt == RankType.DEFAULT_RANK) {	
+				return "1";
+			} else if (rt == RankType.RELEVANCE_RANK) {
+				return "2";
+			} else if (rt == RankType.IMPORTANCE_RANK) { 
+				return "3";
+			}else if (rt == RankType.MOST_CITATION) {
+				return "4";
+			} else if (rt == RankType.LATEST_YEAR) {
+				return "5";
+			} else {
+				return "1";
+			}
 		}
-	}
+
 	/**
 	 * 
 	 * @param it
@@ -458,6 +464,8 @@ public class SearchAllService {
 			years.stream().sorted().forEach(item -> { 
 				acjaShow.getYears().add(item);
 			});
+			// current years
+			acjaShow.getYears().add("2016");
 			
 			acjaShow.setAllPaperNum(paperSize);
 			
@@ -596,7 +604,3 @@ public class SearchAllService {
 	}
 	
 }
-
-
-
-
