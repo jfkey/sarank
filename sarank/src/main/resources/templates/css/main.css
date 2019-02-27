@@ -16,7 +16,6 @@ h6 {
 }
 
 #paper_entity {
-	height: 1070px;
 }
 
 .page-container {
@@ -24,7 +23,7 @@ h6 {
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 50px;
-	margin-bottom: 200px;
+	margin-bottom: 100px;
 }
 
 .paper-item:hover {
@@ -112,7 +111,8 @@ h6 {
 }
 
 .ul-paper-item-actions a, .ul-paper-item-aths a{
-	color: #222222; 
+	/*color: #222222;*/ 
+	color:#000000
 }
 
 a:hover, .ul-paper-item-actions a:hover, .ul-paper-item-aths a:hover{
@@ -155,6 +155,36 @@ a:hover, .ul-paper-item-actions a:hover, .ul-paper-item-aths a:hover{
 	margin-bottom: 8px;
 }
 
+/*css in pagination*/
+.pagination-centered {
+    text-align: center;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.pointer-disabled {
+    pointer-events: none;
+}
+
 .red {
 	color: red;
+}
+
+/*去掉轮播图阴影*/
+.carousel-control.left {
+  
+  background-image:none;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+}
+.carousel-control.right {
+  left: auto;
+  right: 0;
+ 
+  background-image:none;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
 }

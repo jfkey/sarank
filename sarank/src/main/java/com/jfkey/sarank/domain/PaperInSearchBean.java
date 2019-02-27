@@ -44,15 +44,18 @@ public class PaperInSearchBean {
 	/*doi */
 	private String doi;
 	/*the score of paper calculate by sarank */
-	private double score;
+	private double saRank;
 	
+	private double futureRank;  
+	
+	private double pageRank;
 	public PaperInSearchBean() {
 	}
 	
 	public PaperInSearchBean(String title, String paID, String[] authors,
 			String[] authorsID, String year, String venue, String jouID,
 			String conID, int citations, double versions, String doi,
-			double score) {
+			double saRank, double futureRank, double pageRank) {
 		super();
 		this.title = title;
 		this.paID = paID;
@@ -65,8 +68,12 @@ public class PaperInSearchBean {
 		this.citations = citations;
 		this.versions = versions;
 		this.doi = doi;
-		this.score = score;
+		this.saRank = saRank;
+		this.futureRank = futureRank;
+		this.pageRank = pageRank;
 	}
+
+
 
 	public String getTitle() {
 		return title;
@@ -134,21 +141,25 @@ public class PaperInSearchBean {
 	public void setDoi(String doi) {
 		this.doi = doi;
 	}
-	public double getScore() {
-		return score;
+	public double getSaRank() {
+		return saRank;
 	}
-	public void setScore(double score) {
-		this.score = score;
+	public void setSaRank(double saRank) {
+		this.saRank = saRank;
 	}
-	@Override
-	public String toString() {
-		return "SearchedPaper [title=" + title + ", paID=" + paID
-				+ ", authors=" + Arrays.toString(authors) + ", authorsID="
-				+ Arrays.toString(authorsID) + ", year=" + year + ", venue="
-				+ venue + ", jouID=" + jouID + ", conID=" + conID
-				+ ", citations=" + citations + ", versions=" + versions
-				+ ", doi=" + doi + ", score=" + score + "]";
+	public double getFutureRank() {
+		return futureRank;
 	}
+	public void setFutureRank(double futureRank) {
+		this.futureRank = futureRank;
+	}
+	public double getPageRank() {
+		return pageRank;
+	}
+	public void setPageRank(double pageRank) {
+		this.pageRank = pageRank;
+	}
+
 	
 	
 	

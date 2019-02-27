@@ -133,6 +133,7 @@ public class SearchAllService {
 		
 		return result;
 	}
+	
 
 	private Map<String, Object> searchAuthor(SearchPara searchPara) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -515,6 +516,7 @@ public class SearchAllService {
 							+ colorType + "\">" + str + "</span>");
 				}
 				tmp.setTitle(title);
+				
 			}
 		} else if (type == 2) {
 			// color Author.

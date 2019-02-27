@@ -46,14 +46,19 @@ public class ACJA {
  	private double[] affScores;
  	/*published year */
  	private String pubYear;
+ 	
+ 	private double saRank; 
+ 	private double futureRank; 
+ 	private double pageRank;
+ 	
 	public ACJA() {
 	}
 	
-		
 	public ACJA(String paID, String[] athIDs, String[] aths,
 			double[] athScores, String conID, String jouID, String venID,
 			String venueType, String venName, double venScore, String[] affIDs,
-			String[] affNames, double[] affScores, String pubYear) {
+			String[] affNames, double[] affScores, String pubYear,
+			double saRank, double futureRank, double pageRank) {
 		super();
 		this.paID = paID;
 		this.athIDs = athIDs;
@@ -69,149 +74,148 @@ public class ACJA {
 		this.affNames = affNames;
 		this.affScores = affScores;
 		this.pubYear = pubYear;
+		this.saRank = saRank;
+		this.futureRank = futureRank;
+		this.pageRank = pageRank;
 	}
 
-	
-	
+
+
 	public String getPaID() {
 		return paID;
 	}
-
 
 	public void setPaID(String paID) {
 		this.paID = paID;
 	}
 
-
 	public String[] getAthIDs() {
 		return athIDs;
 	}
-
 
 	public void setAthIDs(String[] athIDs) {
 		this.athIDs = athIDs;
 	}
 
-
 	public String[] getAths() {
 		return aths;
 	}
-
 
 	public void setAths(String[] aths) {
 		this.aths = aths;
 	}
 
-
 	public double[] getAthScores() {
 		return athScores;
 	}
-
 
 	public void setAthScores(double[] athScores) {
 		this.athScores = athScores;
 	}
 
-
 	public String getConID() {
 		return conID;
 	}
-
 
 	public void setConID(String conID) {
 		this.conID = conID;
 	}
 
-
 	public String getJouID() {
 		return jouID;
 	}
-
 
 	public void setJouID(String jouID) {
 		this.jouID = jouID;
 	}
 
-
 	public String getVenID() {
 		return venID;
 	}
-
 
 	public void setVenID(String venID) {
 		this.venID = venID;
 	}
 
-
 	public String getVenueType() {
 		return venueType;
 	}
-
 
 	public void setVenueType(String venueType) {
 		this.venueType = venueType;
 	}
 
-
 	public String getVenName() {
 		return venName;
 	}
-
 
 	public void setVenName(String venName) {
 		this.venName = venName;
 	}
 
-
 	public double getVenScore() {
 		return venScore;
 	}
-
 
 	public void setVenScore(double venScore) {
 		this.venScore = venScore;
 	}
 
-
 	public String[] getAffIDs() {
 		return affIDs;
 	}
-
 
 	public void setAffIDs(String[] affIDs) {
 		this.affIDs = affIDs;
 	}
 
-
 	public String[] getAffNames() {
 		return affNames;
 	}
-
 
 	public void setAffNames(String[] affNames) {
 		this.affNames = affNames;
 	}
 
-
 	public double[] getAffScores() {
 		return affScores;
 	}
-
 
 	public void setAffScores(double[] affScores) {
 		this.affScores = affScores;
 	}
 
-
 	public String getPubYear() {
 		return pubYear;
 	}
-
 
 	public void setPubYear(String pubYear) {
 		this.pubYear = pubYear;
 	}
 
+	public double getSaRank() {
+		return saRank;
+	}
+
+	public void setSaRank(double saRank) {
+		this.saRank = saRank;
+	}
+
+	public double getFutureRank() {
+		return futureRank;
+	}
+
+	public void setFutureRank(double futureRank) {
+		this.futureRank = futureRank;
+	}
+
+	public double getPageRank() {
+		return pageRank;
+	}
+
+	public void setPageRank(double pageRank) {
+		this.pageRank = pageRank;
+	}
 
 	@Override
 	public String toString() {
@@ -222,6 +226,10 @@ public class ACJA {
 				+ ", venName=" + venName + ", venScore=" + venScore
 				+ ", affIDs=" + Arrays.toString(affIDs) + ", affNames="
 				+ Arrays.toString(affNames) + ", affScores="
-				+ Arrays.toString(affScores) + ", pubYear=" + pubYear + "]";
+				+ Arrays.toString(affScores) + ", pubYear=" + pubYear
+				+ ", saRank=" + saRank + ", futureRank=" + futureRank
+				+ ", pageRank=" + pageRank + "]";
 	}
+	
+	
 }

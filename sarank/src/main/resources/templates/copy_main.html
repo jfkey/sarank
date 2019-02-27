@@ -11,6 +11,8 @@
 		<link rel="stylesheet" type="text/css" href="css/header.css" />
 		<link rel="stylesheet" type="text/css" href="css/main.css" />
 		<link rel="stylesheet" type="text/css" href="css/footer.css"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"/>
+
 
 		<title></title>
 	</head>
@@ -23,11 +25,9 @@
 			<nav class="navbar" id="top">
 						
 						<!--这是导航图标-->
-						<div class="col-md-3 col-sm-12 header-nav-icon ">
+						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								<img style="width: 36px; height: 36px;" src="img/A.png"/>
-								&nbsp;<h5 style="color: RGB(91,171,214); font-size: larger;">Athena</h5>
-								
+								Search
 							</div>
 						</div>
 						
@@ -55,17 +55,13 @@
 									<label class="sr-only" for="year">affiliation</label>
 									<input type="text" class="form-control " id="year" placeholder="affiliation" th:field="*{affName}" >
 								</div>
-								<div class="form-group ">
-									<label class="sr-only" for="year">venue</label>
-									<input type="text" class="form-control " id="ven" placeholder="venue" th:field="*{venName}" >
-								</div>
-								
+						
 							</div>
 							
-							<button id="btn_search" class="btn btn-success" type="submit">
+							<button id="btn_search" class="btn btn-primary" type="submit">
 											<span class="glyphicon glyphicon-search "></span>
 										</button>
-							<button id="btn_advanced" class="btn btn-success  ">
+							<button id="btn_advanced" class="btn btn-primary  ">
 											<span class="glyphicon glyphicon-edit "></span>
 										</button>
 						</form>						
@@ -74,16 +70,16 @@
 						
 						<!--这是右边菜单-->
 						<div class="col-md-3 col-sm-12" >
-							<nav id="bs-navbar" class="collapse navbar-left navbar-collapse">
+							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
 								<ul class="nav navbar-nav navbar-right">
 									<li>
 										<a href="#" target="_blank">API</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">Blog</a>
+										<a href="#" target="_blank">BLOG</a>
 									</li>
 									<li>
-										<a href="#">About</a>
+										<a href="#">ABOUT</a>
 									</li>
 								</ul>
 							</nav>
@@ -101,90 +97,85 @@
 			<div class="row">
 				
 				<!--左边的筛选条件-->
-				<div id="div_left_container" class="col-md-2 col-sm-12" style=" margin-top: 80px; ">
-					<div class="div-left-condition">
-						<!-- <div>
-							<h4>Filter Conditations &nbsp;</h4><img style="width: 32px; height: 32px;" src="img/filterconditions.png" />
-						</div> -->
-						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
+				<div id="div_left_container" class="col-md-1 col-sm-12" style=" margin-top: 80px; padding-left: 10px; padding-right: 5px;">
+						
+							<h5 style="font-size: larger;">Show PageRank</h5><br />
+							<div class="pretty p-switch p-fill" >
+								<input type="checkbox" />
+							    <div class="state p-primary">
+							    <label style="color: #000000;"></label>
+							    </div>
+							</div>
+						<br /><br />
+						
 						<div class="div-left-date-range">
-							<h4>Year Range </h4><br />
+							<h5 style="font-size: larger;">Year Range </h5><br />
 							
 							<select id="select_start">
                          		<option th:each="entry : ${acjaShow.years}"
                                  	th:text="${entry}">1995</option>
 							</select>
-
-							&nbsp;to &nbsp;&nbsp;
+							to
 							<select id="select_end">
                          		<option th:each="entry : ${acjaShow.years}" th:text="${entry}"> 2016</option>
 							</select>
 				
 						</div>
-						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
-						
-						
+						<br />
+		
 						<div class="div-left-rank-type">
-							<h4>Ranking Type</h4><br />
+							<h5 style="font-size: larger;">Ranking Metrics</h5><br />
 							<ul class="ul-style-type" id="ul_rank_type">
+							
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
-										<span>Relevance</span>
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" ><span>Relevance</span></a>
+								</li>
+								<li>
+									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" ><span>Importance</span></a>
+								</li>
+								<li>
+									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; '" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+										<span>Rel.&nbsp;Imp</span>
 									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='IMPORTANCE_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='IMPORTANCE_RANK', page=1)}" >
-										<span>Importance</span>
-									</a>									
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" ><span>Citation Counts</span></a>
 								</li>
 								
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
-										<span>Relevant Importance </span>
-									</a>
-								</li>
-								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" >
-										<span>Citation counts</span>
-									</a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" ><span>Publish Time</span></a>
 								</li>
 							
-								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
-										<span>Publish time</span>
-									</a>
-								</li>
 							</ul>
 												
 						</div>
-						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
-					</div>
 				</div>
 
-				<!--中间展示数据-->
- 				<div class="col-md-7 col-sm-12" style="margin-top: 50px;">
+				<div class="col-md-9">
+						<!--saRank-->
+ 				<div class="col-md-6 col-sm-12" style="margin-top: 50px;">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<span th:text="|search  ${acjaShow.allPaperNum}  relevant papers|"> search xxx relevant papers</span>
+							<span style="color: #000000;">Sorted By SARank Score</span>
 						</div>
 				
 						<div id="paper_entity" style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
-							
-								<th:block th:each="item:${paperList}">
+						
+
+								<th:block th:each="item, itemState :${paperList}">
 									
 										<div class="div-paper-item">
-		
-											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
+										
+											<span class="badge" th:text="${itemState.index + 1}">1</span>
+											<a style="color:rgb(0,0,204)" class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 											<br />
 											
-											<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
-		
-											<br />
-		
+										
 											<ul class="ul-paper-item-aths">
 												<th:block th:each="name, nameStat: ${item.authors}">
+													
 													<li>
-														<a th:text="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
+														<a style="color:rgb(0,128,0)" th:text="${item.authors[nameStat.index]}" >author1</a>,&nbsp;
 													</li>
 													
 											
@@ -192,26 +183,71 @@
 											</ul>
 												
 											
-											<hr  class="hr-paper-split"/>
+											<!--<hr  class="hr-paper-split"/>-->
 											
 											<div  > 
 												<ul class="ul-paper-item-actions">
 													<li class="li-actions-cite">
-														<img src="img/cite.png"/>
-														<a th:text="|cited by ${item.citations}|" >cited by 111 </a>		
+														<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+		
+													</li>
+													<li class="li-actions-cite">
+														
+														<span style="color: #000000; font: futura;"> Citations </span>
+														<span  style="color: #000000; font: futura;" th:text="${item.citations}">34 <span>
+													</li>
+												</ul>
+												
+											</div>	
+												
+										</div>
+										
+										
+										
+								</th:block>
+				
+						</div>
+				
+					</div>
+				</div>
+				
+					<!--PageRank-->
+ 				<div class="col-md-6 col-sm-12" style="margin-top: 50px;">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<span style="color: #000000;">Sorted By PageRank Score</span>
+						</div>
+				
+						<div style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
+							
+								<th:block th:each="item, itemState:${paperList2}">
+									
+										<div class="div-paper-item">
+											
+											<span class="badge" th:text="${itemState.index+1}">1</span>
+											<a style="color:rgb(0,0,204)" class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
+											<br />
+											
+											
+											<ul class="ul-paper-item-aths">
+												<th:block th:each="name, nameStat: ${item.authors}">
+													<li>
+														<a th:text="${item.authors[nameStat.index]}" style="color:rgb(0,128,0)">author1</a>,&nbsp;
 													</li>
 													
-													<li>
-														<span class="glyphicon glyphicon-globe"></span> 
-														<a th:text="${item.doi}" >doi </a>
-													</li>
-													<li>
-														<img  src="img/bib.png"/> 
-														<a  > bibtex  </a>	
-													</li>													
-													<li>
-														<img src="img/version.png" />
-														<a th:text="|all ${item.versions} versions|" >all .. versions</a>
+											
+												</th:block>
+											</ul>
+												
+											
+											
+											<div  > 
+												<ul class="ul-paper-item-actions">
+													<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+		
+													<li class="li-actions-cite">
+														<span style="color: #000000; font: futura;"> Citations </span>
+														<span  style="color: #000000; font: futura;" th:text="${item.citations}">34 <span>
 													</li>
 													
 												</ul>
@@ -229,88 +265,80 @@
 					</div>
 				</div>
 				
-				
-			<!--右边的一些ranking-->
-			<div id="div_right_container" class="col-md-3 " style="background-color:; margin-top: 80px; ">
 			
-			<div class="container-fluid">
-			<div class="row">
+				</div>
 				
+				
+				<!--右边的一些ranking-->
+				<div id="div_right_container" class="col-md-2 "style="background-color:; margin-top: 80px; margin-left: -10px; " >
+					
 					<!--some Authors-->
-					<div id="div_right_author" class="col-sm-6 col-md-6" >
-						<img class="img_right_icon" src="img/ath-ac.png" />
-						<h4>Top Authors</h4>
+					<div id="div_right_author" class="col-sm-12 col-md-12"> 
+						<img style="height: 26px; width: 26px;" src="img/ath-ac.png"/> <h5 style="font-size: larger;">Top Authors</h5>
 						<ul id="ul_ath" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.athName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
-									<a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
 								</li>
 							</th:block>
-			
+							
 						</ul>
-						<a onclick="showMore('ath')"><span>More Authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
+						<a style="color:rgb(0,128, 0)" onclick="showMore('ath')"><span >more authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
 					</div>
-			
+					
+					
 					<!--Affiliations-->
-					<div id="div_right_aff" class="col-sm-6 col-md-6" >
-						<img class="img_right_icon" src="img/venue-ac.png" />
-						<h4>Top Affiliations</h4>
+					<div id="div_right_aff" class="col-sm-12 col-md-12">
+						<img class="img_right_icon" src="img/aff-ac.png"/> <h5 style="font-size: larger;">Top Affiliations</h5>
 						<ul id="ul_aff" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.affName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
-									<a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
 						</ul>
-			
-						<a onclick="showMore('aff')"><span>More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">	
+						
+						<a style="color:rgb(0,128, 0)" onclick="showMore('aff')"><span >more affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						
 					</div>
-				</div>			
-			</div>
-			
-			<div class="container-fluid">
-				<div class="row">
-			
+					
 					<!--some conference -->
-					<div id="div_right_con" class="col-sm-6 col-md-6">
-						<img class="img_right_icon" src="img/conf-ac.png" />
-						<h4>Top Conferences</h4>
+					<div id="div_right_con" class="col-sm-12 col-md-12"> 
+						<img class="img_right_icon" src="img/con-ac.png"/> <h5 style="font-size: larger;">Top Conferences</h5>
 						<ul id="ul_con" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.conName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
-									<a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
+								
 						</ul>
-						<a onclick="showMore('con')"><span>More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<a style="color:rgb(0,128, 0)" onclick="showMore('con')"><span >more conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						
 					</div>
-			
+					
 					<!--some Journal -->
-					<div id="div_right_jou" class="col-sm-6 col-md-6">
-						<img class="img_right_icon" src="img/jou-ac.png" />
-						<h4>Top Journals</h4>
+					<div id="div_right_jou" class="col-sm-12 col-md-12">
+						<img class="img_right_icon" src="img/jou-ac.png"/> <h5 style="font-size: larger;">Top Journals</h5>
 						<ul id="ul_jou" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
-									<a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
-			
+								
 						</ul>
-						<a onclick="showMore('jou')"><span>More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
+						<a style="color:rgb(0,128, 0)" onclick="showMore('jou')"><span >more journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+							
+							
 					</div>
-			
+					
+					
+					
+					
+					
 				</div>
-			</div>
-			
-			</div>
+				
 
 			</div>
 		

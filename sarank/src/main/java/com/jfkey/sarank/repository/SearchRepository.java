@@ -27,15 +27,17 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 	 *            a list of paper ID.
 	 * @return get searched paper information by list of paper IDs {@link com.jfkey.sarank.domain.PaperInSearchBean}
 	 */
-	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
-			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author) "
-			+ "WHERE p.paID= col  "
-			+ "WITH DISTINCT ( p.paID ) AS paID , a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, "
-			+ "p.NormalizedName AS venue, p.paYear AS year, p.jouID AS jouID, p.conID AS conID, r.authorNumber AS number, "
-			+ "size(()-[:PaRef]->(p)) AS citations, size((p)-[:PaPaurl]->()) AS versions, p.paDOI AS doi, p.paScore AS score "
-			+ "ORDER BY toInteger(number) "
-			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations,versions, doi, score "
-			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations, versions, doi, score; ")
+//	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
+//			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author) "
+//			+ "WHERE p.paID= col  "
+//			+ "WITH DISTINCT ( p.paID ) AS paID , a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, "
+//			+ "p.NormalizedName AS venue, p.paYear AS year, p.jouID AS jouID, p.conID AS conID, r.authorNumber AS number, "
+//			+ "size(()-[:PaRef]->(p)) AS citations, size((p)-[:PaPaurl]->()) AS versions, p.paDOI AS doi, p.paScore AS score "
+//			+ "ORDER BY toInteger(number) "
+//			+ "WITH paID, title, venue, conID, jouID, year, COLLECT(authorsID) AS authorsID ,COLLECT(authors) AS authors, citations,versions, doi, score "
+//			+ "RETURN  title, paID, authors, authorsID, year, venue,jouID, conID, citations, versions, doi, score; ")
+	
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author) WHERE p.paID= col WITH DISTINCT ( p.paID ) AS paID , a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, p.NormalizedName AS venue, p.paYear AS year, p.jouID AS jouID, p.conID AS conID, r.authorNumber AS number, p.cts AS citations, p.paDOI AS doi, p.paScore AS saRank, p.fr as futureRank, p.pr as pageRank ORDER BY toInteger(number) WITH paID, title, venue, year,COLLECT(authors) AS authors, citations, saRank, futureRank, pageRank RETURN  title, authors,  year, venue,  citations,   saRank, futureRank, pageRank order by saRank desc ")
 	Iterable<PaperInSearchBean> getPaperByIDs(@Param("paIDs") List<String> paIDs);
 
 	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
@@ -108,15 +110,18 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 //			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, "
 //			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
 //			+ "COLLECT (affScore) AS affScores, paYear AS pubYear;")
-	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
-			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author), (r)-[:PAAAff]->(aff:Affiliation) "
-			+ "WHERE p.paID = col WITH  DISTINCT ( p.paID ) AS paID, a.athID  AS authorID, a.athName AS author, a.athScore * (SIZE(()-[:PAAAth]->(a))) AS athScore, p.paYear AS paYear, aff.affID AS affID, aff.affName AS affName, aff.affScore AS affScore, p.conID AS conID, p.jouID AS jouID, p.paScore as score,  p "
-			+ "optional match(p)-[:PaVenue]->(ven) "
-			+ "with paID, authorID,  author, athScore, paYear, affID, affName, affScore, conID, jouID,  p.NormalizedName AS venName, p.venueType AS venueType, ven, score "
-			+ "optional MATCH(ven)-[vs:VenueYearScore]->(y:Years{year:paYear})  USING INDEX y:Years(year)  "
-			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores,  "
-			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
-			+ "COLLECT (affScore) AS affScores, paYear AS pubYear, score order by score desc")
+	
+//	@Query("WITH {paIDs} AS coll UNWIND coll AS col "
+//			+ "MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author), (r)-[:PAAAff]->(aff:Affiliation) "
+//			+ "WHERE p.paID = col WITH  DISTINCT ( p.paID ) AS paID, a.athID  AS authorID, a.athName AS author, a.athScore * (SIZE(()-[:PAAAth]->(a))) AS athScore, p.paYear AS paYear, aff.affID AS affID, aff.affName AS affName, aff.affScore AS affScore, p.conID AS conID, p.jouID AS jouID, p.paScore as score,  p "
+//			+ "optional match(p)-[:PaVenue]->(ven) "
+//			+ "with paID, authorID,  author, athScore, paYear, affID, affName, affScore, conID, jouID,  p.NormalizedName AS venName, p.venueType AS venueType, ven, score "
+//			+ "optional MATCH(ven)-[vs:VenueYearScore]->(y:Years{year:paYear})  USING INDEX y:Years(year)  "
+//			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores,  "
+//			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
+//			+ "COLLECT (affScore) AS affScores, paYear AS pubYear, score order by score desc")
+	
+	@Query("WITH {paIDs} AS coll UNWIND coll AS col MATCH (p:Paper)-[:PaPAA]->(r)-[:PAAAth]-(a:Author) WHERE p.paID= col WITH DISTINCT ( p.paID ) AS paID , a.athID AS authorsID, a.athName AS authors, p.originalTitle AS title, p.NormalizedName AS venue, p.paYear AS year, p.jouID AS jouID, p.conID AS conID, r.authorNumber AS number, p.cts AS citations, p.paDOI AS doi, p.paScore AS saRank, p.fr as futureRank, p.pr as pageRank ORDER BY toInteger(number) WITH paID, title, venue, year,COLLECT(authors) AS authors, citations, saRank, futureRank, pageRank RETURN  title, authors,  year, venue,  citations,   saRank, futureRank, pageRank order by pageRank desc ")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
 
 	
