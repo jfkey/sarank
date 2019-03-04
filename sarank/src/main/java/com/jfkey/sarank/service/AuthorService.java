@@ -467,13 +467,16 @@ public class AuthorService {
 		// count Top 5 Field of study. 
 		Map<String, Integer> fosCount = new HashMap<String, Integer>();
 		for (AuthorInfoBean tmp : allPapers) {
-			for (int i =0; i < tmp.getFosID().length; i ++) {
-				if (fosCount.containsKey(tmp.getFosID()[i])) {
-					fosCount.put(tmp.getFosID()[i], fosCount.get(tmp.getFosID()[i]) + 1 );
-				} else {
-					fosCount.put(tmp.getFosID()[i], 1 );
-				}
+			if (tmp.getYear().compareTo("1985")<0) {	
+				continue;
 			}
+			for (int i =0; i < tmp.getFosID().length; i ++) {
+					if (fosCount.containsKey(tmp.getFosID()[i])) {
+						fosCount.put(tmp.getFosID()[i], fosCount.get(tmp.getFosID()[i]) + 1 );
+					} else {
+						fosCount.put(tmp.getFosID()[i], 1 );
+					}
+				}
 		}
 		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(fosCount.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
@@ -498,6 +501,9 @@ public class AuthorService {
 		
 		// generate Theme River data pattern 
 		for(AuthorInfoBean info : allPapers ) {
+			if (info.getYear().compareTo("1985")< 0) {
+				continue;
+			}
 			for( int j = 0; j < info.getFosID().length; j ++) {
 				for (int k = 0; k < fosYear.size(); k ++) {
 					if (info.getFosID()[j].equals(fosYear.get(k).getType())) {
@@ -511,7 +517,6 @@ public class AuthorService {
 						}
 					}
 				}
-				
 			}
 		}
 		
@@ -523,6 +528,7 @@ public class AuthorService {
 		int maxYear = Integer.MIN_VALUE;
 		for (ThreeTuple tmp : fosYear) {
 			// legend.add(tmp.getTypeName());
+			
 			legend[i ++] = tmp.getTypeName(); 
 			if (tmp.getMinYear() < minYear){
 				minYear = tmp.getMinYear();

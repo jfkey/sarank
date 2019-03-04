@@ -22,7 +22,7 @@ $("#btn_advanced").click(function(e) {
 $(document).ready(function() {
 	$('#select_start option:first').attr('selected',true);
 	$('#select_end option:last').attr('selected',true);
-	num = 4;
+	num = 3;
 	
 	i = $("#ul_ath").children().length; 
 	if (  i > num ){
@@ -50,10 +50,10 @@ $(document).ready(function() {
 		} 
 	}
 	
-// 
-          
-//    	var content1 = $("#search_input").text().trim();
-//    	var content2 = $("#title").text().trim();
+	// 
+//        
+//  	var content1 = $("#search_input").text().trim();
+//  	var content2 = $("#title").text().trim();
 //	    if(content1 != "") {
 //	    	for(i = 0; i < $(".div-paper-item-title").length; i++) {
 //	    		title = $(".div-paper-item-title").eq(i).text();
@@ -64,7 +64,7 @@ $(document).ready(function() {
 //	    		$(".div-paper-item-title").eq(i).html(title);
 //	    	}
 //	    }
-//	    
+//	     
 //	    if(content2 != "") {
 //	    	for(i = 0; i < $(".div-paper-item-title").length; i++) {
 //	    		title = $(".div-paper-item-title").eq(i).text();
@@ -79,7 +79,7 @@ $(document).ready(function() {
 });
  
 function showMore(type){
-	num = 4;
+	num = 3;
 	i = $("#ul_"+type ).children().length; 
 	if (  i > num ){
 		for (j=num; j<i; j++) {
@@ -90,16 +90,16 @@ function showMore(type){
 	return false;
 }
 
-function changeRT(type) {
-	i = $("#ul_rank_type").children().length;
-	for (j = 0; j < i; j ++ ){
-		// $("#ul_rank_type").css("background-color", "red"); 
-		var li = $("#ul_rank_type").children().eq(j).children().eq(0).css("color",  "#222222");
-
-//		$("#ul_rank_type").children().eq(j).css();
-			
-	}
-	$("#ul_rank_type").children().eq(type-1).children().eq(0).css("color", "#337AB7")
-	
-	return false;
-}
+//function changeRT(type) {
+//	i = $("#ul_rank_type").children().length;
+//	for (j = 0; j < i; j ++ ){
+//		// $("#ul_rank_type").css("background-color", "red"); 
+//		var li = $("#ul_rank_type").children().eq(j).children().eq(0).css("color",  "#222222");
+//
+////		$("#ul_rank_type").children().eq(j).css();
+//			
+//	}
+//	$("#ul_rank_type").children().eq(type-1).children().eq(0).css("color", "#337AB7")
+//	
+//	return false;
+//}

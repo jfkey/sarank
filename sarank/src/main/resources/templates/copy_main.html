@@ -73,13 +73,13 @@
 							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
 								<ul class="nav navbar-nav navbar-right">
 									<li>
-										<a href="#" target="_blank">API</a>
+										<a href="#" target="_blank">api</a>
 									</li>
 									<li>
-										<a href="#" target="_blank">BLOG</a>
+										<a href="#" target="_blank">blog</a>
 									</li>
 									<li>
-										<a href="#">ABOUT</a>
+										<a href="#">about</a>
 									</li>
 								</ul>
 							</nav>
@@ -128,22 +128,26 @@
 							<ul class="ul-style-type" id="ul_rank_type">
 							
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" ><span>Relevance</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
+										<span style="font-size: 16px; ">Relevance</span></a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" ><span>Importance</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" >
+										<span style="font-size: 16px; ">Importance</span></a>
 								</li>
 								<li>
 									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; '" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
-										<span>Rel.&nbsp;Imp</span>
+										<span style="font-size: 16px; ">Relevant Importance</span>
 									</a>
 								</li>
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" ><span>Citation Counts</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
+										<span style="font-size: 16px; ">Citation Counts</span></a>
 								</li>
 								
 								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" ><span>Publish Time</span></a>
+									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
+										<span style="font-size: 17px; ">Publish Time</span></a>
 								</li>
 							
 							</ul>
@@ -201,9 +205,6 @@
 											</div>	
 												
 										</div>
-										
-										
-										
 								</th:block>
 				
 						</div>

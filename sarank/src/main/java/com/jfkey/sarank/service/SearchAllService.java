@@ -49,7 +49,7 @@ public class SearchAllService {
 	@Autowired
 	private SearchRepository searchRepository;
 	
-	 private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
 
 	public Map<String, Object> search(SearchPara searchPara) {
 		SearchType type = getSearchType(searchPara);
@@ -113,13 +113,29 @@ public class SearchAllService {
 		t2 = System.currentTimeMillis();
 		LOG.info("search paper detailed info, spends " + (t2-t1) + " ms" );
 		List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
-		changeOrder(paIDs, searchedPaperList);
+		// changeOrder(paIDs, searchedPaperList);
 		// title to upper
 		capitalize(searchedPaperList);
 		// color searched keywords
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 		
 		result.put("paperList", searchedPaperList);
+		List<PaperInSearchBean> searchedPaperList2 = new ArrayList<PaperInSearchBean>();
+		searchedPaperList2.addAll(searchedPaperList);
+		Collections.sort(searchedPaperList2, new Comparator<PaperInSearchBean>() {
+	            @Override
+	            public int compare(PaperInSearchBean p1, PaperInSearchBean p2) {
+	            	if (p1.getPageRank() < p2.getPageRank()) {
+	            		return 1; 
+	            	} else if (p1.getPageRank() > p2.getPageRank()) {
+	            		return -1; 
+	            	} else {
+	            		return 0 ; 
+	            	}
+	            }
+	        });
+		result.put("paperList2", searchedPaperList2);
+		
 		
 		// 3. get pagination info
 		result.put("pager", new Pager(allNumber, searchPara.getPage(), Constants.BUTTONS_TO_SHOW));
@@ -232,7 +248,7 @@ public class SearchAllService {
 		// publish time -- 5
 		private String getRtString(RankType rt) {
 			if (rt == RankType.DEFAULT_RANK) {	
-				return "1";
+				return "3";
 			} else if (rt == RankType.RELEVANCE_RANK) {
 				return "2";
 			} else if (rt == RankType.IMPORTANCE_RANK) { 
@@ -431,6 +447,8 @@ public class SearchAllService {
 				years.add(acja.getPubYear());
 				
 			}
+			years.add("1995");
+			years.add("2016");
 //			Object[] affArr = setAff.stream().sorted().toArray();
 //			Object[] athArr = setAth.stream().sorted().toArray();
 //			Object[] conArr = setCon.stream().sorted().toArray();
@@ -465,8 +483,9 @@ public class SearchAllService {
 			years.stream().sorted().forEach(item -> { 
 				acjaShow.getYears().add(item);
 			});
+			
 			// current years
-			acjaShow.getYears().add("2016");
+			//acjaShow.getYears().add("2016");
 			
 			acjaShow.setAllPaperNum(paperSize);
 			
@@ -512,8 +531,10 @@ public class SearchAllService {
 				title = tmp.getTitle();
 				for (String str : split) {
 					str = upperWordFirstChar(str);
-					title = title.replaceAll("(?i)" + str, "<span class=\""
-							+ colorType + "\">" + str + "</span>");
+//					title = title.replaceAll("(?i)" + str, "<span class=\""
+//							+ colorType + "\">" + str + "</span>");
+					title = title.replaceAll("(?i)" + str, "<span style=\""
+							+ "color:rgb(221,75,57)" + "\">" + str + "</span>");
 				}
 				tmp.setTitle(title);
 				
@@ -553,10 +574,19 @@ public class SearchAllService {
 	private void capitalize (List<PaperInSearchBean> list) {
 		for (PaperInSearchBean tmp : list) {
 			tmp.setTitle(sentenceToUpper(tmp.getTitle()));
-			String[] authors = tmp.getAuthors();
-			for (int i = 0; i < authors.length; i ++) {
-				authors[i] = sentenceToUpper(authors[i]);
+//			String[] authors = tmp.getAuthors();
+			int len = tmp.getAuthors().length > 5 ? 6 :tmp.getAuthors().length;
+			String[] authors = new String[len];
+			for (int i = 0; i < tmp.getAuthors().length; i ++) {
+				if (i <= 4 ) {
+					authors[i] = sentenceToUpper(tmp.getAuthors()[i]);
+				} else if (i == 5) {
+					authors[i] = "...";
+				} else {
+					break; 
+				}
 			}
+			
 			tmp.setAuthors(authors);
 		}
 	}

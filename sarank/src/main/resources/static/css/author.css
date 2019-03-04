@@ -37,7 +37,8 @@ body{
 	width: 20px;
 	height: 20px;
 }
-h1,h2,h3,h4{color: #5E5E5E; font-weight: lighter; display: inline-block;}
+h1,h2,h3,h4{color: #000000;font-weight: initial;  display: inline-block;}
+h5{font:arial; }
 
 .red {
 	color: red;

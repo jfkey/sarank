@@ -100,16 +100,16 @@
 		
 			<div class="col-md-8" style="height:auto; margin-top: 50px; background-color:; ">
 				<div class="col-md-7 col-sm-12" style="height: 550px; background-color: ;" >
-					<div class=" col-md-5 col-sm-6"style="background-color: ;">
+					<div class=" col-md-6 col-sm-6"style="background-color: ;">
 						<!--<img src="img/avatar.jpg" style=" margin-top:20px;"/>-->
-						<div id = "chartWordCloud" style="height:280px; background-color : ; margin-left: 0px;"></div>
+						<div id = "chartWordCloud" style="height:320px; background-color : ; margin-left: 0px;"></div>
 
 					</div>
-					<div class="col-md-7 col-sm-6" id="simple_info" style="margin-top: ;">
+					<div class="col-md-6 col-sm-6" id="simple_info" style="margin-top: 50px; background-color: ;" >
 						<!-- map in -->
-						<th:block th:each="entry:${author}">
+						<!-- <th:block th:each="entry:${author}">
 							
-						<!--<img src="img/ath.png" style="width: 25px; height: 25px;" />-->
+						<img src="img/ath.png" style="width: 25px; height: 25px;" />
 						<h1 th:text="${entry.value}">xindong wu</h1><br />
 						</th:block>
 								
@@ -117,17 +117,23 @@
 						<th:block th:each="aff,status : ${#strings.arraySplit(aff, '#')}">
 							<span th:if="${status.index != 0}" th:text="|${aff}|">null</span>
 							
-						</th:block>
+						</th:block> -->
+						
+						<!-- <h1 >Shuai Ma</h1><br />
+						<span>Beihang University</span>
+						 -->
+						<h1 >Jiawei Han</h1><br />
+						<span style="font-size: 15px;">University of Illinois at Urbana-Champaign</span>
 						
 						
-						<div style="margin-top: 80px;">
+						<div style="margin-top: 60px;">
 						
 						
-							<h1 th:text="| ${papers}|">240</h1>
-							<span style="display: inline-block;">PAPERS</span>
+							<h2 th:text="| ${papers}|" >2400</h2>
+							<span style="display: inline-block; font-size: 15px;" >ARTICLES</span>
 							
-							<h1 style="margin-left: 60px;" th:text="|${cite}|">12000 </h1>
-							<span style="display: inline-block;">
+							<h2 style="margin-left: 15px;" th:text="|${cite}|">12000 </h2>
+							<span style="display: inline-block; font-size: 15px;">
 								CITATIONS
 							</span>
 						
@@ -136,9 +142,9 @@
 					</div>
 					
 					<div class="col-md-12"  style="margin-top: 40px;" >
-						<h5>
-							research interests
-						</h5>
+						<span style="font-size: 16px;">
+							Research Interests
+						</span>
 						<div id = "chartFosYear" style="height:300px; margin-top: 10px;">
 							
 						</div>

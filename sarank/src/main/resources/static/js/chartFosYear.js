@@ -12,10 +12,14 @@ chart_fos_year.setOption({
 //			}
 //		}
 //	},
-
+ 			
 	legend: {
 		 data:[ 'Machine learning', 'World Wide Web', 'Machine', 'learning', 'asdf'
-          ]
+          ],
+          textStyle:{//图例文字的样式
+            color:'#000000',
+            fontSize:14
+        }
 	},
 	 title: { 
 					show:true,
@@ -33,6 +37,7 @@ chart_fos_year.setOption({
 		axisTick: {},
 		axisLabel: {},
 		type: 'value',
+		
 		axisPointer: {
 			animation: true,
 			label: {
@@ -55,6 +60,12 @@ chart_fos_year.setOption({
 	},
 	series: [{
 		type: 'themeRiver',
+		label: {
+						normal: {
+							show: false
+						}
+					},
+		top: '100',
 		name: 'fos year',
 		itemStyle: {
 			emphasis: {
