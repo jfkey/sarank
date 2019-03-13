@@ -10,8 +10,8 @@ h3,
 h4,
 h5,
 h6 {
-	color: #5E5E5E;
-	font-weight: ;
+	color: #000000;
+
 	display: inline-block;
 }
 
@@ -87,8 +87,8 @@ h6 {
 }
 
 .img_right_icon {
-	width: 32px;
-	height: 32px;
+	width: 22px;
+	height: 22px;
 }
 
 /** paper style **/

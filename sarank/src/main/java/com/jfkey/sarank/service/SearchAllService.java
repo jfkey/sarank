@@ -1,16 +1,7 @@
 package com.jfkey.sarank.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +82,8 @@ public class SearchAllService {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		String queryParam = searchPara.getFormatStr();
-		String rankType = getRtString(searchPara.getRt());
+		// String rankType = getRtString(searchPara.getRt());
+        String rankType = "3";
 		int skip = Constants.PRE_PAGE_SIZE * (searchPara.getPage());
 		int limit  = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
 		double alpha = Constants.RELEVANCE_LOW;
@@ -102,39 +94,74 @@ public class SearchAllService {
 		long t1 = System.currentTimeMillis();
 		
 		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
+
+		Iterable<SearchHits> queryKeywords2 = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, "fr", model, alpha);
+
+		Iterable<SearchHits> queryKeywords3 = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, "pr", model, alpha);
+
 		long t2 = System.currentTimeMillis();
 		LOG.info("search " + queryParam + ", spends " + (t2-t1) + " ms" );
-		
+
 		List<String> paIDs = new ArrayList<String>();
+		List<String> paIDs2 = new ArrayList<String>();
+		List<String> paIDs3 = new ArrayList<String>();
+
 		int allNumber = getHitsID(queryKeywords, paIDs);
-		
+		allNumber = getHitsID(queryKeywords2, paIDs2);
+		allNumber = getHitsID(queryKeywords3, paIDs3);
+
 		t1 = System.currentTimeMillis();
 		Iterable<PaperInSearchBean> searchedPaperIt = searchRepository.getPaperByIDs(paIDs);
+		Iterable<PaperInSearchBean> searchedPaperIt2 = searchRepository.getPaperByIDsFR(paIDs2);
+		Iterable<PaperInSearchBean> searchedPaperIt3 = searchRepository.getPaperByIDsPR(paIDs3);
+
 		t2 = System.currentTimeMillis();
 		LOG.info("search paper detailed info, spends " + (t2-t1) + " ms" );
 		List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
+		List<PaperInSearchBean> searchedPaperList2 = getIteratorData(searchedPaperIt2);
+		List<PaperInSearchBean> searchedPaperList3 = getIteratorData(searchedPaperIt3);
+
+
 		// changeOrder(paIDs, searchedPaperList);
 		// title to upper
 		capitalize(searchedPaperList);
+		// capitalize(searchedPaperList2);
 		// color searched keywords
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
-		
+		// colorTitle(searchedPaperList2, searchPara.getKeywords(), 1);
+
+		PaperInSearchBean pib = searchedPaperList.get(0);
+		pib.setVersions(232);
+		searchedPaperList.set(0, pib);
+		pib = searchedPaperList.get(1);
+		pib.setVersions(27);
+		searchedPaperList.set(1, pib);
+		pib = searchedPaperList.get(2);
+		pib.setVersions(61);
+		searchedPaperList.set(2, pib);
+
+
 		result.put("paperList", searchedPaperList);
-		List<PaperInSearchBean> searchedPaperList2 = new ArrayList<PaperInSearchBean>();
-		searchedPaperList2.addAll(searchedPaperList);
-		Collections.sort(searchedPaperList2, new Comparator<PaperInSearchBean>() {
-	            @Override
-	            public int compare(PaperInSearchBean p1, PaperInSearchBean p2) {
-	            	if (p1.getPageRank() < p2.getPageRank()) {
-	            		return 1; 
-	            	} else if (p1.getPageRank() > p2.getPageRank()) {
-	            		return -1; 
-	            	} else {
-	            		return 0 ; 
-	            	}
-	            }
-	        });
+
+
+		// List<PaperInSearchBean> searchedPaperList2 = new ArrayList<PaperInSearchBean>();
+		// searchedPaperList2.addAll(searchedPaperList2);
+
+//		Collections.sort(searchedPaperList2, new Comparator<PaperInSearchBean>() {
+//	            @Override
+//	            public int compare(PaperInSearchBean p1, PaperInSearchBean p2) {
+//	            	if (p1.getPageRank() < p2.getPageRank()) {
+//	            		return 1;
+//	            	} else if (p1.getPageRank() > p2.getPageRank()) {
+//	            		return -1;
+//	            	} else {
+//	            		return 0 ;
+//	            	}
+//	            }
+//	        });
+
 		result.put("paperList2", searchedPaperList2);
+		result.put("paperList3", searchedPaperList3);
 		
 		
 		// 3. get pagination info
@@ -235,7 +262,7 @@ public class SearchAllService {
 			return SearchType.AFFILIATION;
 		} else if (para.getAuthor() != null && !para.getAuthor().equals("") ) {
 			return SearchType.AUTHOR;
-		} else if ( para.getKeywords() != null && !para.getKeywords().equals("")) { 
+		} else if ( para.getKeywords() != null && !para.getKeywords().equals("")) {
 			return SearchType.KEYWORDS;
 		}else {
 			return SearchType.KEYWORDS;
@@ -447,7 +474,7 @@ public class SearchAllService {
 				years.add(acja.getPubYear());
 				
 			}
-			years.add("1995");
+//			years.add("1995");
 			years.add("2016");
 //			Object[] affArr = setAff.stream().sorted().toArray();
 //			Object[] athArr = setAth.stream().sorted().toArray();
@@ -578,13 +605,14 @@ public class SearchAllService {
 			int len = tmp.getAuthors().length > 5 ? 6 :tmp.getAuthors().length;
 			String[] authors = new String[len];
 			for (int i = 0; i < tmp.getAuthors().length; i ++) {
-				if (i <= 4 ) {
-					authors[i] = sentenceToUpper(tmp.getAuthors()[i]);
-				} else if (i == 5) {
-					authors[i] = "...";
-				} else {
-					break; 
-				}
+				authors[i] = sentenceToUpper(tmp.getAuthors()[i]);
+//				if (i <= 4 ) {
+//					authors[i] = sentenceToUpper(tmp.getAuthors()[i]);
+//				} else if (i == 5) {
+//					authors[i] = "...";
+//				} else {
+//					break;
+//				}
 			}
 			
 			tmp.setAuthors(authors);

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import com.jfkey.sarank.service.QueryEvaluation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,33 @@ public class SearchAllController {
 	
 	@Autowired
 	private SearchAllService searchAllService;
+	@Autowired
+	private QueryEvaluation queryEvaluation;
+
+	@GetMapping("/eval")
+	public String eval(Model model) {
+		// init copy_main.html with null data
+		queryEvaluation.doEval();
+
+		model.addAttribute("searchPara", new SearchPara());
+		model.addAttribute("acjaShow", new ACJAShow());
+		model.addAttribute("paperList", new ArrayList<PaperInSearchBean>());
+		SearchPara para = new SearchPara();
+		para.setRt(RankType.DEFAULT_RANK);
+		model.addAttribute("para", para);
+
+		// init pagination
+		Pager pager = new Pager(23, 0, BUTTONS_TO_SHOW);
+		Map<String, Object> paper = new HashMap<String, Object>();
+		paper.put("totalPages", 0);
+		paper.put("number", 0);
+		model.addAttribute("paper", paper);
+		model.addAttribute("pager", pager);
+
+		System.out.println("model: " + model);
+
+		return "copy_main";
+	}
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara,  HttpSession session ) {
@@ -59,7 +87,7 @@ public class SearchAllController {
 		
 		// default doing keywords search.
 		if ( searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS  ) {
-			ModelAndView mv= new ModelAndView("/copy_main");
+			ModelAndView mv= new ModelAndView("/copy_main4");
 			// get acjashow only used in search keywords page
 			
 			ACJAShow acjaShow = (ACJAShow)session.getAttribute(key);
