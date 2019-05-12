@@ -131,7 +131,7 @@ public class SearchController {
 	
 	@GetMapping("/main")
 	public String greetingForm(Model model) {
-		// init copy_main.html with null data 
+		// init main_eval.html with null data
 		model.addAttribute("searchPara", new SearchPara());
 		model.addAttribute("acjaShow", new ACJAShow());
 		model.addAttribute("paperList", new ArrayList<PaperInSearchBean>());

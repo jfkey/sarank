@@ -3,7 +3,6 @@ package com.jfkey.sarank.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jfkey.sarank.domain.ACJAShow;
@@ -48,7 +46,7 @@ public class SearchAllController {
 
 	@GetMapping("/eval")
 	public String eval(Model model) {
-		// init copy_main.html with null data
+		// init main_eval.html with null data
 		queryEvaluation.doEval();
 
 		model.addAttribute("searchPara", new SearchPara());
@@ -68,7 +66,7 @@ public class SearchAllController {
 
 		System.out.println("model: " + model);
 
-		return "copy_main";
+		return "main_eval";
 	}
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
@@ -87,7 +85,7 @@ public class SearchAllController {
 		
 		// default doing keywords search.
 		if ( searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS  ) {
-			ModelAndView mv= new ModelAndView("/copy_main4");
+			ModelAndView mv= new ModelAndView("/main");
 			// get acjashow only used in search keywords page
 			
 			ACJAShow acjaShow = (ACJAShow)session.getAttribute(key);
@@ -196,7 +194,7 @@ public class SearchAllController {
 	
 	@GetMapping("/main")
 	public String greetingForm(Model model) {
-		// init copy_main.html with null data 
+		// init main_eval.html with null data
 		model.addAttribute("searchPara", new SearchPara());
 		model.addAttribute("acjaShow", new ACJAShow());
 		model.addAttribute("paperList", new ArrayList<PaperInSearchBean>());
@@ -213,6 +211,6 @@ public class SearchAllController {
 		model.addAttribute("pager", pager);
 		
 		System.out.println("model: " + model);
-		return "copy_main";
+		return "main";
     }
 }

@@ -23,7 +23,7 @@ public class WebConfiguration {
 	@Bean
 	public org.neo4j.ogm.config.Configuration configuration() {
 		org.neo4j.ogm.config.Configuration configuration = new org.neo4j.ogm.config.Configuration.Builder()
-				.uri("bolt://192.168.1.195").credentials("neo4j", "admin123")
+				.uri("bolt://192.168.1.248").credentials("neo4j", "admin123")
 				.build();
 		return configuration;
 	}

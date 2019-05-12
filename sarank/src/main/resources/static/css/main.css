@@ -11,6 +11,7 @@ h4,
 h5,
 h6 {
 	color: #000000;
+
 	display: inline-block;
 }
 
@@ -35,8 +36,9 @@ h6 {
 
 .paper-item {
 	padding-left: 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+
 }
 
 .paper-item a:hover {
@@ -57,6 +59,9 @@ h6 {
 	color: black;
 }
 
+.div-left-condition {
+	margin-left: 30px;
+}
 
 .ul-style-type {
 	list-style-type: none;
@@ -74,12 +79,20 @@ h6 {
 	color: rgb(51, 122, 183);
 }
 
+#div-left-container {
+	margin-top: 100px;
+	
+	/* style=" margin-top: 80px; padding-left: 10px; padding-right: 5px;*/
+}
+
 .div-left-rank-type {
 	padding-top: 10px;
+	margin-left: 40px;
 }
 
 .div-left-date-range {
 	padding-top: 10px;
+	margin-left: 40px;
 }
 
 .img_right_icon {
