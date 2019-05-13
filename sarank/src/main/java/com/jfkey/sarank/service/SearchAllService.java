@@ -42,6 +42,16 @@ public class SearchAllService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
 
+	public Map<String, Object> getAuthorPie () {
+		if (searchRepository != null) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("liu", "junfeng");
+			return map;
+		}
+		return null;
+	}
+
+
 	public Map<String, Object> search(SearchPara searchPara) {
 		SearchType type = getSearchType(searchPara);
 		if (type == SearchType.KEYWORDS) {
