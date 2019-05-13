@@ -11,7 +11,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 3:26:56 PM Apr 20, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc search author information. contains author name, author's affiliation, and paper numbers. years
  *  
  */

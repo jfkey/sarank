@@ -6,7 +6,7 @@ import com.jfkey.sarank.utils.RankType;
  * 
  * @author junfeng Liu
  * @time 10:31:56 PM Apr 12, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc search parameters
  */
 public class SearchPara {

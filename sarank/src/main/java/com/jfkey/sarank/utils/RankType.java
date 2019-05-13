@@ -4,7 +4,7 @@ package com.jfkey.sarank.utils;
  * 
  * @author junfeng Liu
  * @time 9:28:48 PM Apr 13, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc enum class of rank type;
  */
 public enum RankType {

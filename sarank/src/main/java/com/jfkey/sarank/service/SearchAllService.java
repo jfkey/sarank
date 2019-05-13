@@ -32,25 +32,28 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 5:53:16 PM Jul 3, 2018
- * @version v0.2.0
+ * @version v0.3.0
  * @desc
  */
 @Service
 public class SearchAllService {
 	@Autowired
 	private SearchRepository searchRepository;
+	// author pie data.
+	private Map<String, Object> authorPie;
+	// conference pie data
+	private Map<String, Object> confPie;
+
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
 
 	public Map<String, Object> getAuthorPie () {
-		if (searchRepository != null) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("liu", "junfeng");
-			return map;
-		}
-		return null;
+		return authorPie;
 	}
 
+	public Map<String, Object> getConfPie( ) {
+		return confPie;
+	}
 
 	public Map<String, Object> search(SearchPara searchPara) {
 		SearchType type = getSearchType(searchPara);

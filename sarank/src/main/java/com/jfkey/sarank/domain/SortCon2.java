@@ -4,7 +4,7 @@ package com.jfkey.sarank.domain;
  * 
  * @author junfeng Liu
  * @time 3:04:52 PM Aug 17, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc sort conferences in 'author more paper' Page, sort by times
  */
 public class SortCon2 implements Comparable<SortCon2>{

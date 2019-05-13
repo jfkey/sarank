@@ -29,7 +29,7 @@ import com.jfkey.sarank.utils.SearchType;
  * 
  * @author junfeng Liu
  * @time 10:35:30 PM Apr 12, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc search controller
  */
 @Controller

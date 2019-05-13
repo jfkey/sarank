@@ -4,7 +4,7 @@ package com.jfkey.sarank.domain;
  * 
  * @author junfeng Liu
  * @time 11:25:18 PM Jul 7, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc sort author information
  */
 public class SortAuthor implements Comparable<SortAuthor>{

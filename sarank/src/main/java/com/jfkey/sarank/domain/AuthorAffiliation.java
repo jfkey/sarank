@@ -9,7 +9,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * 
  * @author junfeng Liu
  * @time 5:00:08 PM Aug 20, 2018
- * @version v0.2.1 author ID, author name, author score. affiliation ids, affiliation 
+ * @version v0.3.0 author ID, author name, author score. affiliation ids, affiliation
  * @desc
  */
 @QueryResult

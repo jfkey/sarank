@@ -17,7 +17,7 @@ import com.jfkey.sarank.domain.SearchHits;
  * 
  * @author junfeng Liu
  * @time 5:14:39 PM Aug 12, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc search repository. 
  */
 public interface SearchRepository extends Neo4jRepository<Paper, Long> {

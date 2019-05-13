@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * 
  * @author junfeng Liu
  * @time 10:23:12 AM Jan 19, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc this is config info
  */
 @Configuration

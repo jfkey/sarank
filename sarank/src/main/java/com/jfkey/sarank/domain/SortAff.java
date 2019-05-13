@@ -5,24 +5,25 @@ package com.jfkey.sarank.domain;
  * 
  * @author junfeng Liu
  * @time 11:15:35 PM Jul 7, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc sort affiliation information
  */
 public class SortAff implements Comparable<SortAff>{
 	private String affID;
 	private String affName;
 	private double score;
-	
+	private int times;
 	
 	public SortAff() {
 		super();
 	}
 
-	public SortAff(String affID, String affName, double score) {
+	public SortAff(String affID, String affName, double score, int times) {
 		super();
 		this.affID = affID;
 		this.affName = affName;
 		this.score = score;
+		this.times = times;
 	}
 
 	
@@ -48,6 +49,14 @@ public class SortAff implements Comparable<SortAff>{
 
 	public void setScore(double score) {
 		this.score = score;
+	}
+
+	public int getTimes() {
+		return times;
+	}
+
+	public void setTimes(int times) {
+		this.times = times;
 	}
 
 	@Override

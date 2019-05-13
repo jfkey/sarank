@@ -39,7 +39,7 @@ import com.jfkey.sarank.utils.TopKRank;
  * 
  * @author junfeng Liu
  * @time 5:08:28 PM Apr 6, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc author information service, some business code. 
  */
 @Service

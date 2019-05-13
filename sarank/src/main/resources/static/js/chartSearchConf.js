@@ -25,7 +25,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchConf'
         right: 10,
         top: 20,
         bottom: 20,
-        data:['Jiawei Han', 'Wenfei fan','Jerry Xu Yu','Xindong Wu',  'Shuai Ma', 'Xuelian lin']
+        data:['SIGMOD', 'VLDB','ICDE','WSDM',  'CIKM', 'ICDM']
   
     },
     series : [
@@ -35,12 +35,12 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchConf'
             radius : '70%',
             center: ['45%', '60%'],
             data:[
-                {value:3.3, name:'Jiawei Han'},
-                {value:2.5, name:'Wenfei Fan'},
-                {value:2.0, name:'Jerry Xu Yu'},
-                {value:1.3, name:'Xindong Wu'}, 
-                {value:1.1, name:'Shuai Ma'},
-                {value:0.4, name:'Xuelian lin'}
+                {value:3.3, name:'SIGMOD'},
+                {value:2.5, name:'VLDB'},
+                {value:2.0, name:'ICDE'},
+                {value:1.3, name:'WSDM'}, 
+                {value:1.1, name:'CIKM'},
+                {value:0.4, name:'ICDM'}
                 
             ],
             itemStyle: {

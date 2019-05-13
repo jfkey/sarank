@@ -22,7 +22,7 @@ import com.jfkey.sarank.service.SearchAllService;
  * 
  * @author junfeng Liu
  * @time 10:35:41 AM Aug 10, 2018
- * @version v0.2.1
+ * @version v0.3.0
  * @desc Affiliation search interface .
  */
 @Controller
