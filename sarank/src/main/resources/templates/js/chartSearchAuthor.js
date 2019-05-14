@@ -55,7 +55,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
 })
 	
 	$.get('/search/chartauthor').done(function(data) {
-		chart_fos_year.setOption({
+		chart_search_author.setOption({
 			legend: {
 				data: data.authorName
 			},

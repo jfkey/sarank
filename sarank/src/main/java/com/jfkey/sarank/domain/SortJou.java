@@ -16,18 +16,20 @@ public class SortJou implements Comparable<SortJou> {
 	private double score;
 	
 	private String year;
+	private int times;
 
 	public SortJou() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SortJou(String jouID, String jouName, double score, String year) {
+	public SortJou(String jouID, String jouName, double score, String year, int times) {
 		super();
 		this.jouID = jouID;
 		this.jouName = jouName;
 		this.score = score;
 		this.year = year;
+		this.times = times;
 	}
 
 	public String getJouID() {
@@ -61,8 +63,15 @@ public class SortJou implements Comparable<SortJou> {
 	public void setYear(String year) {
 		this.year = year;
 	}
-	
-	
+
+	public int getTimes() {
+		return times;
+	}
+
+	public void setTimes(int times) {
+		this.times = times;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -90,9 +99,9 @@ public class SortJou implements Comparable<SortJou> {
 
 	@Override
 	public int compareTo(SortJou sj) {
-		if (sj.score > score) {
+		if (sj.score * sj.getTimes()> score * times) {
 			return 1;
-		} else if (sj.score < score) {
+		} else if (sj.score * sj.getTimes() < score * times) {
 			return -1;
 		} else {
 			return 0;

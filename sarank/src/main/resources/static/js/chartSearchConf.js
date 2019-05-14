@@ -1,10 +1,10 @@
 
 
 // chart of search author weights .
-var chart_search_author = echarts.init(document.getElementById('chartSearchConf'));
+var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'));
 				 
 	// 7D96BC 67E0E3
-	chart_search_author.setOption({
+	chart_search_conf.setOption({
 	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78'],
 	 title : {
         text: 'Conference',
@@ -25,7 +25,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchConf'
         right: 10,
         top: 20,
         bottom: 20,
-        data:['SIGMOD', 'VLDB','ICDE','WSDM',  'CIKM', 'ICDM']
+        data:['VLDB', 'SIGMOD','ICDE','WSDM',  'CIKM', 'ICDM']
   
     },
     series : [
@@ -35,12 +35,12 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchConf'
             radius : '70%',
             center: ['45%', '60%'],
             data:[
-                {value:3.3, name:'SIGMOD'},
-                {value:2.5, name:'VLDB'},
-                {value:2.0, name:'ICDE'},
+                {value:2, name:'SIGMOD'},
+                {value:3, name:'VLDB'},
+                {value:1.5, name:'ICDE'},
                 {value:1.3, name:'WSDM'}, 
                 {value:1.1, name:'CIKM'},
-                {value:0.4, name:'ICDM'}
+                {value:0.7, name:'ICDM'}
                 
             ],
             itemStyle: {
@@ -55,7 +55,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchConf'
 })
 	
 $.get('/search/chartconf').done(function(data) {
-	chart_fos_year.setOption({
+	chart_search_conf.setOption({
 		legend: {
 			data: data.confName
 		},

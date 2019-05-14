@@ -92,9 +92,9 @@ public class SortAff implements Comparable<SortAff>{
 	
 	@Override
 	public int compareTo(SortAff sf) {
-		if (sf.getScore() > score) {
+		if (sf.getScore() * sf.getTimes() > score * times) {
 			return 1;
-		} else if (sf.getScore() < score) {
+		} else if (sf.getScore() * sf.getTimes() < score * times) {
 			return -1;
 		} else {
 			return 0;

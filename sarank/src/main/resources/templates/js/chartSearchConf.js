@@ -1,10 +1,10 @@
 
 
 // chart of search author weights .
-var chart_search_author = echarts.init(document.getElementById('chartSearchConf'));
+var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'));
 				 
 	// 7D96BC 67E0E3
-	chart_search_author.setOption({
+	chart_search_conf.setOption({
 	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78'],
 	 title : {
         text: 'Conference',
@@ -55,7 +55,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchConf'
 })
 	
 $.get('/search/chartconf').done(function(data) {
-	chart_fos_year.setOption({
+	chart_search_conf.setOption({
 		legend: {
 			data: data.confName
 		},

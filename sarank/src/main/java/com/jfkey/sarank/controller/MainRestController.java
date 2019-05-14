@@ -55,7 +55,7 @@ public class MainRestController {
 
 	@RequestMapping("/search/chartconf")
 	public Map<String, Object>getConfPie() {
-		return null;
+		return searchAllService.getConfPie();
 	}
 	
 }

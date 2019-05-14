@@ -3,13 +3,12 @@ package com.jfkey.sarank.service;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.jfkey.sarank.utils.ACJAInfoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.stereotype.Service;
 
-import com.jfkey.sarank.domain.ACJA;
 import com.jfkey.sarank.domain.ACJAShow;
 import com.jfkey.sarank.domain.AffHit;
 import com.jfkey.sarank.domain.AuthorAffiliation;
@@ -19,10 +18,6 @@ import com.jfkey.sarank.domain.PaperInSearchBean;
 import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.SearchHits;
 import com.jfkey.sarank.domain.SearchPara;
-import com.jfkey.sarank.domain.SortAff;
-import com.jfkey.sarank.domain.SortAuthor;
-import com.jfkey.sarank.domain.SortCon;
-import com.jfkey.sarank.domain.SortJou;
 import com.jfkey.sarank.repository.SearchRepository;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.RankType;
@@ -48,10 +43,12 @@ public class SearchAllService {
 	private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
 
 	public Map<String, Object> getAuthorPie () {
+		LOG.info("authorPie: " + authorPie);
 		return authorPie;
 	}
 
 	public Map<String, Object> getConfPie( ) {
+		LOG.info("confPie: " + confPie);
 		return confPie;
 	}
 
@@ -84,8 +81,14 @@ public class SearchAllService {
 		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
 		int allNumber = getHitsID(queryKeywords, acjaIDs);
 
-		ACJAShow acjaShow = new ACJAShow();
-		getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(acjaIDs), allNumber);
+
+
+		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(searchRepository.getACJAInfo(acjaIDs), allNumber);
+		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
+		authorPie = acjaInfoHandler.getSearchAuthorPie();
+		confPie = acjaInfoHandler.getSearchConfPie();
+
+		// getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(acjaIDs), allNumber);
 		// acjaShow upper. 
 		acjaUpper(acjaShow);
 		return acjaShow;
@@ -394,166 +397,167 @@ public class SearchAllService {
 		}
 	}
 	
-	private ACJAShow getDetailACJAInfo(ACJAShow acjaShow, Iterable<ACJA> ACJAIt, int paperSize) {
-	int ai = 0;
-		if (ACJAIt == null) {
-			return new ACJAShow();
-		} else {
-			Iterator<ACJA> it = ACJAIt.iterator();
-			ACJA acja = null;
-			Set<SortAff> setAff = new HashSet<SortAff>();
-			Set<SortAuthor> setAth = new HashSet<SortAuthor>();
-			Set<SortCon> setCon = new HashSet<SortCon>();
-			Set<SortJou> setJou = new HashSet<SortJou>();
-			Set<String> years = new HashSet<String>();
-			SortAff tmpA = null;
-			SortAuthor tmpAth = null;
-			SortCon tmpC = null;
-			SortJou tmpJ = null;
-			while (it.hasNext()) {
-				acja = it.next();
-				tmpA = null;
-				for (int i = 0; i < acja.getAffIDs().length; i ++) {
-//					tmpA = new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]);
-//					LOG.info("aff: " + tmpA.getAffID() + " , affName: " + tmpA.getAffName() + " score : " + tmpA.getScore());
-//					if ( setAff.contains(tmpA) ){
-//						Iterator<SortAff> ita = setAff.iterator();
-//						SortAff itS = null;
-//						while(ita.hasNext()) {
-//							itS = ita.next();
-//							if (itS.equals(tmpA)) { 
-//								itS.setScore(itS.getScore() + tmpA.getScore());
+//	private ACJAShow getDetailACJAInfo(ACJAShow acjaShow, Iterable<ACJA> ACJAIt, int paperSize) {
+//	int ai = 0;
+//		if (ACJAIt == null) {
+//			return new ACJAShow();
+//		} else {
+//			Iterator<ACJA> it = ACJAIt.iterator();
+//			ACJA acja = null;
+//			Set<SortAff> setAff = new HashSet<SortAff>();
+//			Set<SortAuthor> setAth = new HashSet<SortAuthor>();
+//			Set<SortCon> setCon = new HashSet<SortCon>();
+//			Set<SortJou> setJou = new HashSet<SortJou>();
+//			Set<String> years = new HashSet<String>();
+//			SortAff tmpA = null;
+//			SortAuthor tmpAth = null;
+//			SortCon tmpC = null;
+//			SortJou tmpJ = null;
+//			while (it.hasNext()) {
+//				acja = it.next();
+//				tmpA = null;
+//				for (int i = 0; i < acja.getAffIDs().length; i ++) {
+////					tmpA = new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]);
+////					LOG.info("aff: " + tmpA.getAffID() + " , affName: " + tmpA.getAffName() + " score : " + tmpA.getScore());
+////					if ( setAff.contains(tmpA) ){
+////						Iterator<SortAff> ita = setAff.iterator();
+////						SortAff itS = null;
+////						while(ita.hasNext()) {
+////							itS = ita.next();
+////							if (itS.equals(tmpA)) {
+////								itS.setScore(itS.getScore() + tmpA.getScore());
+////							}
+////						}
+////					} else {
+////						setAff.add(tmpA);
+////					}
+//					setAff.add(new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]));
+//				}
+//				ai ++;
+//				for (int i = 0; i < acja.getAthIDs().length && ai < 5; i ++) {
+//					tmpAth = new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i]);
+//					if (setAth.contains(tmpAth)) {
+//						Iterator<SortAuthor> itAth = setAth.iterator();
+//						SortAuthor itS = null;
+//						while (itAth.hasNext()) {
+//							itS = itAth.next();
+//							if (itS.equals(tmpAth)) {
+////								itS.setScore(itS.getScore() + tmpAth.getScore());
+//							}
+//						}
+//
+//					} else {
+//						setAth.add(tmpAth);
+//					}
+//				}
+//				if (acja.getConID() != null) {
+//					tmpC = new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) ;
+//					if (setCon.contains(tmpC)) {
+//						Iterator<SortCon> itC = setCon.iterator();
+//						SortCon itS = null;
+//						while (itC.hasNext()){
+//							itS = itC.next();
+//							if (itS.equals(tmpC)) {
+//								itS.setScore(itS.getScore() + tmpC.getScore());
 //							}
 //						}
 //					} else {
-//						setAff.add(tmpA);
+//						setCon.add(tmpC);
 //					}
-					setAff.add(new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]));
-				}
-				ai ++;
-				for (int i = 0; i < acja.getAthIDs().length && ai < 5; i ++) {
-					tmpAth = new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i]);
-					if (setAth.contains(tmpAth)) {
-						Iterator<SortAuthor> itAth = setAth.iterator();
-						SortAuthor itS = null;
-						while (itAth.hasNext()) {
-							itS = itAth.next();
-							if (itS.equals(tmpAth)) {
-//								itS.setScore(itS.getScore() + tmpAth.getScore());
-							}
-						}
-						
-					} else {
-						setAth.add(tmpAth);
-					}
-				}
-				if (acja.getConID() != null) {
-					tmpC = new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) ;
-					if (setCon.contains(tmpC)) {
-						Iterator<SortCon> itC = setCon.iterator();
-						SortCon itS = null;
-						while (itC.hasNext()){
-							itS = itC.next();
-							if (itS.equals(tmpC)) {
-								itS.setScore(itS.getScore() + tmpC.getScore()); 
-							}
-						}
-					} else {
-						setCon.add(tmpC);
-					}
-					
-				}
-				if (acja.getJouID() != null) {
-					if (!acja.getVenName().equalsIgnoreCase("VLDB")){
-					
-					
-					tmpJ = new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear());
-					if (setJou.contains(tmpJ)) {
-						Iterator<SortJou> itJ = setJou.iterator();
-						SortJou itS = null; 
-						while (itJ.hasNext()) {
-							itS = itJ.next();
-							if (itS.equals(tmpJ)) {
-//								itS.setScore(itS.getScore() +  tmpJ.getScore());
-								
-							}
-						}
-						
-					} else {
-						setJou.add(tmpJ);
-					}
-				}
-				}
-				years.add(acja.getPubYear());
-				
-			}
-//			years.add("1995");
-			years.add("2016");
-//			Object[] affArr = setAff.stream().sorted().toArray();
-//			Object[] athArr = setAth.stream().sorted().toArray();
-//			Object[] conArr = setCon.stream().sorted().toArray();
-//			Object[] jouArr = setJou.stream().sorted().toArray();
-			
-			int size = (setAff.size() > Constants.ACJA_SHOW)  ? Constants.ACJA_SHOW : setAff.size();  
-			setAff.stream().sorted().limit(size).forEach( item ->{
-				acjaShow.getAffID().add(item.getAffID());
-				acjaShow.getAffName().add(item.getAffName());
-				acjaShow.getAffScore().add(item.getScore());
-			});
-			
-			setAth.stream().sorted().limit(size).forEach(item ->{
-				acjaShow.getAthID().add(item.getAthID());
-				acjaShow.getAthName().add(item.getAthName());
-				acjaShow.getAthScore().add(item.getScore());
-				
-			});
-			
-			setCon.stream().sorted().limit(size).forEach(item -> {
-				acjaShow.getConID().add(item.getConID());
-				acjaShow.getConName().add(item.getConName());
-				acjaShow.getConScore().add(item.getScore());
-			});
-			
-			setJou.stream().sorted().limit(size).forEach(item -> {
-				acjaShow.getJouID().add(item.getJouID());
-				acjaShow.getJouName().add(item.getJouName());
-				acjaShow.getJouScore().add(item.getScore());
-			});
-			
-			years.stream().sorted().forEach(item -> { 
-				acjaShow.getYears().add(item);
-			});
-			
-			// current years
-			//acjaShow.getYears().add("2016");
-			
-			acjaShow.setAllPaperNum(paperSize);
-			
-		}
-		
-		List<String> jouName = acjaShow.getJouName();
-		acjaShow.getJouScore();
-		int dest = -1;
-		for (int i = 0; i < jouName.size(); i++) {
-			if (jouName.get(i).equalsIgnoreCase("SIGMOD")) {
-				jouName.remove(i);
-				dest = i;
-				break;
-			}
-		}
-		if (dest != -1) {
-			acjaShow.getJouID().remove(dest);
-			acjaShow.getJouScore().remove(dest);
-			dest = -1;
-		}
-		
-		LOG.info("conference ID : " + acjaShow.getConID() + " , conference score : " + acjaShow.getConScore() + ", name : " + acjaShow.getConName() );
-		LOG.info("journal ID : " + acjaShow.getJouID() + " , journal score : " + acjaShow.getJouScore() + ", name : " + acjaShow.getJouName() );
-		LOG.info("author ID: " + acjaShow.getAthID() + ", author score: " + acjaShow.getAthScore() + ", name: " + acjaShow.getAthName());
-		LOG.info("affiliation: " + acjaShow.getAffID() + ", affName score : " + acjaShow.getAffScore() +", name : " + acjaShow.getAffName() );
-		return acjaShow;
-	}
-	
+//
+//				}
+//				if (acja.getJouID() != null) {
+//					if (!acja.getVenName().equalsIgnoreCase("VLDB")){
+//
+//
+//					tmpJ = new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear());
+//					if (setJou.contains(tmpJ)) {
+//						Iterator<SortJou> itJ = setJou.iterator();
+//						SortJou itS = null;
+//						while (itJ.hasNext()) {
+//							itS = itJ.next();
+//							if (itS.equals(tmpJ)) {
+////								itS.setScore(itS.getScore() +  tmpJ.getScore());
+//
+//							}
+//						}
+//
+//					} else {
+//						setJou.add(tmpJ);
+//					}
+//				}
+//				}
+//				years.add(acja.getPubYear());
+//
+//			}
+////			years.add("1995");
+//			years.add("2016");
+////			Object[] affArr = setAff.stream().sorted().toArray();
+////			Object[] athArr = setAth.stream().sorted().toArray();
+////			Object[] conArr = setCon.stream().sorted().toArray();
+////			Object[] jouArr = setJou.stream().sorted().toArray();
+//
+//			int size = (setAff.size() > Constants.ACJA_SHOW)  ? Constants.ACJA_SHOW : setAff.size();
+//			setAff.stream().sorted().limit(size).forEach( item ->{
+//				acjaShow.getAffID().add(item.getAffID());
+//				acjaShow.getAffName().add(item.getAffName());
+//				acjaShow.getAffScore().add(item.getScore());
+//			});
+//
+//			setAth.stream().sorted().limit(size).forEach(item ->{
+//				acjaShow.getAthID().add(item.getAthID());
+//				acjaShow.getAthName().add(item.getAthName());
+//				acjaShow.getAthScore().add(item.getScore());
+//
+//			});
+//
+//			setCon.stream().sorted().limit(size).forEach(item -> {
+//				acjaShow.getConID().add(item.getConID());
+//				acjaShow.getConName().add(item.getConName());
+//				acjaShow.getConScore().add(item.getScore());
+//			});
+//
+//			setJou.stream().sorted().limit(size).forEach(item -> {
+//				acjaShow.getJouID().add(item.getJouID());
+//				acjaShow.getJouName().add(item.getJouName());
+//				acjaShow.getJouScore().add(item.getScore());
+//			});
+//
+//			years.stream().sorted().forEach(item -> {
+//				acjaShow.getYears().add(item);
+//			});
+//
+//			// current years
+//			//acjaShow.getYears().add("2016");
+//
+//			acjaShow.setAllPaperNum(paperSize);
+//
+//		}
+//
+//		List<String> jouName = acjaShow.getJouName();
+//		acjaShow.getJouScore();
+//		int dest = -1;
+//		for (int i = 0; i < jouName.size(); i++) {
+//			if (jouName.get(i).equalsIgnoreCase("SIGMOD")) {
+//				jouName.remove(i);
+//				dest = i;
+//				break;
+//			}
+//		}
+//		if (dest != -1) {
+//			acjaShow.getJouID().remove(dest);
+//			acjaShow.getJouScore().remove(dest);
+//			dest = -1;
+//		}
+//
+//		LOG.info("conference ID : " + acjaShow.getConID() + " , conference score : " + acjaShow.getConScore() + ", name : " + acjaShow.getConName() );
+//		LOG.info("journal ID : " + acjaShow.getJouID() + " , journal score : " + acjaShow.getJouScore() + ", name : " + acjaShow.getJouName() );
+//		LOG.info("author ID: " + acjaShow.getAthID() + ", author score: " + acjaShow.getAthScore() + ", name: " + acjaShow.getAthName());
+//		LOG.info("affiliation: " + acjaShow.getAffID() + ", affName score : " + acjaShow.getAffScore() +", name : " + acjaShow.getAffName() );
+//		return acjaShow;
+//	}
+//
+
 	/**
 	 * 
 	 * @param list
@@ -585,7 +589,6 @@ public class SearchAllService {
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("color title spends : " + (end - start) + " ms");
-
 	}
 	
 	private void acjaUpper(ACJAShow acja) {

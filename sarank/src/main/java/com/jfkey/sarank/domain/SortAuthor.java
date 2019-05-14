@@ -11,15 +11,18 @@ public class SortAuthor implements Comparable<SortAuthor>{
 	private String athID;
 	private String athName;
 	private double score;
+	private int times;
+
 	public SortAuthor() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public SortAuthor(String athID, String athName, double score) {
+	public SortAuthor(String athID, String athName, double score, int times) {
 		super();
 		this.athID = athID;
 		this.athName = athName;
 		this.score = score;
+		this.times = times;
 	}
 	public String getAthID() {
 		return athID;
@@ -39,10 +42,15 @@ public class SortAuthor implements Comparable<SortAuthor>{
 	public void setScore(double score) {
 		this.score = score;
 	}
-	
-	
-	
-	
+
+	public int getTimes() {
+		return times;
+	}
+
+	public void setTimes(int times) {
+		this.times = times;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -74,9 +82,9 @@ public class SortAuthor implements Comparable<SortAuthor>{
 	}
 	@Override
 	public int compareTo(SortAuthor sa) {
-		if (sa.score > score) {
+		if (sa.score * sa.getTimes() > score * times ) {
 			return 1;
-		} else if (sa.score < score) {
+		} else if (sa.score * sa.getTimes() < score * times) {
 			return -1;
 		} else {
 			return 0;

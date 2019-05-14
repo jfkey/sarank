@@ -163,16 +163,16 @@ public class VenueService {
 			while (it.hasNext()) {
 				acja = it.next();
 				for (int i = 0; i < acja.getAffIDs().length; i ++) {
-					setAff.add(new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i]));
+					setAff.add(new SortAff(acja.getAffIDs()[i], acja.getAffNames()[i], acja.getAffScores()[i], 1));
 				}
 				for (int i = 0; i < acja.getAthIDs().length; i ++) {
-					setAth.add(new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i]) );
+					setAth.add(new SortAuthor(acja.getAthIDs()[i],acja.getAths()[i], acja.getAthScores()[i], 1) );
 				}
 				if (acja.getConID() != null) {
-					setCon.add( new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) );
+					setCon.add( new SortCon(acja.getConID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear(), 1) );
 				}
 				if (acja.getJouID() != null) {
-					setJou.add( new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear()) );
+					setJou.add( new SortJou(acja.getJouID(), acja.getVenName(), acja.getVenScore(), acja.getPubYear(), 1) );
 				}
 				years.add(acja.getPubYear());
 			}

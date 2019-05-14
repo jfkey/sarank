@@ -12,13 +12,16 @@ public class SortCon implements Comparable<SortCon> {
 	private String conName;
 	private double score;
 	private String year;
+	// the times of conference in search results
+	private int times;
 
-	public SortCon(String conID, String conName, double score, String year) {
+	public SortCon(String conID, String conName, double score, String year, int times) {
 		super();
 		this.conID = conID;
 		this.conName = conName;
 		this.score = score;
 		this.year = year;
+		this.times = times;
 	}
 
 	public SortCon() {
@@ -58,7 +61,13 @@ public class SortCon implements Comparable<SortCon> {
 		this.year = year;
 	}
 
-	
+	public int getTimes() {
+		return times;
+	}
+
+	public void setTimes(int times) {
+		this.times = times;
+	}
 
 	@Override
 	public int hashCode() {
@@ -87,9 +96,9 @@ public class SortCon implements Comparable<SortCon> {
 
 	@Override
 	public int compareTo(SortCon sc) {
-		if (sc.score > score) {
+		if (sc.score * sc.getTimes() > score * times) {
 			return 1;
-		} else if (sc.score < score) {
+		} else if (sc.score *sc.getTimes()< score * times) {
 			return -1;
 		} else {
 			return 0;

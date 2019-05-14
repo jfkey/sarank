@@ -163,11 +163,11 @@ public class AuthorService {
 			
 			// listAff consist author affiliation and co-author affiliation
 			for (AffYear tmp : affYear) {
-				listAff.add(new SortAff(tmp.getAffID(), tmp.getAffName(), 0));
+				listAff.add(new SortAff(tmp.getAffID(), tmp.getAffName(), 0, 1));
 			}
 			for (AuthorHit tmp : coAuthors) {
-				listAth.add(new SortAuthor(tmp.getAthID(), tmp.getAthName() + " (" + tmp.getCo_Times() + ")", 0));
-				listAff.add(new SortAff(tmp.getAffID(), tmp.getAffName(), 0));
+				listAth.add(new SortAuthor(tmp.getAthID(), tmp.getAthName() + " (" + tmp.getCo_Times() + ")", 0, 1));
+				listAff.add(new SortAff(tmp.getAffID(), tmp.getAffName(), 0, 1));
 			}
 			SortCon2 conTmp = null;
 			SortJou2 jouTmp = null;
