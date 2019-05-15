@@ -5,7 +5,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
 				 
 	
 	chart_search_author.setOption({
-	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78'],
+	color:['#FFAE8B','#428BCA','#67E0E3','#EEDD78', '#7D96BC', '#9BD4B9', '#E7BCF3', '#96BFFF', '#837BEA'],
 	 title : {
         text: 'Author',
         x:'left',
@@ -60,8 +60,19 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
 				data: data.authorName
 			},
 			series: [{
+				data:(function(){
+				var res = [];
+				var len =  data.authorWeight.length; 
+				for (var i = 0, size = len;i<size; i++ ) {
+					res.push({
+	                	name: data.authorName[i],
+	                	value: data.authorWeight[i]
+	                });	
+				}
+                return res; 
 				
-				data: data.authorWeight
+				})() 
+				
 			}]
 		});
 	});

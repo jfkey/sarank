@@ -5,7 +5,7 @@ var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'))
 				 
 	// 7D96BC 67E0E3
 	chart_search_conf.setOption({
-	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78'],
+	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78','#E7BCF3', '#96BFFF', '#837BEA'],
 	 title : {
         text: 'Conference',
         x:'left',
@@ -35,12 +35,12 @@ var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'))
             radius : '70%',
             center: ['45%', '60%'],
             data:[
-                {value:2, name:'SIGMOD'},
-                {value:3, name:'VLDB'},
                 {value:1.5, name:'ICDE'},
                 {value:1.3, name:'WSDM'}, 
                 {value:1.1, name:'CIKM'},
-                {value:0.7, name:'ICDM'}
+                {value:0.7, name:'ICDM'},
+                {value:2, name:'SIGMOD'},
+                {value:3, name:'VLDB'}
                 
             ],
             itemStyle: {
@@ -60,8 +60,20 @@ $.get('/search/chartconf').done(function(data) {
 			data: data.confName
 		},
 		series: [{
-			
-			data: data.confWeight
+			data:(function(){
+				var res = [];
+				var len =  data.confWeight.length; 
+				for (var i = 0, size = len;i<size; i++ ) {
+					res.push({
+	                	name: data.confName[i],
+	                	value: data.confWeight[i]
+	                });	
+				}
+                return res; 
+				
+			})() 
 		}]
 	});
 });
+
+ 

@@ -1,5 +1,7 @@
 package com.jfkey.sarank.domain;
 
+import java.util.Objects;
+
 /**
  * 
  * @author junfeng Liu
@@ -70,31 +72,6 @@ public class SortCon implements Comparable<SortCon> {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((conName == null) ? 0 : conName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SortCon other = (SortCon) obj;
-		if (conName == null) {
-			if (other.conName != null)
-				return false;
-		} else if (!conName.equals(other.conName))
-			return false;
-		return true;
-	}
-
-	@Override
 	public int compareTo(SortCon sc) {
 		if (sc.score * sc.getTimes() > score * times) {
 			return 1;
@@ -105,4 +82,17 @@ public class SortCon implements Comparable<SortCon> {
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SortCon sortCon = (SortCon) o;
+		// return Objects.equals(conName, sortCon.conName);
+		return conName.equalsIgnoreCase(sortCon.conName);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(conName);
+	}
 }

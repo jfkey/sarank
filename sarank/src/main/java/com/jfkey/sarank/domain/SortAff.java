@@ -1,6 +1,8 @@
 package com.jfkey.sarank.domain;
 
 
+import java.util.Objects;
+
 /**
  * 
  * @author junfeng Liu
@@ -60,37 +62,6 @@ public class SortAff implements Comparable<SortAff>{
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((affID == null) ? 0 : affID.hashCode());
-		result = prime * result + ((affName == null) ? 0 : affName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SortAff other = (SortAff) obj;
-		if (affID == null) {
-			if (other.affID != null)
-				return false;
-		} else if (!affID.equals(other.affID))
-			return false;
-		if (affName == null) {
-			if (other.affName != null)
-				return false;
-		} else if (!affName.equals(other.affName))
-			return false;
-		return true;
-	}
-	
-	@Override
 	public int compareTo(SortAff sf) {
 		if (sf.getScore() * sf.getTimes() > score * times) {
 			return 1;
@@ -100,6 +71,19 @@ public class SortAff implements Comparable<SortAff>{
 			return 0;
 		}
 	}
-	
-	
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SortAff sortAff = (SortAff) o;
+		// return Objects.equals(affName, sortAff.affName);
+		return affName.equalsIgnoreCase(sortAff.affName);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(affName);
+	}
 }
