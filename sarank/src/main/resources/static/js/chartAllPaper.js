@@ -29,13 +29,13 @@ var myChart = echarts.init(document.getElementById('chartAllPapers'));
 			    yAxis: {
 			    	type: 'value',
 			    	show:true,
-			    	name:'number of papers' 
+			    	name:'Counts' 
 			    },
 			    series: [ 
 			    		{
 			            name: 'not-first author',
 			            type: 'bar',
-			            color :['#b8d2c7'],
+			            color :['#516b91'],
 			            barWidth:'40%',
 			            stack: 'all papers',
 			            label: {
@@ -47,7 +47,7 @@ var myChart = echarts.init(document.getElementById('chartAllPapers'));
 			       },  {
 			            name: 'first author',
 			            type: 'bar', 
-			            color :['#f5e8c8'],
+			            color :['#59c4e6'],
 			            barWidth:'40%',
 			            stack: 'all papers',
 			            label: {

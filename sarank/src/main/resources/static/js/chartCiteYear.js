@@ -30,13 +30,13 @@ var chart_cite_year = echarts.init(document.getElementById('chartCiteYear'));
 			    yAxis: {
 			    	type: 'value',
 			    	show:true,
-			    	name:'citations' 
+			    	name:'Citations' 
 			    },
 			    series: [ 
 			    		{
 			            name: 'citations',
 			            type: 'bar',
-			            color :['#61a0a8'],
+			            color :['#3685BC'],
 			            barWidth:'70%',
 			            stack: 'all papers',
 			            label: {
@@ -45,10 +45,10 @@ var chart_cite_year = echarts.init(document.getElementById('chartCiteYear'));
 			                    position: 'insideRight'
 			                }
 			            },
-			            data: [20,12,33,22,43,18,26]
+			            data: [20,12,33,22]
 			       }
-			    		
-			       ],
+			       ]
+ 
 			});
 			
 			// myChart.showLoading();

@@ -3,6 +3,7 @@ package com.jfkey.sarank.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jfkey.sarank.domain.ACJAShow;
@@ -32,7 +30,7 @@ import com.jfkey.sarank.utils.SearchType;
 public class SearchAllController {
 
 	private final int BUTTONS_TO_SHOW = 5;
-
+	private final int INITIAL_PAGE = 0;
 	private static final Logger LOG = LoggerFactory.getLogger(SearchAllController.class);
 
 	// it will be used in pagination. and rank type. 
@@ -70,30 +68,28 @@ public class SearchAllController {
 	}
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara,  HttpSession session ) {
-		LOG.info("search parameter : " + searchPara);
-		String k = searchPara.getKeywords();
-		String aff = searchPara.getAffName();
-		String ath = searchPara.getAuthor(); 
-		String key = k == null ? "" : k + aff == null ? "": aff + ath == null ? "" : ath;
-		
+	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara,
+	@RequestParam("page") Optional<Integer> page, @RequestParam("rt") Optional<RankType> rt ) {
+		// 1. set current page, set rank type default
+		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
+		// int evalRt = (rankType.isPresent()) ? rankType.get() : 1;
+
+		searchPara.setPage(evalPage);
+		searchPara.setRt(rt.get());
 		searchPara.setFormatStr(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
 		searchPara.setAuthor(searchPara.getAuthor().trim());
-		searchPara.setPage(searchPara.getPage() - 1);
-		
+		searchPara.setVenName(searchPara.getVenName().trim());
+		searchPara.setAffName(searchPara.getAffName().trim());
+		LOG.info("search parameter : " + searchPara);
+
+
 		Map<String, Object> searchResult = searchAllService.search(searchPara);
 		
 		// default doing keywords search.
 		if ( searchResult.get(Constants.SEARCH_TYPE) == null || searchResult.get(Constants.SEARCH_TYPE) == SearchType.KEYWORDS  ) {
 			ModelAndView mv= new ModelAndView("/main");
-			// get acjashow only used in search keywords page
-			
-			ACJAShow acjaShow = (ACJAShow)session.getAttribute(key);
-			if (acjaShow == null) {
-				acjaShow = searchAllService.getACJAShow(searchPara);
-				session.setAttribute(key, acjaShow);
-			}
-			
+
+			ACJAShow acjaShow = searchAllService.getACJAShow(searchPara);
 			mv.addAllObjects(searchResult);
 			mv.addObject("acjaShow", acjaShow);		
 			mv.addObject("para", searchPara );
@@ -105,7 +101,6 @@ public class SearchAllController {
 			mv.addObject("searchPara", searchPara );
 			return mv;
 		} else if (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AFFILIATION) {
-
 			ModelAndView mv= new ModelAndView("/affs");
 			mv.addAllObjects(searchResult);
 			mv.addObject("para", searchPara );

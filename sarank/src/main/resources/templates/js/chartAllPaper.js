@@ -29,7 +29,7 @@ var myChart = echarts.init(document.getElementById('chartAllPapers'));
 			    yAxis: {
 			    	type: 'value',
 			    	show:true,
-			    	name:'number of papers' 
+			    	name:'Counts' 
 			    },
 			    series: [ 
 			    		{

@@ -30,7 +30,7 @@ var chart_cite_year = echarts.init(document.getElementById('chartCiteYear'));
 			    yAxis: {
 			    	type: 'value',
 			    	show:true,
-			    	name:'citations' 
+			    	name:'Citations' 
 			    },
 			    series: [ 
 			    		{

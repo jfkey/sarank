@@ -2,6 +2,7 @@ package com.jfkey.sarank.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.jfkey.sarank.domain.SearchPara;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,8 +47,11 @@ public class PaperDetailsController {
 			@RequestParam(value="page",required=false) String page, HttpSession session) {
 		if (type.equals(TYPE_INFO)) {
 			ModelAndView mv= new ModelAndView("/paper_info_info");
+			SearchPara para = new SearchPara();
+			mv.addObject("para", para);
 			mv.addObject(DETAILS, paperDetailsService.getPaperDetails(paid));
 			mv.addObject(PAID, paid);
+
 			return mv;
 		} else if (type.equals(TYPE_REF)) {
 			if (page == null) {

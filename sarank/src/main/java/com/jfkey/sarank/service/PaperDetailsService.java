@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.jfkey.sarank.utils.FormatWords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,8 @@ public class PaperDetailsService {
 	}
 	
 	public String getPaperTitleByID (String paID) {
-		return getIteratorData( paperDetailsRepository.getPaperTitleByID(paID)).get(0);
+		String title = getIteratorData( paperDetailsRepository.getPaperTitleByID(paID)).get(0);
+		return FormatWords.sentenceToUpper(title);
 	}
 	
 	/**

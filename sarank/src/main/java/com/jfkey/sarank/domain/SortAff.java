@@ -79,7 +79,9 @@ public class SortAff implements Comparable<SortAff>{
 		if (o == null || getClass() != o.getClass()) return false;
 		SortAff sortAff = (SortAff) o;
 		// return Objects.equals(affName, sortAff.affName);
-		return affName.equalsIgnoreCase(sortAff.affName);
+		// return affName.equalsIgnoreCase(sortAff.affName);
+		return affName.equalsIgnoreCase(sortAff.getAffName());
+
 	}
 
 	@Override

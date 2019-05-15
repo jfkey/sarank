@@ -73,7 +73,6 @@ public class ACJAInfoHandler {
                     if (listAff.contains(tmpAff)){
                         tmpAff = listAff.get(listAff.indexOf(tmpAff));
                         tmpAff.setTimes(tmpAff.getTimes() + 1);
-                        // listAff.add(tmpAff);
                     }
                     listAff.add(tmpAff);
                 }
@@ -83,7 +82,6 @@ public class ACJAInfoHandler {
                     if (listAuthor.contains(tmpAth)) {
                         tmpAth = listAuthor.get(listAuthor.indexOf(tmpAth));
                         tmpAth.setTimes(tmpAth.getTimes() + 1);
-//                        listAuthor.add(tmpAth);
                     } else {
                         listAuthor.add(tmpAth);
                     }
@@ -93,7 +91,6 @@ public class ACJAInfoHandler {
                     if (listCon.contains(tmpConf)) {
                         tmpConf = listCon.get(listCon.indexOf(tmpConf));
                         tmpConf.setTimes(tmpConf.getTimes() + 1);
-//                        listCon.add(tmpConf);
                     } else {
                         listCon.add(tmpConf);
                     }
@@ -104,7 +101,6 @@ public class ACJAInfoHandler {
                         if (listJou.contains(tmpJou)) {
                             tmpJou = listJou.get(listJou.indexOf(tmpJou));
                             tmpJou.setTimes(tmpJou.getTimes() + 1);
-//                            listJou.add(tmpJou);
                         } else {
                             listJou.add(tmpJou);
                         }

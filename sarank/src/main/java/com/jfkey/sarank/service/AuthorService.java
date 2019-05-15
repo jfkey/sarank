@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.jfkey.sarank.utils.FormatWords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +49,8 @@ import com.jfkey.sarank.utils.TopKRank;
 public class AuthorService {
 	@Autowired
 	private AuthorRepositroy authorRepository;
-	
+	private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
+
 	/*all papers by this author*/
 	private List<AuthorInfoBean> allPapers;
 	
@@ -83,7 +87,7 @@ public class AuthorService {
 		// allPapers = new ArrayList<SearchHit>();
 		long s1 = System.currentTimeMillis();
 		allPapers = getIteratorData(authorRepository.getAllPapers(athID));
-		System.out.println("repository getAllPapers: search auhtor " + athID + "all papers, spends : " + (System.currentTimeMillis() - s1)/1000 + " s.");
+		LOG.info("repository getAllPapers: search auhtor " + athID + "all papers, spends : " + (System.currentTimeMillis() - s1)/1000 + " s.");
 		return allPapers;
 	}
 
@@ -144,12 +148,14 @@ public class AuthorService {
 		}
 		long s2 = System.currentTimeMillis();
 		List<PaperSimpleBean> hotPapers = getIteratorData(authorRepository.getPaperPerPage(listID));
-		System.out.println("search author hot papers : " + athID + " spends " + (System.currentTimeMillis() - s2)/1000 + " s.");
+		// to upper words
+		capitalize(hotPapers);
+
+		LOG.info("search author hot papers : " + athID + " spends " + (System.currentTimeMillis() - s2)/1000 + " s.");
 		return hotPapers;
-		
 	}
-	
-	
+
+
 	public ACJAShow getACJAShow() {
 		// co author,  conference,  journal, affiliation
 		if (allPapers == null) {
@@ -260,14 +266,14 @@ public class AuthorService {
 						}
 						
 					} else {
-						tmp.getIdAff().put(sigPaper.getAffID()[i], new AuthorSimpleAff(sigPaper.getAffID()[i], sigPaper.getAff()[i], sigPaper.getYear(), 1) );
+						tmp.getIdAff().put(sigPaper.getAffID()[i], new AuthorSimpleAff(sigPaper.getAffID()[i], FormatWords.sentenceToUpper(sigPaper.getAff()[i]), sigPaper.getYear(), 1) );
 					}
 				} else {
-					tmp = new AuthorSimpleDesc(sigPaper.getAuthorsID()[i],sigPaper.getAuthors()[i], 1);
+					tmp = new AuthorSimpleDesc(sigPaper.getAuthorsID()[i], FormatWords.sentenceToUpper(sigPaper.getAuthors()[i]), 1);
 					if (sigPaper.getAffID() == null || sigPaper.getAffID().length != sigPaper.getAuthorsID().length) {
 						continue;
 					} else {
-						tmp.getIdAff().put(sigPaper.getAffID()[i], new AuthorSimpleAff(sigPaper.getAffID()[i], sigPaper.getAff()[i], sigPaper.getYear(), 1));
+						tmp.getIdAff().put(sigPaper.getAffID()[i], new AuthorSimpleAff(sigPaper.getAffID()[i], FormatWords.sentenceToUpper(sigPaper.getAff()[i]), sigPaper.getYear(), 1));
 					}
 					idAuthor.put(sigPaper.getAuthorsID()[i],tmp);
 				}
@@ -365,7 +371,7 @@ public class AuthorService {
 		while (idIt.hasNext()) {
 			idNameMap = idIt.next();
 		}
-		String athName = (String)idNameMap.get("name");
+		String athName = FormatWords.sentenceToUpper((String)idNameMap.get("name"));
 		athIDName.put(athID, athName);
 		
 //		athName = list.get(0).getValue().getAthName();
@@ -568,11 +574,11 @@ public class AuthorService {
 	}
 	
 	
-	/**
-	 * rearrange a list of {@link com.jfkey.sarank.domain.AuthorHit} order by an array of IDs
-	 * @param ids  an array of String
-	 * @param authorHit a list of AuthorHit
-	 */
+//	/**
+//	 * rearrange a list of {@link com.jfkey.sarank.domain.AuthorHit} order by an array of IDs
+//	 * @param ids  an array of String
+//	 * @param authorHit a list of AuthorHit
+//	 */
 //	private void changeOrder(String[] ids, List<AuthorHit> authorHit) {
 //		String tmpID = "";
 //		AuthorHit pa = null;
@@ -627,7 +633,7 @@ public class AuthorService {
 	/**
 	 * colored the author
 	 * @param list a list of PaperSimpleBean 
-	 * @param athName author name
+	 *
 	 */
 	public void colorAuthor(List<PaperSimpleBean>list, String athid) {
 		Iterable<Map<String, Object>> IDNameIt = authorRepository.getAuthorName(athid);
@@ -635,7 +641,7 @@ public class AuthorService {
 		if (listIDName == null) {
 			return ;
 		} 
-		String athName = (String)listIDName.get(0).get("name");
+		String athName = FormatWords.sentenceToUpper((String)listIDName.get(0).get("name"));
 		
 		String colorType = "red";
 		String formatAthStr = "<span class=\"" + colorType + "\">" + athName
@@ -648,9 +654,21 @@ public class AuthorService {
 			}
 		}
 	}
-	
-	
-	
+
+	private void capitalize (List<PaperSimpleBean> list) {
+		for (PaperSimpleBean tmp : list) {
+			tmp.setTitle(FormatWords.sentenceToUpper((tmp.getTitle())));
+			int len = tmp.getAuthors().length > 5 ? 5 :tmp.getAuthors().length;
+
+			String[] authors = new String[len];
+			for (int i = 0; i < len; i ++) {
+				authors[i] = FormatWords.sentenceToUpper((tmp.getAuthors()[i]));
+			}
+			tmp.setAuthors(authors);
+		}
+	}
+
+
 	public String getAthName() {
 		return this.athName;
 	}

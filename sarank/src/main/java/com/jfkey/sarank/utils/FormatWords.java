@@ -26,7 +26,7 @@ public class FormatWords {
         List<String> lowerCase = new ArrayList<>();
 
         lowerCase.add("and");lowerCase.add("of"); lowerCase.add("or");lowerCase.add("for");
-        lowerCase.add("a"); lowerCase.add("an "); lowerCase.add("in");
+        lowerCase.add("a"); lowerCase.add("an "); lowerCase.add("in"); lowerCase.add("at");
         for (String tmpArr: arr) {
             if (lowerCase.contains(tmpArr)){
             } else{
@@ -43,7 +43,7 @@ public class FormatWords {
      * @param string
      * @return to upper word
      */
-    private static String upperWordFirstChar(String string) {
+    public static String upperWordFirstChar(String string) {
         char[] charArray = string.toCharArray();
         if (charArray[0] >= 97 && charArray[0] <= 122 ) {
             charArray[0] -= 32;

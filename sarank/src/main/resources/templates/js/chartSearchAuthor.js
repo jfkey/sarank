@@ -25,6 +25,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
         right: 10,
         top: 20,
         bottom: 20,
+        show: false, 
         data:['Jiawei Han', 'Wenfei fan','Jerry Xu Yu','Xindong Wu',  'Shuai Ma', 'Xuelian lin']
   
     },

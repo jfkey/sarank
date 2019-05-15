@@ -60,10 +60,10 @@ public interface Constants {
 	public final int FOS_SIZE = 5;
 	
 	/**co_author numbers will be shown `CO_AUTHOR_NUMBER - 1`*/
-	public final int CO_AUTHOR_NUMBER = 11;
+	public final int CO_AUTHOR_NUMBER = 8;
 	
 	/** aff_number will be shown in author info page.*/
-	public final int AFF_NUMBER = 8;
+	public final int AFF_NUMBER = 7;
 	
 	/**only show 10 influent Author conference journal affiliation*/
 	public final int ACJA_SHOW = 10;

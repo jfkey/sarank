@@ -3,7 +3,7 @@ package com.jfkey.sarank.service;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.jfkey.sarank.utils.ACJAInfoHandler;
+import com.jfkey.sarank.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,6 @@ import com.jfkey.sarank.domain.PaperScoresBean;
 import com.jfkey.sarank.domain.SearchHits;
 import com.jfkey.sarank.domain.SearchPara;
 import com.jfkey.sarank.repository.SearchRepository;
-import com.jfkey.sarank.utils.Constants;
-import com.jfkey.sarank.utils.RankType;
-import com.jfkey.sarank.utils.SearchType;
 
 /**
  * 
@@ -38,15 +35,12 @@ public class SearchAllService {
 	private Map<String, Object> authorPie;
 	// conference pie data
 	private Map<String, Object> confPie;
-
-	
 	private static final Logger LOG = LoggerFactory.getLogger(SearchAllService.class);
 
 	public Map<String, Object> getAuthorPie () {
 		LOG.info("authorPie: " + authorPie);
 		return authorPie;
 	}
-
 	public Map<String, Object> getConfPie( ) {
 		LOG.info("confPie: " + confPie);
 		return confPie;
@@ -71,7 +65,7 @@ public class SearchAllService {
 		// String rankType = getRtString(searchPara.getRt());
 		String rankType = "3";
 		int skip = 0;
-		int limit  = Constants.PRE_PAGE_SIZE * 3;
+		int limit  = Constants.PRE_PAGE_SIZE * 4;
 		double alpha = Constants.RELEVANCE_LOW;
 		double nor = Constants.C;
 		
@@ -81,8 +75,6 @@ public class SearchAllService {
 		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
 		int allNumber = getHitsID(queryKeywords, acjaIDs);
 
-
-
 		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(searchRepository.getACJAInfo(acjaIDs), allNumber);
 		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
 		authorPie = acjaInfoHandler.getSearchAuthorPie();
@@ -90,7 +82,7 @@ public class SearchAllService {
 
 		// getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(acjaIDs), allNumber);
 		// acjaShow upper. 
-		acjaUpper(acjaShow);
+		// acjaUpper(acjaShow);
 		return acjaShow;
 	}
 	
@@ -98,8 +90,7 @@ public class SearchAllService {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		String queryParam = searchPara.getFormatStr();
-		// String rankType = getRtString(searchPara.getRt());
-        String rankType = "3";
+		String rankType = "3";
 		int skip = Constants.PRE_PAGE_SIZE * (searchPara.getPage());
 		int limit  = Constants.PRE_PAGE_SIZE * (searchPara.getPage() + 1);
 		double alpha = Constants.RELEVANCE_LOW;
@@ -137,14 +128,11 @@ public class SearchAllService {
 		List<PaperInSearchBean> searchedPaperList2 = getIteratorData(searchedPaperIt2);
 		List<PaperInSearchBean> searchedPaperList3 = getIteratorData(searchedPaperIt3);
 
-
-		// changeOrder(paIDs, searchedPaperList);
 		// title to upper
 		capitalize(searchedPaperList);
-		// capitalize(searchedPaperList2);
+
 		// color searched keywords
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
-		// colorTitle(searchedPaperList2, searchPara.getKeywords(), 1);
 
 		PaperInSearchBean pib = searchedPaperList.get(0);
 		pib.setVersions(232);
@@ -156,9 +144,7 @@ public class SearchAllService {
 		pib.setVersions(61);
 		searchedPaperList.set(2, pib);
 
-
 		result.put("paperList", searchedPaperList);
-
 
 		// List<PaperInSearchBean> searchedPaperList2 = new ArrayList<PaperInSearchBean>();
 		// searchedPaperList2.addAll(searchedPaperList2);
@@ -241,12 +227,10 @@ public class SearchAllService {
 					}
 				}
 				listHits.add(new AuthorHit(aa.getAthID(), aa.getAthName(), affID, affName, 1, aa.getPaNumber()));
-			
 			}
 		} 
 	
 		result.put("authors", listHits);
-		
 		result.put(Constants.SEARCH_TYPE, SearchType.AUTHOR);
 		return result;
 	}
@@ -574,7 +558,7 @@ public class SearchAllService {
 			for (PaperInSearchBean tmp : list) {
 				title = tmp.getTitle();
 				for (String str : split) {
-					str = upperWordFirstChar(str);
+					str = FormatWords.upperWordFirstChar(str);
 //					title = title.replaceAll("(?i)" + str, "<span class=\""
 //							+ colorType + "\">" + str + "</span>");
 					title = title.replaceAll("(?i)" + str, "<span style=\""
@@ -594,34 +578,34 @@ public class SearchAllService {
 	private void acjaUpper(ACJAShow acja) {
 		List<String> affName = acja.getAffName();
 		for (int i = 0; i < affName.size(); i ++) {
-			affName.set(i, sentenceToUpper(affName.get(i)));
+			affName.set(i, FormatWords.sentenceToUpper(affName.get(i)));
 		}
 		List<String> conName = acja.getConName();
 		for (int i = 0; i < conName.size(); i++) {
-			conName.set(i, upperAllChar(conName.get(i)));
+			conName.set(i, FormatWords.sentenceToUpper((conName.get(i))));
 		}
 		List<String> jouName = acja.getJouName();
 		for (int i = 0; i < jouName.size(); i ++) {
 			if (jouName.get(i).equalsIgnoreCase("sigmod")) {
 				jouName.set(i, "SIGMOD RECORD");
 			}
-			jouName.set(i, upperAllChar(jouName.get(i)));
+			jouName.set(i, FormatWords.upperAllChar((jouName.get(i))));
 		}
 		List<String> athName = acja.getAthName();
 		for (int i = 0; i < athName.size(); i ++) {
-			athName.set(i, sentenceToUpper(athName.get(i)));
+			athName.set(i, FormatWords.sentenceToUpper((athName.get(i))));
 		}
 		
 	}
 	
 	private void capitalize (List<PaperInSearchBean> list) {
 		for (PaperInSearchBean tmp : list) {
-			tmp.setTitle(sentenceToUpper(tmp.getTitle()));
+			tmp.setTitle(FormatWords.sentenceToUpper((tmp.getTitle())));
 //			String[] authors = tmp.getAuthors();
 			int len = tmp.getAuthors().length > 5 ? 6 :tmp.getAuthors().length;
 			String[] authors = new String[len];
 			for (int i = 0; i < tmp.getAuthors().length; i ++) {
-				authors[i] = sentenceToUpper(tmp.getAuthors()[i]);
+				authors[i] = FormatWords.sentenceToUpper((tmp.getAuthors()[i]));
 //				if (i <= 4 ) {
 //					authors[i] = sentenceToUpper(tmp.getAuthors()[i]);
 //				} else if (i == 5) {
@@ -635,48 +619,48 @@ public class SearchAllService {
 		}
 	}
 
-	/**
-	 * 
-	 * @param tar
-	 * @return sentence level toUpper First Char
-	 */
-	private String sentenceToUpper(String tar) {
-		// a-z：97-122  	A-Z：65-90 0-9：48-57
-		StringBuilder sb = new StringBuilder();
-		
-		String[] arr = tar.split(" ");
-		String[] lowerCase = {"and", "or", "of", "a", "in", "for"};
-		for (String tmpArr: arr) {
-			if (tmpArr.equals(lowerCase[0]) || tmpArr.equals(lowerCase[1]) || tmpArr.equals(lowerCase[2]) || tmpArr.equals(lowerCase[3]) ||tmpArr.equals(lowerCase[4]) ||tmpArr.equals(lowerCase[5]) ){
-			} else{
-				tmpArr = upperWordFirstChar(tmpArr);
-			}	
-			sb.append(tmpArr + " ");
-		}
-		return sb.toString();
-	}
-	
-	/**
-	 * 
-	 * @param string
-	 * @return to upper word
-	 */
-	private String upperWordFirstChar(String string) {
-		char[] charArray = string.toCharArray();
-		if (charArray[0] >= 97 && charArray[0] <= 122 ) {
-			charArray[0] -= 32;
-		}
-		return String.valueOf(charArray);
-	}
-	
-	private String upperAllChar(String string) {
-		char[] charArray = string.toCharArray();
-		for (int i = 0; i < charArray.length; i ++) {
-			if (charArray[i] >= 97 && charArray[i] <= 122 ) {
-				charArray[i] -= 32;
-			}	
-		}
-		return String.valueOf(charArray);
-	}
-	
+//	/**
+//	 *
+//	 * @param tar
+//	 * @return sentence level toUpper First Char
+//	 */
+//	private String sentenceToUpper(String tar) {
+//		// a-z：97-122  	A-Z：65-90 0-9：48-57
+//		StringBuilder sb = new StringBuilder();
+//
+//		String[] arr = tar.split(" ");
+//		String[] lowerCase = {"and", "or", "of", "a", "in", "for"};
+//		for (String tmpArr: arr) {
+//			if (tmpArr.equals(lowerCase[0]) || tmpArr.equals(lowerCase[1]) || tmpArr.equals(lowerCase[2]) || tmpArr.equals(lowerCase[3]) ||tmpArr.equals(lowerCase[4]) ||tmpArr.equals(lowerCase[5]) ){
+//			} else{
+//				tmpArr = upperWordFirstChar(tmpArr);
+//			}
+//			sb.append(tmpArr + " ");
+//		}
+//		return sb.toString();
+//	}
+//
+//	/**
+//	 *
+//	 * @param string
+//	 * @return to upper word
+//	 */
+//	private String upperWordFirstChar(String string) {
+//		char[] charArray = string.toCharArray();
+//		if (charArray[0] >= 97 && charArray[0] <= 122 ) {
+//			charArray[0] -= 32;
+//		}
+//		return String.valueOf(charArray);
+//	}
+//
+//	private String upperAllChar(String string) {
+//		char[] charArray = string.toCharArray();
+//		for (int i = 0; i < charArray.length; i ++) {
+//			if (charArray[i] >= 97 && charArray[i] <= 122 ) {
+//				charArray[i] -= 32;
+//			}
+//		}
+//		return String.valueOf(charArray);
+//	}
+//
 }

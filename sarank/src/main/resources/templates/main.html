@@ -177,7 +177,8 @@
 								<th:block th:each="name, nameStat: ${item.authors}">
 
 									<li>
-										<a style="color:rgb(0,128,0)" th:text="${item.authors[nameStat.index]}" >author1</a>,&nbsp;
+										<a style="color:rgb(0,128,0)" th:text="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
+										
 									</li>
 
 								</th:block>
@@ -306,7 +307,7 @@
 
 			<div >
 				<div class="col-md-12" id = "chartSearchAuthor" style=" height: 280px; margin-top: 30px;"  > </div>
-				<div class="col-md-12"  id = "chartSearchConf" style="height: 280px; margin-top: 30px; "  > </div>
+				<div class="col-md-12"  id = "chartSearchConf" style="height: 280px; margin-top: 70px; "  > </div>
 			</div>
 				
 			 
