@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jfkey.sarank.utils.ACJAInfoHandler;
+import com.jfkey.sarank.utils.FormatWords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,17 @@ public class VenueService {
 			if (rt == RankType.DEFAULT_RANK || rt == RankType.RELEVANCE_RANK) {
 				
 				List<PaperInSearchBean> papers = getIteratorData(venueRepository.findVenuePaperByID_DefaultRank(venueID,skip, limit ));
+				for(PaperInSearchBean tmp : papers) {
+					if (tmp.getTitle() != null ){
+						tmp.setTitle(FormatWords.sentenceToUpper(tmp.getTitle()));
+					}
+					if (tmp.getAuthors() != null) {
+						for (int i = 0; i < tmp.getAuthors().length; i ++){
+							tmp.getAuthors()[i] = FormatWords.sentenceToUpper(tmp.getAuthors()[i]);
+						}
+					}
+				}
+
 				result.put("paperList", papers );
 			} else if (rt == RankType.MOST_CITATION) {
 				int skip1, skip2, limit1, limit2;
@@ -86,12 +99,14 @@ public class VenueService {
 	}
 	
 	public ACJAShow getACJAShow(SearchPara para) {
-		ACJAShow acjaShow = new ACJAShow();
+
 		String venID = para.getVenID();
 		int skip = 0; 
-		int limit = 30;
-		getACJAShowByACJA(acjaShow, venueRepository.getACJAByVenID(venID, skip, limit));
-		
+		int limit = 40;
+		// getACJAShowByACJA(acjaShow, venueRepository.getACJAByVenID(venID, skip, limit));
+		ACJAInfoHandler acjaInfoHandler= new ACJAInfoHandler(venueRepository.getACJAByVenID(venID, skip, limit), limit);
+		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
+
 		// set paper number
 		long numberSize = 0;
 		String itemName = "";

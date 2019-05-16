@@ -21,18 +21,17 @@ public class VenueController {
 	private VenueService venueService;
 	
 	@RequestMapping("/ven") 
-	public ModelAndView findVenuePaper(@ModelAttribute(value = "para") SearchPara para, HttpSession session) {
+	public ModelAndView findVenuePaper(@ModelAttribute(value = "para") SearchPara para ) {
 		para.setPage( para.getPage() - 1);
 		
-		String ACJASHOW_VENID = para.getVenID();
+
 		ModelAndView mv = new ModelAndView("/venue");
-		ACJAShow acjaShow = (ACJAShow)session.getAttribute(ACJASHOW_VENID);
-		if (acjaShow == null) {
-			acjaShow  = venueService.getACJAShow(para);
-			session.setAttribute(ACJASHOW_VENID, acjaShow);
-		}
+
+		ACJAShow acjaShow  = venueService.getACJAShow(para);
+
 		mv.addObject("acjaShow", acjaShow);
 		Map<String, Object> result = venueService.findVenuePaper(para, acjaShow);
+
 		mv.addAllObjects(result);
 		
 		mv.addObject("para", para);

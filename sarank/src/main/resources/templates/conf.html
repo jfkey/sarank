@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-		<link href="css/mricode.pagination.css" rel="stylesheet" />
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/header.css" />
-		<link rel="stylesheet" type="text/css" href="css/main.css" />
-		<link rel="stylesheet" type="text/css" href="css/footer.css"/>
-	
-		<title></title>
-	</head>
-	<body>
+	<link href="css/mricode.pagination.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/header.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/footer.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"/>
+
+	<title></title>
+</head>
+<body>
 
 
 
-		
-		<header class="site-header">
-			<nav class="navbar" id="top">
-						
-						<!--这是导航图标-->
-						<div class="col-md-3 col-sm-12 header-nav-icon">
-							<div class="navbar-header">
-								<span th:text="${acjaShow.itemName}">Conference on Information and Knowledge Management(CIKM)</span>
-							</div>
-						</div>
-						
-						<!-- 搜索表单部分-->
-		<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${para}" method="get">
+
+<header class="site-header">
+	<nav class="navbar" id="top">
+
+		<!--这是导航图标-->
+		<div class="col-md-3 col-sm-12 header-nav-icon">
+			<div class="navbar-header">
+				Search
+			</div>
+		</div>
+
+		<!-- 搜索表单部分-->
+		<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${searchPara}" method="get">
 			<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
 			<input type="hidden" class="form-control" value="1" name="page">
 
@@ -88,28 +89,19 @@
 
 		</div>
 
-						
-			</nav>
-		</header>
-		
-		
-	<!-- main container .-->
+	</nav>
+</header>
+
+
+
+
+<!-- main container .-->
 <div class="container-fluid">
 	<div class="row">
 
 		<!--左边的筛选条件-->
-		<div style="margin-top: 50px;" class="col-md-2 col-sm-12" >
-			
-			
-			<div class="div-left-date-range" style="margin-bottom: 20px;" >
-				<h5 style="font-size: larger;">Conference Series</h5><br />
-				<span style="color: #337AB1;"> CIKM 2015 Melbourne, Australia </span>
-				<span style="color: #008000;"> CIKM 2015 Melbourne, Australia </span>
-				<span style="color: #008000;"> CIKM 2015 Melbourne, Australia </span>
-				<span style="color: #008000;"> CIKM 2015 Melbourne, Australia </span>
-				<span style="color: #008000;"> CIKM 2015 Melbourne, Australia </span>
-				
-			</div>
+		<div id="div-left-container" class="col-md-2 col-sm-12" >
+
 
 			<div class="div-left-date-range" >
 				<h5 style="font-size: larger;">Year Range </h5><br />
@@ -156,17 +148,15 @@
 				</ul>
 
 			</div>
-			
 		
-			
 		</div>
 
 		<div class="col-md-7">
 
 
-			<div class="panel panel-info" style="margin-top: 60px;">
+			<div class="panel panel-default" style="margin-top: 60px;">
 				<div class="panel-heading">
-					<span th:text="|Search  ${acjaShow.allPaperNum}  Relevant Articles|"> Search xxx Relevant Articles</span>
+					<span th:text="|search  ${acjaShow.allPaperNum}  relevant articles|"> search xxx relevant articles</span>
 				</div>
 
 				<div id="paper_entity" style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
@@ -179,7 +169,7 @@
 							<span class="badge" th:text="${itemState.index + 1}">1</span>
 							<a style="color:rgb(0,0,204)" class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
 							<br />
-							<span style="color: red;" th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+							<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
 							<br />
 
 
@@ -360,47 +350,48 @@
 
 
 
-		
-		
-		<footer class="page-footer font-small blue pt-4 mt-4">
-			<!--Footer Links-->
-			<div id="div_footer_1" class="container-fluid text-center text-md-left">
-				<div class="row">
-		
-					<div class="footer-about col-md-4 col-sm-4">
-						<a href="#">About Us</a>
-					</div>
-					<div class="footer-links col-md-4  col-sm-4">
-						<a href="#">Links</a>
-					</div>
-		
-					<div class="footer-sug col-md-4 col-sm-4">
-						<a href="#">Suggestion</a>
-					</div>
-					
-				</div>
-		
-			</div>
-			</div>
-			<!--/.Footer Links-->
-		
-			<!--Copyright-->
-			<div id="div_footer_2" class="footer-copyright py-3 text-center">
-				© 2018 Copyright:
-				<a href="http://www.buaa.edu.cn/"> Beihang University </a>
-			</div>
-		
-		</footer>
+<footer class="page-footer font-small blue pt-4 mt-4" >
+	<!--Footer Links-->
+	<div id="div_footer_1" class="container-fluid text-center text-md-left">
+		<div class="row">
 
-		
-	
-		<!--<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>-->
-		<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-		<script src="js/mricode.pagination.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<!--<script src="js/main_search.js"></script>-->
-		<script src="js/mainSearch.js"></script>
-  
-	</body>
+			<div class="footer-about col-md-4 col-sm-4">
+				<a href="#">About Us</a>
+			</div>
+			<div class="footer-links col-md-4  col-sm-4">
+				<a href="#">Links</a>
+			</div>
+
+			<div class="footer-sug col-md-4 col-sm-4">
+				<a href="#">Suggestion</a>
+			</div>
+
+		</div>
+
+	</div>
+	</div>
+	<!--/.Footer Links-->
+
+	<!--Copyright-->
+	<div id="div_footer_2" class="footer-copyright py-3 text-center">
+		© 2018 Copyright:
+		<a href="http://www.buaa.edu.cn/"> Beihang University </a>
+	</div>
+
+</footer>
+
+
+
+<!--<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>-->
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+<script src="js/mricode.pagination.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!--<script src="js/main_search.js"></script>-->
+<script src="js/mainSearch.js"></script>
+
+<script type="text/javascript" src="js/echarts.min.js" ></script>
+<script type="text/javascript" src="js/chartSearchAuthor.js" ></script>
+<script type="text/javascript" src="js/chartSearchConf.js" ></script>
+
+</body>
 </html>
- 

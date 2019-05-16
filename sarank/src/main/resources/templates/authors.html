@@ -25,65 +25,66 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								<span th:text="${searchPara.author}"></span>
+								<span th:text="${searchPara.author}">Authors </span>
 							</div>
 						</div>
 						
-							<!-- 搜索表单部分-->
-						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${searchPara}" method="get">
-							<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
-							<input type="hidden" class="form-control" value="1" name="page">
-							
-							
-							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
-								<label class="sr-only" for="keywords">keywords</label>
-								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database"  th:field="*{keywords}">
-							</div>
-						
-							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
-								<div class="form-group">
-									<label class="sr-only" for="title">title</label>
-									<input  class="form-control " id="title" placeholder="keywords" name="" >
-								</div>
-								<div class="form-group">
-									<label class="sr-only" for="authorname">authorname</label>
-									<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}" >
-								</div>
-								<div class="form-group ">
-									<label class="sr-only" for="year">affiliation</label>
-									<input type="text" class="form-control " id="year" placeholder="affiliation" th:field="*{affName}" >
-								</div>
-						
-							</div>
-							
-							<button id="btn_search" class="btn btn-success" type="submit">
-											<span class="glyphicon glyphicon-search "></span>
-										</button>
-							<button id="btn_advanced" class="btn btn-success  ">
-											<span class="glyphicon glyphicon-edit "></span>
-										</button>
-						</form>						
-						
-						
-						
-						<!--这是右边菜单-->
-						<div class="col-md-3 col-sm-12" >
-							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
-								<ul class="nav navbar-nav navbar-right">
-									<li>
-										<a href="#" target="_blank">API</a>
-									</li>
-									<li>
-										<a href="#" target="_blank">博客</a>
-									</li>
-									<li>
-										<a href="#">关于</a>
-									</li>
-								</ul>
-							</nav>
-							
-						</div>
-						
+		<!-- 搜索表单部分-->
+		<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${para}" method="get">
+			<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
+			<input type="hidden" class="form-control" value="1" name="page">
+
+			<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
+				<label class="sr-only" for="keywords">keywords</label>
+				<input class="form-control" id="search_input" type="text" style="width: 92%;" placeholder="keywords" th:field="*{keywords}">
+			</div>
+
+			<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
+				<div class="form-group">
+					<label class="sr-only" for="title">title</label>
+					<input class="form-control " id="title" placeholder="keywords" name="">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="authorname">authorname</label>
+					<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}">
+				</div>
+				<div class="form-group ">
+					<label class="sr-only" for="year">affiliation</label>
+					<input type="text" class="form-control " id="aff" placeholder="affiliation" th:field="*{affName}">
+				</div>
+
+				<div class="form-group ">
+					<label class="sr-only" for="year">venue</label>
+					<input type="text" class="form-control " id="ven" placeholder="venue" th:field="*{venName}">
+				</div>
+			</div>
+
+			<button id="btn_search" class="btn btn-primary" type="submit">
+				<span class="glyphicon glyphicon-search "></span>
+			</button>
+			<button id="btn_advanced" class="btn btn-primary  ">
+				<span class="glyphicon glyphicon-edit "></span>
+			</button>
+		</form>
+
+		<!--这是右边菜单-->
+		<div class="col-md-3 col-sm-12">
+			<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="#" target="_blank">API</a>
+					</li>
+					<li>
+						<a href="#" target="_blank">Blog</a>
+					</li>
+					<li>
+						<a href="#">About</a>
+					</li>
+				</ul>
+			</nav>
+
+		</div>
+
 			</nav>
 		</header>
 		
@@ -100,9 +101,9 @@
 			
 				<!--中间展示数据-->
  				<div class="col-md-7 col-sm-12" style="margin-top: 50px; height: 1000px;">
-					<div class="panel panel-default">
+					<div class="panel panel-info">
 						<div class="panel-heading">
-							<span th:text="|authors you want to find:  ${searchPara.author}|">authors you want to find </span>
+							<span th:text="|Authors You Want to Find:  ${searchPara.author}|">Authors You Want to Find</span>
 						</div>
 						
 						<table class="table table-hover">
@@ -180,8 +181,9 @@
 		<!--<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>-->
 		<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<!--<script src="js/main_search.js"></script>-->
-  
+		<script src="js/mainSearch.js"></script>
+		
+		
 	</body>
 </html>
  

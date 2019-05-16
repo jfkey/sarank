@@ -98,7 +98,7 @@ public class SearchAllController {
 		} else if  (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AUTHOR) {
 			ModelAndView mv= new ModelAndView("/authors");
 			mv.addAllObjects(searchResult);
-			mv.addObject("searchPara", searchPara );
+			mv.addObject("para", searchPara );
 			return mv;
 		} else if (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AFFILIATION) {
 			ModelAndView mv= new ModelAndView("/affs");
@@ -108,9 +108,10 @@ public class SearchAllController {
 			return mv;
 		} else if(searchResult.get(Constants.SEARCH_TYPE) == SearchType.VENUE) {
 			ModelAndView mv = new ModelAndView("vens");
-			mv.addAllObjects(null);
+			mv.addAllObjects(searchResult);
 			mv.addObject("para", searchPara);
-			
+			// CIKM
+
 			return mv;
 		}else {
 			return null;

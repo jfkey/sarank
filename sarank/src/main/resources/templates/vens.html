@@ -25,7 +25,7 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								<span th:text="${searchPara.affName}">Affiliations</span>
+								<span th:text="${para.venName}">VenueName</span>
 								
 							</div>
 						</div>
@@ -104,7 +104,7 @@
  				<div class="col-md-7 col-sm-12" style="margin-top: 50px; height: 1000px;">
 					<div class="panel panel-info">
 						<div class="panel-heading">
-							<span th:text="|Affiliations You Want to Find:  ${intent}|">Affiliations You Want to Find:</span>
+							<span th:text="|Venues You Want to Find:  ${para.venName}|">Venues You Want to Find:</span>
 							
 						</div>
 						
@@ -112,23 +112,23 @@
 							<thead>
 								<tr>
 									<th class="col-md-1"></th>
-									<th class="col-md-7">Affiliation</th>
+									<th class="col-md-7">Venue</th>
 									<th class="col-md-4">Paper Numbers</th>
 								</tr>
 							</thead>
 							<tbody>
-								<th:block th:each="hit,iter : ${affs}">
+								<th:block th:each="hit, iter : ${vens}">
 									<tr>
 										<td >
 											<span th:text="${iter.index+1}">1</span>
 										</td>
 										<td >
-											<a th:text="${hit.affName}" th:href="@{/aff(affID=${hit.affID}, rt='DEFAULT_RANK', page=1)}">
-												affiliation name
+											<a th:text="${hit.venName}" th:href="@{/ven(venID=${hit.venID}, rt='DEFAULT_RANK', page=1)}">
+												Venue Name
 											</a>
 										</td>
 										
-										<td th:text="${hit.paperNum}">paperNumbers</td>
+										<td th:text="${hit.location}">Location</td>
 										
 									</tr>
 								</th:block>

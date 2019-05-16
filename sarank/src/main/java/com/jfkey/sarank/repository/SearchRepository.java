@@ -2,16 +2,10 @@ package com.jfkey.sarank.repository;
 
 import java.util.List;
 
+import com.jfkey.sarank.domain.*;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
-
-import com.jfkey.sarank.domain.ACJA;
-import com.jfkey.sarank.domain.AffHit;
-import com.jfkey.sarank.domain.AuthorAffiliation;
-import com.jfkey.sarank.domain.Paper;
-import com.jfkey.sarank.domain.PaperInSearchBean;
-import com.jfkey.sarank.domain.SearchHits;
 
 /**
  * 
@@ -159,5 +153,11 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "RETURN aff.affID AS affID, aff.affName AS affName, COUNT(DISTINCT(paa.paID)) AS paperNum "
 			+ "ORDER BY paperNum DESC SKIP {skip} LIMIT {limit}")
 	Iterable<AffHit> getAffInfo(@Param("affReg")String affReg, @Param("skip")int skip, @Param("limit")int limit);
- 	
+
+	@Query("match(v:Venue) where v.venueName = {venName} return v.venueName as venName, v.venID as venID, \"\" as location")
+	Iterable<VensHit> searchVensByName1 (@Param("venName")String venName);
+
+	@Query("match(v:Venue)-[]->(c:Coni) where v.venueName = {venName} return c.shortName as venName, c.coniID as venID, c.location as location order by venName desc")
+	Iterable<VensHit> searchVensByName2 (@Param("venName")String venName);
+
 }

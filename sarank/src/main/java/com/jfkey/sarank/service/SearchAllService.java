@@ -3,21 +3,13 @@ package com.jfkey.sarank.service;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.jfkey.sarank.domain.*;
 import com.jfkey.sarank.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jfkey.sarank.domain.ACJAShow;
-import com.jfkey.sarank.domain.AffHit;
-import com.jfkey.sarank.domain.AuthorAffiliation;
-import com.jfkey.sarank.domain.AuthorHit;
-import com.jfkey.sarank.domain.Pager;
-import com.jfkey.sarank.domain.PaperInSearchBean;
-import com.jfkey.sarank.domain.PaperScoresBean;
-import com.jfkey.sarank.domain.SearchHits;
-import com.jfkey.sarank.domain.SearchPara;
 import com.jfkey.sarank.repository.SearchRepository;
 
 /**
@@ -59,6 +51,7 @@ public class SearchAllService {
 		}
 		return null; 
 	}
+
 
 	public ACJAShow getACJAShow (SearchPara searchPara) {
 		String queryParam = searchPara.getFormatStr();
@@ -135,14 +128,19 @@ public class SearchAllService {
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
 
 		PaperInSearchBean pib = searchedPaperList.get(0);
-		pib.setVersions(232);
+		pib.setVersions(31);
 		searchedPaperList.set(0, pib);
 		pib = searchedPaperList.get(1);
-		pib.setVersions(27);
+		pib.setVersions(12);
 		searchedPaperList.set(1, pib);
 		pib = searchedPaperList.get(2);
-		pib.setVersions(61);
+		pib.setVersions(12);
 		searchedPaperList.set(2, pib);
+		pib = searchedPaperList.get(3);
+		pib.setVersions(4);
+		searchedPaperList.set(3, pib);
+
+
 
 		result.put("paperList", searchedPaperList);
 
@@ -251,8 +249,15 @@ public class SearchAllService {
 	}
 
 	private Map<String, Object> searchVenue(SearchPara searchPara) {
-		
-		return null;
+		Map<String, Object> res = new HashMap<>();
+		String venName = searchPara.getVenName();
+		List<VensHit> vensList = getIteratorData(searchRepository.searchVensByName1(venName));
+		vensList.addAll(getIteratorData(searchRepository.searchVensByName2(venName)));
+
+		res.put("vens", vensList);
+		res.put(Constants.SEARCH_TYPE, SearchType.VENUE);
+
+		return res;
 	}
 	
 	private SearchType getSearchType(SearchPara para) {
