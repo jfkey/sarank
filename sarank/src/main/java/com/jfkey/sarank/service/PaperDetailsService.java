@@ -1,10 +1,8 @@
 package com.jfkey.sarank.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.jfkey.sarank.domain.YearCount;
 import com.jfkey.sarank.utils.FormatWords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,34 +26,69 @@ import com.jfkey.sarank.utils.Constants;
 public class PaperDetailsService {
 	@Autowired
 	private PaperDetailsRepository paperDetailsRepository;
-	private static final Logger LOG = LoggerFactory.getLogger(PaperDetailsService.class);
 
+	private static final Logger LOG = LoggerFactory.getLogger(PaperDetailsService.class);
+	private PaperDetailBean paperDetailBean;
+	public Map<String, Object> getCitationTrend() {
+		Map<String, Object> res = new HashMap<>();
+		String paID = paperDetailBean.getPaID();
+		Iterable<YearCount> ycIt =  paperDetailsRepository.getCitationPerYear(paID);
+		List<YearCount> ycList = getIteratorData(ycIt);
+		List<String> years = new ArrayList<>();
+		List<Integer> count = new ArrayList<>();
+
+		for (YearCount tmp: ycList) {
+			years.add(tmp.getYear());
+			count.add(tmp.getCount());
+		}
+		res.put("years",years);
+		res.put("citations",count);
+		return res;
+	}
+
+	public Map<String,Integer> getPaperWordCloud() {
+		Map<String, Integer> fosMap = new HashMap<>();
+		String[] fos = paperDetailBean.getFosName1();
+		Random rand = new Random();
+		if ( fos != null){
+			for (String str : fos) {
+				fosMap.put(str, rand.nextInt(5) + 5);
+			}
+		}
+		fos = paperDetailBean.getFosName2();
+		if (fos != null){
+			for (String str : fos) {
+				fosMap.put(str, rand.nextInt(5) + 5);
+			}
+		}
+		return fosMap;
+	}
 
 	public PaperDetailBean getPaperDetails(String paID) {
 		Iterable<PaperDetailBean> it = paperDetailsRepository.getPaperInfo(paID);
 		List<PaperDetailBean> paperDetailList = getIteratorData(it);
 		if (paperDetailList != null && paperDetailList.size() > 0) {
-			PaperDetailBean tmp = paperDetailList.get(0);
-			tmp.setVenName(FormatWords.upperAllChar(tmp.getVenName()));
-			tmp.setTitle(FormatWords.sentenceToUpper(tmp.getTitle()));
-			if (tmp.getAthName()  != null){
-				for (int i = 0; i < tmp.getAthName().length; i ++) {
-					tmp.getAthName()[i] = FormatWords.sentenceToUpper(tmp.getAthName()[i]);
+			paperDetailBean = paperDetailList.get(0);
+			paperDetailBean.setVenName(FormatWords.upperAllChar(paperDetailBean.getVenName()));
+			paperDetailBean.setTitle(FormatWords.sentenceToUpper(paperDetailBean.getTitle()));
+			if (paperDetailBean.getAthName()  != null){
+				for (int i = 0; i < paperDetailBean.getAthName().length; i ++) {
+					paperDetailBean.getAthName()[i] = FormatWords.sentenceToUpper(paperDetailBean.getAthName()[i]);
 				}
 			}
 
-			if(tmp.getFosName1() != null) {
-				for (int i = 0; i < tmp.getFosName1().length;  i ++) {
-					tmp.getFosName1()[i] = FormatWords.sentenceToUpper(tmp.getFosName1()[i]);
+			if(paperDetailBean.getFosName1() != null) {
+				for (int i = 0; i < paperDetailBean.getFosName1().length;  i ++) {
+					paperDetailBean.getFosName1()[i] = FormatWords.sentenceToUpper(paperDetailBean.getFosName1()[i]);
 				}
 			}
 
-			if (tmp.getFosName2() != null){
-				for (int i = 0; i < tmp.getFosName2().length;  i ++) {
-					tmp.getFosName2()[i] = FormatWords.sentenceToUpper(tmp.getFosName2()[i]);
+			if (paperDetailBean.getFosName2() != null){
+				for (int i = 0; i < paperDetailBean.getFosName2().length;  i ++) {
+					paperDetailBean.getFosName2()[i] = FormatWords.sentenceToUpper(paperDetailBean.getFosName2()[i]);
 				}
 			}
-			return tmp;
+			return paperDetailBean;
 		}
 
 		

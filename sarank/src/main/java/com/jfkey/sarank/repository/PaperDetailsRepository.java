@@ -1,5 +1,6 @@
 package com.jfkey.sarank.repository;
 
+import com.jfkey.sarank.domain.YearCount;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
@@ -43,7 +44,7 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 	/**
 	 * 
 	 * @param paID  paper id	
-	 * @param limitSize result limit size 
+
 	 * @return get paper citations, return {@link com.jfkey.sarank.domain.PaperSimpleBean}
 	 */
 	@Query("MATCH (p1:Paper)-[:PaRef]->(p2:Paper) "
@@ -63,8 +64,7 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 	/**
 	 * 
 	 * @param paID  paper id
-	 * @param limitSize result limit size 
-	 * @return get paper references, return {@link com.jfkey.sarank.domain.PaperSimpleBean}
+	 * 	 * @return get paper references, return {@link com.jfkey.sarank.domain.PaperSimpleBean}
 	 */
 	@Query("MATCH (p1:Paper)-[:PaRef]->(p2:Paper) "
 			+ "WHERE p1.paID = {paID} "
@@ -86,6 +86,8 @@ public interface PaperDetailsRepository extends Neo4jRepository<Paper, Long> {
 	
 	@Query("MATCH (p:Paper) WHERE p.paID = {paID} WITH p RETURN  SIZE(()-[:PaRef]->(p)) as cite;")
 	Iterable<Integer> getPaperCiteNumber(@Param("paID")String paID);
-	
-	
+
+	@Query("match(c:Paper)-[:PaRef]->(p:Paper) where p.paID = {paID} with distinct c.paYear as cy with collect(cy) as cys unwind cys as peryear match(c:Paper)-[:PaRef]->(p:Paper) where p.paID = {paID} AND c.paYear = peryear return peryear as year, count (c) as count order by peryear asc ")
+	Iterable<YearCount> getCitationPerYear(@Param("paID") String paID);
+
 }

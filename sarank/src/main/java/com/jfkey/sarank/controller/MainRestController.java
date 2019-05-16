@@ -63,7 +63,13 @@ public class MainRestController {
 
 	@RequestMapping("/paper/getwordcloud")
 	public Map<String, Integer>getPaperWordCloud() {
-		return null;
+		return paperDetailsService.getPaperWordCloud();
+
 	}
+	@RequestMapping("/paper/ct")
+	public Map<String, Object> getPaperCitationTrend() {
+		return paperDetailsService.getCitationTrend();
+	}
+
 
 }
