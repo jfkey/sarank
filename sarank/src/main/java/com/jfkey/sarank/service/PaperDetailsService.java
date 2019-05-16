@@ -110,7 +110,15 @@ public class PaperDetailsService {
 	//		Constants.REF_CITE_SIZE
 		int limit = (pageNumber + 1) * Constants.REF_CITE_SIZE;
 		int skip =  pageNumber * Constants.REF_CITE_SIZE;
-		return getIteratorData(paperDetailsRepository.getPaperRef(paID, limit, skip));
+		List<PaperSimpleBean> res = getIteratorData(paperDetailsRepository.getPaperRef(paID, limit, skip));
+		for (PaperSimpleBean tmp : res){
+			for (int i = 0; i < tmp.getAuthors().length;i ++){
+				tmp.getAuthors()[i] = FormatWords.sentenceToUpper(tmp.getAuthors()[i] );
+			}
+			tmp.setTitle(FormatWords.sentenceToUpper(tmp.getTitle()));
+
+		}
+		return res;
 	}
 	
 	/**
@@ -121,7 +129,15 @@ public class PaperDetailsService {
 	public List<PaperSimpleBean> getPaperCite(String paID, int pageNumber) {
 		int limit = (pageNumber + 1) * Constants.REF_CITE_SIZE;
 		int skip =  pageNumber * Constants.REF_CITE_SIZE;
-		return getIteratorData(paperDetailsRepository.getPaperCite(paID,limit, skip));
+		List<PaperSimpleBean> res = getIteratorData(paperDetailsRepository.getPaperCite(paID,limit, skip));
+		for (PaperSimpleBean tmp : res){
+			for (int i = 0; i < tmp.getAuthors().length;i ++){
+				tmp.getAuthors()[i] = FormatWords.sentenceToUpper(tmp.getAuthors()[i] );
+			}
+			tmp.setTitle(FormatWords.sentenceToUpper(tmp.getTitle()));
+
+		}
+		return res;
 	}
 	
 	public int getRefNumber(String paID) {

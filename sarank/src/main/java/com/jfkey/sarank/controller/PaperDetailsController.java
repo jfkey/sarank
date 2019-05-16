@@ -52,6 +52,8 @@ public class PaperDetailsController {
 			mv.addObject(DETAILS, paperDetailsService.getPaperDetails(paid));
 			mv.addObject(PAID, paid);
 
+
+
 			return mv;
 		} else if (type.equals(TYPE_REF)) {
 			if (page == null) {
@@ -66,7 +68,8 @@ public class PaperDetailsController {
 				mv.addObject("paTitle",paperDetailsService.getPaperTitleByID(paid) );
 				mv.addObject("refNum", paperDetailsService.getRefNumber(paid));
 				mv.addObject("paID", paid);
-				
+				SearchPara para = new SearchPara();
+				mv.addObject("para", para);
 				
 				return mv;	
 			} else if (page.equals(PAGE_PREV)) {
@@ -79,7 +82,8 @@ public class PaperDetailsController {
 				mv.addObject("paTitle",paperDetailsService.getPaperTitleByID(paid) );
 				mv.addObject("refNum", paperDetailsService.getRefNumber(paid));
 				mv.addObject("paID", paid);
-				
+				SearchPara para= new SearchPara();
+				mv.addObject("para", para);
 				
 				return mv;
 			} else if (page.equals(PAGE_NEXT)){
@@ -93,8 +97,9 @@ public class PaperDetailsController {
 				mv.addObject("paTitle",paperDetailsService.getPaperTitleByID(paid) );
 				mv.addObject("refNum", paperDetailsService.getRefNumber(paid));
 				mv.addObject("paID", paid);
-				
-				
+				SearchPara para= new SearchPara();
+				mv.addObject("para", para);
+
 				return mv;
 			} else {
 				return null;
@@ -113,7 +118,9 @@ public class PaperDetailsController {
 				mv.addObject("paTitle",paperDetailsService.getPaperTitleByID(paid) );
 				mv.addObject("citeNum", paperDetailsService.getCiteNumber(paid));
 				mv.addObject("paID", paid);
-				
+
+				SearchPara para= new SearchPara();
+				mv.addObject("para", para);
 				return mv;	
 			} else if (page.equals(PAGE_PREV)) {
 				int curPage = (int)session.getAttribute(CITE_CUR_PAGE);
@@ -125,6 +132,8 @@ public class PaperDetailsController {
 				mv.addObject("paTitle",paperDetailsService.getPaperTitleByID(paid) );
 				mv.addObject("citeNum", paperDetailsService.getCiteNumber(paid));
 				mv.addObject("paID", paid);
+				SearchPara para= new SearchPara();
+				mv.addObject("para", para);
 				return mv;
 				
 			} else if (page.equals(PAGE_NEXT)) {
@@ -138,7 +147,9 @@ public class PaperDetailsController {
 				mv.addObject("paTitle",paperDetailsService.getPaperTitleByID(paid) );
 				mv.addObject("citeNum", paperDetailsService.getCiteNumber(paid));
 				mv.addObject("paID", paid);
-				
+				SearchPara para= new SearchPara();
+				mv.addObject("para", para);
+
 				return mv;
 			} else {
 				return null;

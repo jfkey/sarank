@@ -30,11 +30,11 @@
 						<!--这是导航图标-->
 						<div class="col-md-3 col-sm-12 header-nav-icon">
 							<div class="navbar-header">
-								Paper Citations
+								Paper References
 							</div>
 						</div>
 						
-						<!-- 搜索表单部分-->
+							<!-- 搜索表单部分-->
 		<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${para}" method="get">
 			<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
 			<input type="hidden" class="form-control" value="1" name="page">
@@ -90,19 +90,18 @@
 
 		</div>
 
-
 			</nav>
 		</header>
 		
 		<div class="row ">
-		
 		<!--左边的div-->
 		<div class="col-md-2" >
 			
 		</div>
 		
 		<!--中间展示数据-->
-	
+		
+		
 			<div class="col-md-8" style="height:auto; margin-top: 20px; ">
 				<div class="col-md-9" style="margin-bottom: 10px; margin-top: 10px; text-align: center;">
 					<font size="6" face="book antiqua" th:text="${paTitle}">this is paper title graph database </font>
@@ -114,32 +113,32 @@
 							<a th:href="@{/paper(paid=${paID},type=info)}" > <span class="font-theme-lg"> Info</span></a>
 						</li>
 						<li id= "tab_ref" class="">
-							<a th:href="@{/paper(paid=${paID},type=ref)}" ><span class="font-theme-lg"> References</span></a>
+							<a th:href="@{/paper(paid=${paID},type=ref)}"  ><span class="font-theme-lg"> References</span></a>
 						</li>
-						<li id="tab_cite" class="active">
+						<li id="tab_cite" class="">
 							<a th:href="@{/paper(paid=${paID},type=cite)}" ><span class="font-theme-lg">Citations</span></a>
 						</li>
-						<li id="tab_sim" class="">
-							<a href="#sim" data-toggle="tab"><span class="font-theme-lg">Similar </span></a>
+						<li id="tab_sim" class="active">
+							<a href="@{/paper(paid=${paID},type=ref)}" data-toggle="tab"><span class="font-theme-lg">Similar</span></a>
 						</li>
-						
-						
+		
 						
 					</ul>
 		
 					<div id="paperTabContent" class="tab-content">
-						<div class="tab-pane fade in active" id="cite">
+						<div class="tab-pane fade in active" id="ref">
 							<div class="panel panel-info">
-								<div class="panel-heading"> 
-									<span th:text="|Citation Counts:${citeNum} |">Citation Counts: 10</span>
+								<div class="panel-heading" >
+									<span th:text="|Number of References:${refNum} |">Similar Articles </span>
+									
 								</div>
 		
-								<div class="panel-body">
-									<th:block th:each="item, itemState:${cite}">
+								<div class="panel-body" id="ref_container">
+									
+									<th:block th:each="item:${ref}">
 										<div class="details-item-ref">
-											
-											<span class="badge" style="background-color: #17A2B8;"  th:text="${itemState.index + 1}">1</span>
-											<!--<img src="img/icon-paper.png" style="width: 20px; height: 20px;" />-->
+		
+											<img src="img/icon-paper.png" style="width: 20px; height: 20px;" />
 											<a class="details-item-ref-title" th:href="@{/paper(paid=${item.paID})}" th:text="${item.title}">This is paper title </a>
 											<br />
 											<img src="img/venue.png" style="width: 14px; height: 14px;">
@@ -148,7 +147,7 @@
 											<br />
 		
 											<div class="details-item-ref-ath">
-												<img src="img/ath.png" style="width: 14px; height: 14px;" />
+												<img src="img/co_ath.png" style="width: 14px; height: 14px;" />
 												<li style="list-style-type: none; display: inline;" th:each=" name, nameStat: ${item.authors}">
 													<a th:text="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
 												</li><br />
@@ -163,15 +162,28 @@
 								</div>
 		
 							</div>
+		
 						</div>
-					
+		
+						<div class="tab-pane fade" id="sim">
+							<div class="panel panel-default">
+								<div class="panel-heading">Similar paper</div>
+		
+								<div class="panel-body">
+																			
+								</div>
+		
+							</div>
+						</div>
+						
+						
 						
 					</div>
 				
 					<div class="btn-toolbar pull-right" role="toolbar">
 						<div class="btn-group">
-							<a th:href="@{/paper(paid=${paID},type=cite,page=prev)}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
-							<a th:href="@{/paper(paid=${paID},type=cite,page=next)}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
+							<a th:href="@{/paper(paid=${paID},type=ref,page=prev)}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+							<a th:href="@{/paper(paid=${paID},type=ref,page=next)}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
 						</div>
 					</div>
 				
