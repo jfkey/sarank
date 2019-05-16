@@ -177,8 +177,8 @@
 								<th:block th:each="name, nameStat: ${item.authors}">
 
 									<li>
-										<a style="color:rgb(0,128,0)" th:text="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
 										
+										<a style="color:rgb(0,128,0)" th:utext="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
 									</li>
 
 								</th:block>

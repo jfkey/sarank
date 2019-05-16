@@ -135,8 +135,8 @@
 		
 		<table class="table table-striped table-hover">
 			<tr>
-				<th class="col-md-4"></th>
-				<th class="col-md-8"></th>
+				<th class="col-md-4">Type</th>
+				<th class="col-md-8">Detailed Information </th>
 			</tr>
 			<tr>
 				<td>Authors</td>
@@ -177,50 +177,70 @@
 				</td>
 			</tr>
 			<tr>
-				<td>Versions of the Article</td>
+				<td>Number of URL Links</td>
 				<td>
-					<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#demo">
-								    	    <span class="glyphicon glyphicon-eye-open"></span>
+					<!--<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#demo">
+						<span class="glyphicon glyphicon-eye-open" ></span>
 					</button>
 		
 					<div id="demo" class="collapse">
 						<li style="list-style-type: none; display: inline; margin-left: 10px;" th:each=" tmp : ${details.paUrl}">
 							<a th:text="${tmp}" th:href="${tmp}">this is paper url</a> <br />
 						</li>
-					</div>
-
+					</div>-->
+					<a >12</a> <br />
 				</td>
 			</tr>
 			<tr>
 				<td>Abstract of the Article</td>
 				<td>
-					<span>this is abstract </span>
+					<span>The abstract of the article is null.</span>
 				</td>
 			</tr>
 			<tr>
 				<td>Article Keywords</td>
 				<td>
-					<li style="list-style-type: none; margin-left: 10px;" th:each=" tmp : ${details.keywords}">
+					<li style="list-style-type: none; " th:each=" tmp : ${details.keywords}">
 					<a th:text="${tmp}" href="#">data mining </a> <br />
 				</li>
 				</td>
 			</tr>
 			<tr>
-				<td>Related Fields of Study </td>
-				<td>
-				<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName1}">
-					<a th:text="${fos}" href="#">data mining </a> <br />
-				</li>
-				<li style="list-style-type: none; margin-left: 10px;" th:each=" fos, fosStat: ${details.fosName2}">
-					<a th:text="${fos}" href="#">data mining </a> <br />
-				</li>
+				<td style="vertical-align: middle;">Related Fields of Study </td>
+				<td >
+				<table>
+					<tbody>
+						<tr >
+					
+						<th scope="row">
+					      <td class="" >
+					      		<li style="list-style-type: none; margin-top: 2px;" th:each=" fos, fosStat: ${details.fosName1}">
+									<a th:text="${fos}" href="#">Data Mining</a> 
+								</li>
+					      		<li style="list-style-type: none; margin-top: 5px;" th:each=" fos, fosStat: ${details.fosName2}">
+								<a th:text="${fos}" href="#">Machine Learning</a> 
+							</li>
+					      </td>
+					      </th>
+					    </tr>
+					</tbody>
+				</table>	
+					
+			
+				
 				</td>
 			</tr>
 			
 						
 			
 		</table>
-
+		
+		<div class="col-md-6" style="height: 300px;background-color: khaki;">
+			<div id = "paperWordCloud" style="margin-left: 0px; "></div>
+		</div>
+		
+		<div class="col-md-6" style="height: 300px;background-color: chartreuse;">
+		</div>
 		</div>
 	
 	</div>
@@ -274,6 +294,9 @@
 		<script src="js/mricode.pagination.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/mainSearch.js"></script>
+		<script src="echarts.min.js"></script>
+		<script src="echarts-wordcloud.min.js"></script>
+		<script type="text/javascript" src="js/paperWordCloud.js" ></script>
 
 	</body>
 </html>

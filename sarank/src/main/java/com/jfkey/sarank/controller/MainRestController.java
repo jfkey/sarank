@@ -2,6 +2,7 @@ package com.jfkey.sarank.controller;
 
 import java.util.Map;
 
+import com.jfkey.sarank.service.PaperDetailsService;
 import com.jfkey.sarank.service.SearchAllService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,9 @@ public class MainRestController {
 
 	@Autowired
 	private SearchAllService searchAllService;
+
+	@Autowired
+	private PaperDetailsService paperDetailsService;
 
 
 
@@ -52,10 +56,14 @@ public class MainRestController {
 		return searchAllService.getAuthorPie();
 	}
 
-
 	@RequestMapping("/search/chartconf")
 	public Map<String, Object>getConfPie() {
 		return searchAllService.getConfPie();
 	}
-	
+
+	@RequestMapping("/paper/getwordcloud")
+	public Map<String, Integer>getPaperWordCloud() {
+		return null;
+	}
+
 }

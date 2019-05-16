@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfkey.sarank.utils.FormatWords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +28,36 @@ import com.jfkey.sarank.utils.Constants;
 public class PaperDetailsService {
 	@Autowired
 	private PaperDetailsRepository paperDetailsRepository;
-	
+	private static final Logger LOG = LoggerFactory.getLogger(PaperDetailsService.class);
+
+
 	public PaperDetailBean getPaperDetails(String paID) {
 		Iterable<PaperDetailBean> it = paperDetailsRepository.getPaperInfo(paID);
 		List<PaperDetailBean> paperDetailList = getIteratorData(it);
 		if (paperDetailList != null && paperDetailList.size() > 0) {
-			return paperDetailList.get(0);
+			PaperDetailBean tmp = paperDetailList.get(0);
+			tmp.setVenName(FormatWords.upperAllChar(tmp.getVenName()));
+			tmp.setTitle(FormatWords.sentenceToUpper(tmp.getTitle()));
+			if (tmp.getAthName()  != null){
+				for (int i = 0; i < tmp.getAthName().length; i ++) {
+					tmp.getAthName()[i] = FormatWords.sentenceToUpper(tmp.getAthName()[i]);
+				}
+			}
+
+			if(tmp.getFosName1() != null) {
+				for (int i = 0; i < tmp.getFosName1().length;  i ++) {
+					tmp.getFosName1()[i] = FormatWords.sentenceToUpper(tmp.getFosName1()[i]);
+				}
+			}
+
+			if (tmp.getFosName2() != null){
+				for (int i = 0; i < tmp.getFosName2().length;  i ++) {
+					tmp.getFosName2()[i] = FormatWords.sentenceToUpper(tmp.getFosName2()[i]);
+				}
+			}
+			return tmp;
 		}
+
 		
 		return new PaperDetailBean();
 	}
