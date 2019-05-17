@@ -1,11 +1,11 @@
 
 
 // chart of search author weights .
-var chart_search_author = echarts.init(document.getElementById('chartSearchAuthor'));
+var aff_pie_author = echarts.init(document.getElementById('affPieAuthor'));
 				 
 	
-	chart_search_author.setOption({
-	color:['#FFAE8B','#428BCA','#67E0E3','#EEDD78', '#7D96BC', '#9BD4B9', '#E7BCF3', '#96BFFF', '#837BEA', '#F49F42', '#759AA0'],
+	aff_pie_author.setOption({
+	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78','#E7BCF3',  '#F49F42', '#759AA0' , '#96BFFF', '#837BEA'],
 	 title : {
         text: 'Author',
         x:'left',
@@ -25,7 +25,6 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
         right: 10,
         top: 20,
         bottom: 20,
-        show: false, 
         data:['Jiawei Han', 'Wenfei fan','Jerry Xu Yu','Xindong Wu',  'Shuai Ma', 'Xuelian lin']
   
     },
@@ -55,8 +54,8 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
     ]
 })
 	
-	$.get('/search/chartauthor').done(function(data) {
-		chart_search_author.setOption({
+	$.get('/aff/pieauthor').done(function(data) {
+		aff_pie_author.setOption({
 			legend: {
 				data: data.authorName
 			},

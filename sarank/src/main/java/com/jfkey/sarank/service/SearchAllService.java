@@ -240,6 +240,9 @@ public class SearchAllService {
 		String searchIntent = searchPara.getAffName().trim();
 		String affReg = searchIntent + Constants.AFF_REG_SUFFIX;
 		List<AffHit> searchedAffs = getIteratorData(searchRepository.getAffInfo(affReg, skip, limit));
+		for (AffHit tmp : searchedAffs ){
+			tmp.setAffName(FormatWords.sentenceToUpper(tmp.getAffName()));
+		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("affs", searchedAffs);
 		result.put("intent", searchIntent);

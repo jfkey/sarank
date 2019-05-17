@@ -5,7 +5,7 @@ var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'))
 				 
 	// 7D96BC 67E0E3
 	chart_search_conf.setOption({
-	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78','#E7BCF3', '#96BFFF', '#837BEA'],
+	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78','#E7BCF3', '#F49F42', '#759AA0', '#96BFFF', '#837BEA'],
 	 title : {
         text: 'Conference',
         x:'left',

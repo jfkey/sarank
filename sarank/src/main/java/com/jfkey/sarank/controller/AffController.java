@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.jfkey.sarank.utils.FormatWords;
 import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,22 +30,20 @@ import com.jfkey.sarank.service.SearchAllService;
 public class AffController {
 	@Autowired
 	private AffService affService;
-//	private final String AFF_ACJA_SHOW = "AFF_ACJA_SHOW";
+
 	 private static final Logger LOG = LoggerFactory.getLogger(AffController.class);
 	
 	@RequestMapping("/aff") 
-	public ModelAndView searchPaper(@ModelAttribute(value = "para") SearchPara para, HttpSession session) {
-		String ACJASHOW_AFFID = para.getAffID();
+	public ModelAndView searchPaper(@ModelAttribute(value = "para") SearchPara para ) {
+
 		para.setPage( para.getPage() - 1);
 		
 		ModelAndView mv= new ModelAndView("/affiliation");
 		LOG.info("para:" + para);
-		ACJAShow acjaShow = (ACJAShow)session.getAttribute(ACJASHOW_AFFID );
-		LOG.info("acjaShow : " + acjaShow); 
-		if ( acjaShow == null) {
-			acjaShow = affService.getACJAShow(para);
-			session.setAttribute(ACJASHOW_AFFID , acjaShow);
-		}
+
+		ACJAShow acjaShow = affService.getACJAShow(para);
+		acjaShow.setItemName(FormatWords.sentenceToUpper(acjaShow.getItemName()));
+
 		mv.addObject("acjaShow", acjaShow);
 		Map<String, Object> searchResult = affService.getAffByID(para, acjaShow);
 		mv.addAllObjects(searchResult);

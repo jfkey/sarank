@@ -19,7 +19,9 @@ public class ACJAInfoHandler {
     private Map<String, Object> searchConfPie;
     // main search page, author pie
     private Map<String, Object> searchAuthorPie;
-
+    // venue page,  affiliation pie.
+    private Map<String,  Object> affPie;
+    private Map<String, Object> jouPie;
     private ACJAShow acjaShow;
 
     public ACJAInfoHandler(Iterable<ACJA> ACJAIt, int paperSize) {
@@ -28,6 +30,9 @@ public class ACJAInfoHandler {
         acjaShow = new ACJAShow();
         searchConfPie = new HashMap<>();
         searchAuthorPie = new HashMap<>();
+        affPie = new HashMap<>();
+        jouPie = new HashMap<>();
+
         this.run();
     }
 
@@ -37,11 +42,15 @@ public class ACJAInfoHandler {
     public Map<String, Object> getSearchAuthorPie() {
         return searchAuthorPie;
     }
+    public Map<String, Object> getJouPie() {
+        return jouPie;
+    }
+
+    public Map<String, Object> getAffPie() { return affPie; }
 
     public ACJAShow getAcjaShow() {
         return acjaShow;
     }
-
 
 
     /**
@@ -149,7 +158,9 @@ public class ACJAInfoHandler {
 //            int pieAthNum = acjaShow.getAthName().size() > 6 ? 6 : acjaShow.getAthName().size();
 //            int pieConNum = acjaShow.getConName().size() > 6 ? 6 : acjaShow.getConName().size();
             int pieAthNum = 10;
-            int pieConNum = 6;
+            int pieConNum = 8;
+            int pieAffNum = 8;
+            int pieJouNum = 8;
             double tmpScore = 0.0;
             List<String> legendData = new ArrayList<>();
             List<Double> data = new ArrayList<>();
@@ -190,6 +201,48 @@ public class ACJAInfoHandler {
             data.add(tmpScore);
             searchConfPie.put("confName", legendData);
             searchConfPie.put("confWeight", data);
+
+            legendData = new ArrayList<>();
+            data = new ArrayList<>();
+            tmpScore = 0.0;
+            for (int i = 0; i < acjaShow.getAffName().size(); i ++) {
+                if (i < pieAffNum) {
+
+                    legendData.add(FormatWords.sentenceToUpper(acjaShow.getAffName().get(i)));
+                    data.add(acjaShow.getAffScore().get(i));
+                } else {
+                    tmpScore += tmpScore;
+                }
+            }
+            if (tmpScore == 0.0 ){
+                tmpScore = acjaShow.getAffScore().get(acjaShow.getAffScore().size() - 1) / 2;
+            }
+
+            legendData.add("OTHER");
+            data.add(tmpScore);
+            affPie.put("affName", legendData);
+            affPie.put("affWeight", data);
+
+            legendData = new ArrayList<>();
+            data = new ArrayList<>();
+            tmpScore = 0.0;
+            for (int i = 0; i < acjaShow.getJouName().size(); i ++) {
+                if (i < pieJouNum) {
+
+                    legendData.add(FormatWords.sentenceToUpper(acjaShow.getJouName().get(i)));
+                    data.add(acjaShow.getJouScore().get(i));
+                } else {
+                    tmpScore += tmpScore;
+                }
+            }
+            if (tmpScore == 0.0 ){
+                tmpScore = acjaShow.getJouScore().get(acjaShow.getJouScore().size() - 1) / 2;
+            }
+
+            legendData.add("OTHER");
+            data.add(tmpScore);
+            jouPie.put("jouName", legendData);
+            jouPie.put("jouWeight", data);
 
         }
     }

@@ -111,16 +111,16 @@
 						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th class="col-md-1"></th>
-									<th class="col-md-7">Venue</th>
+									<th class="col-md-2 " ></th>
+									<th class="col-md-6 ">Venue</th>
 									<th class="col-md-4">Paper Numbers</th>
 								</tr>
 							</thead>
 							<tbody>
 								<th:block th:each="hit, iter : ${vens}">
 									<tr>
-										<td >
-											<span th:text="${iter.index+1}">1</span>
+										<td  style="text-align: center;" >
+											<span  th:text="${iter.index+1}">1</span>
 										</td>
 										<td >
 											<a th:text="${hit.venName}" th:href="@{/ven(venID=${hit.venID}, rt='DEFAULT_RANK', page=1)}">

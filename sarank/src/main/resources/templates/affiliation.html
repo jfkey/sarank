@@ -27,294 +27,326 @@
 								<span th:text="${acjaShow.itemName}">Affiliation</span>
 							</div>
 						</div>
-						
-						<!-- 这是中间搜索部分-->
-						<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${para}" method="get">
-							<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
-								<label class="sr-only" for="keywords">keywords</label>
-								<input class="form-control" id="search_input" type="text" style="width: 92%;" value="graph database" placeholder="graph database"  th:field="*{keywords}">
-							</div>
-						
-							<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
-								<div class="form-group">
-									<label class="sr-only" for="title">title</label>
-									<input  class="form-control " id="title" placeholder="keywords" name="" >
-								</div>
-								<div class="form-group">
-									<label class="sr-only" for="authorname">authorname</label>
-									<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}" >
-								</div>
-								<div class="form-group ">
-									<label class="sr-only" for="year">affiliation</label>
-									<input type="text" class="form-control " id="year" placeholder="affiliation" th:field="*{affName}" >
-								</div>
-						
-							</div>
-						
-							<button id="btn_search" class="btn btn-success" type="submit">
-											<span class="glyphicon glyphicon-search "></span>
-										</button>
-							<button id="btn_advanced" class="btn btn-success  ">
-											<span class="glyphicon glyphicon-edit "></span>
-										</button>
-						</form>						
-						
-						
-						
-						<!--这是右边菜单-->
-						<div class="col-md-3 col-sm-12" >
-							<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
-								<ul class="nav navbar-nav navbar-right">
-									<li>
-										<a href="#" target="_blank">API</a>
-									</li>
-									<li>
-										<a href="#" target="_blank">博客</a>
-									</li>
-									<li>
-										<a href="#">关于</a>
-									</li>
-								</ul>
-							</nav>
-							
-						</div>
-						
+					
+										<!-- 搜索表单部分-->
+		<form class="form-inline col-md-6 col-sm-12 header-search" action="#" th:action="@{/search}" th:object="${para}" method="get">
+			<input type="hidden" class="form-control" value="DEFAULT_RANK" name="rt">
+			<input type="hidden" class="form-control" value="1" name="page">
+
+
+			<div id="input_single" class="form-group col-md-10 col-sm-12" style="display: inline">
+				<label class="sr-only" for="keywords">keywords</label>
+				<input class="form-control" id="search_input" type="text" style="width: 92%;"  placeholder="keywords"  th:field="*{keywords}">
+			</div>
+
+			<div id="input_multi" class="form-group col-md-10 col-sm-12" style="display: none;">
+				<div class="form-group">
+					<label class="sr-only" for="title">title</label>
+					<input  class="form-control " id="title" placeholder="keywords" name="" >
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="authorname">authorname</label>
+					<input type="text" class="form-control " id="author" placeholder="author name" th:field="*{author}" >
+				</div>
+				<div class="form-group ">
+					<label class="sr-only" for="year">affiliation</label>
+					<input type="text" class="form-control " id="aff" placeholder="affiliation" th:field="*{affName}" >
+				</div>
+				
+				<div class="form-group ">
+					<label class="sr-only" for="year">venue</label>
+					<input type="text" class="form-control " id="ven" placeholder="venue" th:field="*{venName}" >
+				</div>
+			</div>
+
+			<button id="btn_search" class="btn btn-primary" type="submit">
+				<span class="glyphicon glyphicon-search "></span>
+			</button>
+			<button id="btn_advanced" class="btn btn-primary  ">
+				<span class="glyphicon glyphicon-edit "></span>
+			</button>
+		</form>
+
+
+
+		<!--这是右边菜单-->
+		<div class="col-md-3 col-sm-12" >
+			<nav id="bs-navbar" class="collapse navbar-right navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="#" target="_blank">API</a>
+					</li>
+					<li>
+						<a href="#" target="_blank">Blog</a>
+					</li>
+					<li>
+						<a href="#">About</a>
+					</li>
+				</ul>
+			</nav>
+
+		</div>
+
+					
 			</nav>
 		</header>
 		
 		
-	
-		
 		<!-- main container .-->
-		<div class="container-fluid">
-			<div class="row">
-				
-				<!--左边的筛选条件-->
-				<div id="div_left_container" class="col-md-2 col-sm-12" style=" margin-top: 80px; ">
-					<div class="div-left-condition">
-						<div>
-							<h4>Filter Conditations &nbsp;</h4><img style="width: 32px; height: 32px;" src="img/filterconditions.png" />
-						</div>
-						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
-						<div class="div-left-date-range">
-							<h4>Date Range </h4><br />
-							
-							<select id="select_start">
-                         		<option th:each="entry : ${acjaShow.years}"
-                                 	th:text="${entry}">1995</option>
-							</select>
+<div class="container-fluid">
+	<div class="row">
 
-							&nbsp;to &nbsp;&nbsp;
-							<select id="select_end">
-                         		<option th:each="entry : ${acjaShow.years}" th:text="${entry}"> 2016</option>
-							</select>
-				
-						</div>
-						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
-						
-						<div class="div-left-rank-type">
-							<h4>Ranking Type</h4><br />
-							<ul class="ul-style-type" id="ul_rank_type">
-								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; font-size:large;'" th:href="@{/aff(affID=${para.affID}, rt='DEFAULT_RANK', page=1)}">
-										<span>SARank</span>
-									</a>
-								</li>
-								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/aff(affID=${para.affID}, rt='DEFAULT_RANK', page=1)}"><span>relevance ranking</span></a>
-								</li>
-								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/aff(affID=${para.affID}, rt='MOST_CITATION', page=1)}" ><span>most citations</span></a>
-								</li>
-							
-								<li>
-									<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; font-size:large;'"  th:href="@{/aff(affID=${para.affID}, rt='LATEST_YEAR', page=1)}" ><span>time ranking</span></a>
-								</li>
-							</ul>
-												
-						</div>
-						<HR align="left" width="100%" SIZE=7 color="#8C8C8C">
-					</div>
+		<!--左边的筛选条件-->
+		<div style="margin-top: 90px;" class="col-md-2 col-sm-12" >
+			
+			
+
+			<div class="div-left-date-range" >
+				<h5 style="font-size: larger;">Year Range </h5><br />
+
+				<select id="select_start">
+					                         		<option th:each="entry : ${acjaShow.years}"
+															                                  	th:text="${entry}">1995</option>
+				</select>
+				to
+				<select id="select_end">
+					                         		<option th:each="entry : ${acjaShow.years}" th:text="${entry}"> 2016</option>
+				</select>
+
+			</div>
+			<br />
+
+			<div class="div-left-rank-type">
+				<h5 style="font-size: larger;">Ranking Metrics</h5><br />
+				<ul class="ul-style-type" id="ul_rank_type">
+
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
+							<span style="font-size: 16px; ">Relevance</span></a>
+					</li>
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" >
+							<span style="font-size: 16px; ">Importance</span></a>
+					</li>
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; '" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+							<span style="font-size: 16px; ">Relevant Importance</span>
+						</a>
+					</li>
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
+							<span style="font-size: 16px; ">Citation Counts</span></a>
+					</li>
+
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
+							<span style="font-size: 17px; ">Publish Time</span></a>
+					</li>
+
+				</ul>
+
+			</div>
+			
+		
+			
+		</div>
+
+		<div class="col-md-7">
+
+
+			<div class="panel panel-info" style="margin-top: 60px;">
+				<div class="panel-heading">
+					<span th:text="|Search  ${acjaShow.allPaperNum}  Relevant Articles|"> Search xxx Relevant Articles</span>
 				</div>
 
-				<!--中间展示数据-->
- 				<div class="col-md-7 col-sm-12" style="margin-top: 50px;">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<span th:text="|search  ${acjaShow.allPaperNum}  relevant papers|"> search xxx relevant papers</span>
-						</div>
-				
-						<div id="paper_entity" style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
-							
-								<th:block th:each="item:${paperList}">
-									
-										<div class="div-paper-item">
-		
-		
-		
-		
-											<a class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
-											<br />
-											
-											<span  th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
-		
-											<br />
-		
-											<ul class="ul-paper-item-aths">
-												<th:block th:each="name, nameStat: ${item.authors}">
-													<li>
-														<a th:utext="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
-													</li>
-													
-											
-												</th:block>
-											</ul>
-												
-											
-											<hr  class="hr-paper-split"/>
-											
-											<div  > 
-												<ul class="ul-paper-item-actions">
-													<li class="li-actions-cite">
-														<img src="img/cite.png"/>
-														<a th:text="|cited by ${item.citations}|" >cited by 111 </a>		
-													</li>
-													
-													<li>
-														<span class="glyphicon glyphicon-globe"></span> 
-														<a th:text="${item.doi}" >doi </a>
-													</li>
-													<li>
-														<img  src="img/bib.png"/> 
-														<a  > bibtex  </a>	
-													</li>													
-													<li>
-														<img src="img/version.png" />
-														<a th:text="|All ${item.versions} Versions|" >all .. versions</a>
-													</li>
-													
-												</ul>
-												
-											</div>	
-												
-										</div>
+				<div id="paper_entity" style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
+	
+	
+					<th:block th:each="item, itemState :${paperList}">
+
+						<div class="div-paper-item">
+
+							<span class="badge" th:text="${itemState.index + 1}">1</span>
+							<a style="color:rgb(0,0,204)" class="div-paper-item-title" th:href="@{/paper(paid=${item.paID},type=info)}" th:utext="${item.title}"> this is paper title this is paper title  Mastering data mining: The art and science of customer relationship management </a>
+							<br />
+							<span th:text="${#strings.toUpperCase(item.venue)} +'('+ ${item.year} + ')'">Venue(2014)</span>
+							<br />
+
+
+							<ul class="ul-paper-item-aths">
+								<th:block th:each="name, nameStat: ${item.authors}">
+
+									<li>
 										
-										
-										
+										<a style="color:rgb(0,128,0)" th:utext="${item.authors[nameStat.index]}" th:href="@{/author(athid=${item.authorsID[nameStat.index]})}">author1</a>,&nbsp;
+									</li>
+
 								</th:block>
-				
+							</ul>
+
+
+							<!--<hr  class="hr-paper-split"/>-->
+							<div  >
+
+								<ul class="ul-paper-item-actions">
+									<li class="li-actions-cite">
+										<img src="img/cite.png"/>
+										<a th:text="|cited by ${item.citations}|" >cited by 111 </a>
+									</li>
+
+									<li>
+										<span class="glyphicon glyphicon-globe"></span>
+										<a th:text="${item.doi}" >doi </a>
+									</li>
+									<li>
+										<img  src="img/bib.png"/>
+										<a> bibtex </a>
+									</li>
+									<li>
+										<img src="img/version.png" />
+										<a th:text="|all ${item.versions} versions|" >all .. versions</a>
+									</li>
+
+								</ul>
+
+							</div>
+
+
 						</div>
-				
-					</div>
+					</th:block>
+	
 				</div>
-				
-				
-				<!--右边的一些ranking-->
-				<div id="div_right_container" class="col-md-3 "style="background-color:; margin-top: 80px; " >
-					
+
+			</div>
+
+
+
+		</div>
+
+		<!--右边的一些ranking-->
+		<div id="div_right_container" class="col-md-3 " style=" margin-top: 100px; ">
+
+			<div class="container-fluid" style="margin-left: -15px;">
+				<div class="row">
+
 					<!--some Authors-->
-					<div id="div_right_author" class="col-sm-12 col-md-12"> 
-						<img class="img_right_icon" src="img/ath-ac.png"/> <h4>Prestige Author</h4>
+					<div id="div_right_author" class="col-sm-6 col-md-6"  >
+						<img class="img_right_icon" src="img/ath-ac.png" />
+						<h5 style="font-size: 16px;">Top Authors</h5>
 						<ul id="ul_ath" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.athName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.athName[nameStat.index]}" th:href="@{/author(athid=${acjaShow.athID[nameStat.index]})}">author1</a>
 								</li>
 							</th:block>
-							
+
 						</ul>
-						<a  onclick="showMore('ath')"><span >More Authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+						<a onclick="showMore('ath')"><span>More Authors </span><span id="span_icon_ath" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+
 					</div>
-					
-					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
-					
+
 					<!--Affiliations-->
-					<div id="div_right_aff" class="col-sm-12 col-md-12">
-						<img class="img_right_icon" src="img/venue-ac.png"/> <h4>Influential Affiliation</h4>
-							<ul id="ul_aff" class="ul-style-type">
+					<div id="div_right_aff" class="col-sm-6 col-md-6" style="margin-left: -10px;"  >
+						<img class="img_right_icon" src="img/aff-ac.png" />
+						<h5 style="font-size: 16px;">Top Affiliations</h5>
+						<ul id="ul_aff" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.affName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
-								</li>	
-							</th:block>
-						</ul>
-						
-						<a onclick="showMore('aff')"><span >More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						
-					</div>
-					
-					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
-					
-					<!--some Journal -->
-					<div id="div_right_jou" class="col-sm-12 col-md-12">
-						<img class="img_right_icon" src="img/jou-ac.png"/> <h4>Famous Journals</h4>
-						<ul id="ul_jou" class="ul-style-type">
-							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
-								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.affName[nameStat.index]}" th:href="@{/aff(affID=${acjaShow.affID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
-								
 						</ul>
-						<a onclick="showMore('jou')"><span >More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-							
-							
+
+						<a onclick="showMore('aff')"><span>More Affilations </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+
 					</div>
-					
-					<HR align="left" width="80%" SIZE=7 color="#8C8C8C">
-					
+				</div>
+			</div>
+
+			<div class="container-fluid" style="margin-left: -15px; margin-top: 30px;">
+				<div class="row">
+
 					<!--some conference -->
-					<div id="div_right_con" class="col-sm-12 col-md-12"> 
-						<img class="img_right_icon" src="img/conf-ac.png"/> <h4>Famous Conferences</h4>
+					<div id="div_right_con" class="col-sm-6 col-md-6">
+						<img class="img_right_icon" src="img/con-ac.png" />
+						<h5 style="font-size: 16px;">Top Conferences</h5>
 						<ul id="ul_con" class="ul-style-type">
 							<th:block th:each="name, nameStat: ${acjaShow.conName}">
 								<li>
-									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a> <a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.conName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.conID[nameStat.index]},rt='DEFAULT_RANK', page=1)}">aff1</a>
 								</li>
 							</th:block>
-								
 						</ul>
-						<a onclick="showMore('con')"><span >More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-						
+						<a onclick="showMore('con')"><span>More Conferences </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+
 					</div>
-					
-					
+
+					<!--some Journal -->
+					<div id="div_right_jou" class="col-sm-6 col-md-6" style="margin-left: -10px;">
+						<img class="img_right_icon" src="img/jou-ac.png" />
+						<h5 style="font-size: 16px;">Top Journals</h5>
+						<ul id="ul_jou" class="ul-style-type">
+							<th:block th:each="name, nameStat: ${acjaShow.jouName}">
+								<li>
+									<a><span class='glyphicon glyphicon-hand-right'></span>&nbsp; </a>
+									<a th:text="${acjaShow.jouName[nameStat.index]}" th:href="@{/ven(venID=${acjaShow.jouID[nameStat.index]}, rt='DEFAULT_RANK', page=1)}">aff1</a>
+								</li>
+							</th:block>
+
+						</ul>
+						<a onclick="showMore('jou')"><span>More Journals </span><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+					</div>
+
 				</div>
-				
-
 			</div>
-		
-		</div>
+
+			<div >
 				
+		
+				<div class="col-md-12" id = "affPieJou" style=" height: 280px; margin-top: 70px;"  > </div>
+				<div class="col-md-12" id = "affPieAff" style=" height: 280px; margin-top: 30px;"  > </div>
+				<div class="col-md-12"  id = "affPieAuthor" style="height: 280px; margin-top: 30px; "  > </div>	
+			</div>
+			 
+		</div>
+	</div> 
+
+</div>
 
 
-	<!--search(keywords=${searchPara.keywords},author=${searchPara.author}, ${year=searchPara.year},-->
-	<div class="row">
-      <div class="col-md-4 col-md-offset-4">
-        <div th:if="${paper.totalPages != 1}" class="form-group col-md-11 pagination-centered">
-                <ul class="pagination">
-            	
-                <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt}, page=1)}">&laquo;</a>
-                </li>
-                <li th:class="${paper.number == 0} ? disabled">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${paper.number})}">&larr;</a>
-                </li>
-                <li th:class="${paper.number == (page - 1)} ? 'active pointer-disabled'"
-                    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${page})}" th:text="${page}"></a>
-                </li>
-                <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink"th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${paper.number + 2})}">&rarr;</a>
-                </li>
-                <li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
-                    <a class="pageLink" th:href="@{aff(affID=${para.affID}, rt=${para.rt},page=${paper.totalPages})}">&raquo;</a>
-                </li>
-            </ul>
-        </div>
-      </div>
-    </div>
 
+<!--search(keywords=${searchPara.keywords},author=${searchPara.author}, ${year=searchPara.year},-->
+<div class="row" style="margin-top: 50px;">
+	<div class="col-md-4 col-md-offset-4">
+		<div th:if="${paper.totalPages != 1}" class="form-group col-md-11 pagination-centered">
+			<ul class="pagination">
+
+				<li th:class="${paper.number == 0} ? disabled">
+					<a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}">&laquo;</a>
+				</li>
+				<li th:class="${paper.number == 0} ? disabled">
+					<a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${paper.number})}">&larr;</a>
+				</li>
+				<li th:class="${paper.number == (page - 1)} ? 'active pointer-disabled'"
+					th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+					<a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${page})}" th:text="${page}"></a>
+				</li>
+				<li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
+					<a class="pageLink"th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${paper.number + 2})}">&rarr;</a>
+				</li>
+				<li th:class="${paper.number + 1 == paper.totalPages} ? disabled">
+					<a class="pageLink" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=${paper.totalPages})}">&raquo;</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+	
 		
 		
 		<footer class="page-footer font-small blue pt-4 mt-4">
@@ -353,8 +385,14 @@
 		<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 		<script src="js/mricode.pagination.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/echarts.min.js" ></script>
 		<!--<script src="js/main_search.js"></script>-->
 		<script src="js/mainSearch.js"></script>
+		<script src="js/affPieAuthor.js"></script>
+		<script src="js/affPieJou.js"></script>
+		<script src="js/affPieAff.js"></script>
+		
+		
   
 	</body>
 </html>

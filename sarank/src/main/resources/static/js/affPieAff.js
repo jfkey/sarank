@@ -1,13 +1,13 @@
 
 
 // chart of search author weights .
-var chart_search_author = echarts.init(document.getElementById('chartSearchAuthor'));
+var aff_pie_aff = echarts.init(document.getElementById('affPieAff'));
 				 
 	
-	chart_search_author.setOption({
+	aff_pie_aff.setOption({
 	color:['#FFAE8B','#428BCA','#67E0E3','#EEDD78', '#7D96BC', '#9BD4B9', '#E7BCF3', '#96BFFF', '#837BEA', '#F49F42', '#759AA0'],
 	 title : {
-        text: 'Author',
+        text: 'Affiliation',
         x:'left',
         textStyle : {
 						fontSize: 16,
@@ -23,9 +23,9 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
         type: 'scroll',
         orient: 'vertical',
         right: 10,
+        show:false, 
         top: 20,
         bottom: 20,
-        show: false, 
         data:['Jiawei Han', 'Wenfei fan','Jerry Xu Yu','Xindong Wu',  'Shuai Ma', 'Xuelian lin']
   
     },
@@ -55,19 +55,19 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
     ]
 })
 	
-	$.get('/search/chartauthor').done(function(data) {
-		chart_search_author.setOption({
+	$.get('/aff/pieaff').done(function(data) {
+		aff_pie_aff.setOption({
 			legend: {
-				data: data.authorName
+				data: data.affName
 			},
 			series: [{
 				data:(function(){
 				var res = [];
-				var len =  data.authorWeight.length; 
+				var len =  data.affWeight.length; 
 				for (var i = 0, size = len;i<size; i++ ) {
 					res.push({
-	                	name: data.authorName[i],
-	                	value: data.authorWeight[i]
+	                	name: data.affName[i],
+	                	value: data.affWeight[i]
 	                });	
 				}
                 return res; 

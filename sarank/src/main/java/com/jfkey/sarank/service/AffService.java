@@ -1,5 +1,6 @@
 package com.jfkey.sarank.service;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jfkey.sarank.utils.ACJAInfoHandler;
+import com.jfkey.sarank.utils.FormatWords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,15 +38,34 @@ import com.jfkey.sarank.utils.RankType;
 public class AffService {
 	@Autowired
 	private AffRepository affRespository;
-	
+
+	private Map<String, Object> affPieAff;
+	private Map<String, Object> affPieAuthor;
+	private Map<String, Object> affPieJou;
+
+	public Map<String, Object> getAffPieAff() {
+		return affPieAff;
+	}
+	public Map<String, Object> getAffPieAuthor (){
+		return affPieAuthor;
+	}
+	public Map<String, Object> getAffPieJou() {
+		return affPieJou;
+	}
+
 	public ACJAShow getACJAShow(SearchPara para) {
-		ACJAShow acjaShow = new ACJAShow();
+
 		String affID = para.getAffID();
 		// get first 30 paper to generate acjaShow
 		int skip = 0;
 		int limit = 30;
 		// get and set author conference journal affiliation information
-		getACJAShowByACJA(acjaShow, affRespository.getACJAShowByAffID(affID, skip, limit));
+		// getACJAShowByACJA(acjaShow, affRespository.getACJAShowByAffID(affID, skip, limit));
+		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(affRespository.getACJAShowByAffID(affID, skip, limit), limit);
+		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
+		affPieAff = acjaInfoHandler.getAffPie();
+		affPieAuthor = acjaInfoHandler.getSearchAuthorPie();
+		affPieJou = acjaInfoHandler.getJouPie();
 		
 		long numberSize = 0;
 		String affName = "";
@@ -75,6 +97,15 @@ public class AffService {
 		int skip = (page ) * Constants.PRE_PAGE_SIZE;
 		if (rt == RankType.DEFAULT_RANK || rt == RankType.RELEVANCE_RANK) {
 			List<PaperInSearchBean> allPapers = getIteratorData(affRespository.getPapersByAffID_DefaultRank(affID, skip, limit));
+			for (PaperInSearchBean tmp : allPapers) {
+				tmp.setTitle(FormatWords.sentenceToUpper(tmp.getTitle()));
+				if (tmp.getAuthors() != null) {
+					for (int i =0 ; i < tmp.getAuthors().length; i++) {
+						tmp.getAuthors()[i] = FormatWords.sentenceToUpper(tmp.getAuthors()[i]);
+					}
+				}
+			}
+
 			result.put("paperList", allPapers );
 		} else if (rt == RankType.LATEST_YEAR) {
 			List<PaperInSearchBean> allPapers = getIteratorData(affRespository.getPapersByAffID_LatestYear(affID, skip, limit));

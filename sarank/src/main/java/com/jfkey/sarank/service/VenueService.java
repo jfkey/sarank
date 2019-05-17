@@ -29,14 +29,15 @@ import com.jfkey.sarank.utils.RankType;
 public class VenueService {
 	@Autowired
 	private VenueRepository venueRepository;
+	private Map<String, Object> pieAff;
+	private Map<String, Object> pieAuthor;
 
 	public Map<String, Object> getPieAff (){
-		// 10:50 - 12:20 .
-		return null;
+		return pieAff;
 	}
 
 	public Map<String, Object> getPieAuthor() {
-		return null;
+		return pieAuthor;
 	}
 
 
@@ -109,6 +110,9 @@ public class VenueService {
 		int limit = 40;
 		// getACJAShowByACJA(acjaShow, venueRepository.getACJAByVenID(venID, skip, limit));
 		ACJAInfoHandler acjaInfoHandler= new ACJAInfoHandler(venueRepository.getACJAByVenID(venID, skip, limit), limit);
+		pieAuthor = acjaInfoHandler.getSearchAuthorPie();
+		pieAff = acjaInfoHandler.getAffPie();
+
 		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
 
 		// set paper number

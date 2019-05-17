@@ -2,13 +2,10 @@ package com.jfkey.sarank.controller;
 
 import java.util.Map;
 
-import com.jfkey.sarank.service.PaperDetailsService;
-import com.jfkey.sarank.service.SearchAllService;
-import com.jfkey.sarank.service.VenueService;
+import com.jfkey.sarank.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jfkey.sarank.service.AuthorService;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -32,6 +29,8 @@ public class MainRestController {
 	@Autowired
 	private VenueService venueService;
 
+	@Autowired
+	private AffService affService;
 
 
 	@RequestMapping("/author/firstAndNot")
@@ -80,8 +79,19 @@ public class MainRestController {
 		return venueService.getPieAuthor();
 	}
 
-	@RequestMapping("/venue/pieaff")
-	public Map<String, Object> getVenuePieAff() {
-		return venueService.getPieAff();
+	@RequestMapping("/aff/pieaff")
+	public Map<String, Object> getAffPieAff() {
+		return affService.getAffPieAff();
 	}
+
+	@RequestMapping("/aff/pieauthor")
+	public Map<String, Object> getAffPieAuthor() {
+		return affService.getAffPieAuthor();
+	}
+
+	@RequestMapping("/aff/piejou")
+	public Map<String, Object> getAffPieJou() {
+		return affService.getAffPieJou();
+	}
+
 }

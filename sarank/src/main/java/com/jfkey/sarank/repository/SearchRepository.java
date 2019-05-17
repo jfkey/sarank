@@ -123,8 +123,8 @@ public interface SearchRepository extends Neo4jRepository<Paper, Long> {
 			+ "jouID, conID, venName, vs.score AS venScore, venueType, COLLECT(affID ) AS affIDs, COLLECT(affName) AS affNames, "
 			+ "COLLECT (affScore) AS affScores, paYear AS pubYear, score order by score desc")
 	Iterable<ACJA> getACJAInfo(@Param("paIDs") List<String> paIDs);
+	//  a.athScore * (SIZE(()-[:PAAAth]->(a))) AS athScore,
 
-	
 	/**
 	 * 
 	 * @param athName author name

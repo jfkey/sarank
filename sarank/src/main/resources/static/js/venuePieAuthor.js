@@ -1,10 +1,10 @@
 
 
 // chart of search author weights .
-var chart_search_author = echarts.init(document.getElementById('chartSearchAuthor'));
+var ven_pie_author = echarts.init(document.getElementById('venuePieAuthor'));
 				 
 	
-	chart_search_author.setOption({
+	ven_pie_author.setOption({
 	color:['#FFAE8B','#428BCA','#67E0E3','#EEDD78', '#7D96BC', '#9BD4B9', '#E7BCF3', '#96BFFF', '#837BEA', '#F49F42', '#759AA0'],
 	 title : {
         text: 'Author',
@@ -25,7 +25,6 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
         right: 10,
         top: 20,
         bottom: 20,
-        show: false, 
         data:['Jiawei Han', 'Wenfei fan','Jerry Xu Yu','Xindong Wu',  'Shuai Ma', 'Xuelian lin']
   
     },
@@ -55,8 +54,8 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
     ]
 })
 	
-	$.get('/search/chartauthor').done(function(data) {
-		chart_search_author.setOption({
+	$.get('/venue/pieauthor').done(function(data) {
+		ven_pie_author.setOption({
 			legend: {
 				data: data.authorName
 			},
