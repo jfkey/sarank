@@ -2,6 +2,7 @@ package com.jfkey.sarank.repository;
 
 import java.util.Map;
 
+import com.jfkey.sarank.domain.VensHit;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
@@ -101,8 +102,7 @@ public interface VenueRepository extends Neo4jRepository<Paper, Long>{
 			+ "USING INDEX y:Years(year) "
 			+ "RETURN paID, COLLECT(authorID) AS athIDs, COLLECT(author) AS aths, COLLECT(athScore) AS athScores, jouID, conID, venName, vs.score AS venScore, venueType,  COLLECT(affID ) AS affIDs, COLLECT(affName ) AS affNames, COLLECT (affScore) AS affScores, paYear AS pubYear; ")
 	Iterable<ACJA> getACJAByVenID(@Param("venID")String venID, @Param("skip")int skip, @Param("limit")int limit );
-	
-	
+
 	/**
 	 * 
 	 * @param venID
@@ -110,7 +110,11 @@ public interface VenueRepository extends Neo4jRepository<Paper, Long>{
 	 */
 	@Query("MATCH ()-[:PaVenue]->(v:Venue) "
 			+ "WHERE v.venID={venID} "
-			+ "RETURN COUNT(*) AS numbers, v.venueName AS venName "
+			+ "RETURN COUNT(*) AS numbers, v.fullName + \"(\" + v.venueName+\")\" AS venName "
 			+ "LIMIT 1;")
 	Iterable<Map<String, Object>> getVenueNameAndPaperNumber(@Param("venID")String venID);
+
+	@Query("match(v:Venue)-[]->(c:Coni) where v.venID = {venID} return c.shortName +\" (\"+c.location +\")\" as venName, c.coniID as venID, c.location as location order by venName desc limit 5")
+	Iterable<VensHit> getConis(@Param("venID")String venName);
+
 }

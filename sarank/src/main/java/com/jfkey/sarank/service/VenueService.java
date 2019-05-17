@@ -8,20 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jfkey.sarank.domain.*;
 import com.jfkey.sarank.utils.ACJAInfoHandler;
 import com.jfkey.sarank.utils.FormatWords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jfkey.sarank.domain.ACJA;
-import com.jfkey.sarank.domain.ACJAShow;
-import com.jfkey.sarank.domain.Pager;
-import com.jfkey.sarank.domain.PaperInSearchBean;
-import com.jfkey.sarank.domain.SearchPara;
-import com.jfkey.sarank.domain.SortAff;
-import com.jfkey.sarank.domain.SortAuthor;
-import com.jfkey.sarank.domain.SortCon;
-import com.jfkey.sarank.domain.SortJou;
 import com.jfkey.sarank.repository.VenueRepository;
 import com.jfkey.sarank.utils.Constants;
 import com.jfkey.sarank.utils.RankType;
@@ -37,7 +29,17 @@ import com.jfkey.sarank.utils.RankType;
 public class VenueService {
 	@Autowired
 	private VenueRepository venueRepository;
-	
+
+	public Map<String, Object> getPieAff (){
+		// 10:50 - 12:20 .
+		return null;
+	}
+
+	public Map<String, Object> getPieAuthor() {
+		return null;
+	}
+
+
 	public Map<String, Object> findVenuePaper(SearchPara para, ACJAShow acjaShow) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		int allNumber = acjaShow.getAllPaperNum();
@@ -86,9 +88,11 @@ public class VenueService {
 				result.put("paperList", new ArrayList<PaperInSearchBean>());
 			}
 			
-		}		
-		
-		
+		}
+
+		List<VensHit> vensHitList =  getIteratorData(venueRepository.getConis(venueID));
+
+		result.put("conis", vensHitList);
 		result.put("pager", new Pager(allNumber, para.getPage(), Constants.BUTTONS_TO_SHOW));
 		Map<String, Object> paper = new HashMap<String, Object>();
 		paper.put("totalPages",Math.floorDiv(allNumber, Constants.PRE_PAGE_SIZE) +(allNumber % Constants.PRE_PAGE_SIZE == 0 ? 0 : 1) );

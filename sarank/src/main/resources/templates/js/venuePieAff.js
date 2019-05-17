@@ -1,13 +1,12 @@
 
 
 // chart of search author weights .
-var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'));
+var venue_pie_aff = echarts.init(document.getElementById('venuePieAff'));
 				 
-	// 7D96BC 67E0E3
-	chart_search_conf.setOption({
-	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78','#E7BCF3', '#F49F42', '#759AA0', '#96BFFF', '#837BEA'],
+	venue_pie_aff.setOption({
+	color:['#428BCA','#7D96BC','#FFAE8B','#67E0E3','#9BD4B9', '#EEDD78','#E7BCF3',  '#F49F42', '#759AA0' , '#96BFFF', '#837BEA'],
 	 title : {
-        text: 'Conference',
+        text: 'Affiliation',
         x:'left',
         textStyle : {
 						fontSize: 16,
@@ -24,6 +23,7 @@ var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'))
         orient: 'vertical',
         right: 10,
         top: 20,
+        show: false,
         bottom: 20,
         data:['VLDB', 'SIGMOD','ICDE','WSDM',  'CIKM', 'ICDM']
   
@@ -53,27 +53,28 @@ var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'))
         }
     ]
 })
+
 	
-$.get('/search/chartconf').done(function(data) {
-	chart_search_conf.setOption({
-		legend: {
-			data: data.confName
-		},
-		series: [{
-			data:(function(){
+	$.get('/venue/pieaff').done(function(data) {
+		venue_pie_aff.setOption({
+			legend: {
+				data: data.authorName
+			},
+			series: [{
+				data:(function(){
 				var res = [];
-				var len =  data.confWeight.length; 
+				var len =  data.authorWeight.length; 
 				for (var i = 0, size = len;i<size; i++ ) {
 					res.push({
-	                	name: data.confName[i],
-	                	value: data.confWeight[i]
+	                	name: data.authorName[i],
+	                	value: data.authorWeight[i]
 	                });	
 				}
                 return res; 
 				
-			})() 
-		}]
+				})() 
+				
+			}]
+		});
 	});
-});
-
- 
+			

@@ -79,6 +79,22 @@ h6 {
 	color: rgb(51, 122, 183);
 }
 
+.ul-style-type2 {
+	list-style-type: none;
+}
+
+.ul-style-type2 li {
+	margin-top: 6px;
+}
+
+.ul-style-type2 a {
+	color: #222222;
+}
+
+.ul-style-type2 a:hover {
+	color: rgb(51, 122, 183);
+}
+
 #div-left-container {
 	margin-top: 100px;
 	

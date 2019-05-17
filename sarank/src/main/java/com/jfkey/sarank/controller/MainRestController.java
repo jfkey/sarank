@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.jfkey.sarank.service.PaperDetailsService;
 import com.jfkey.sarank.service.SearchAllService;
+import com.jfkey.sarank.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,6 +28,9 @@ public class MainRestController {
 
 	@Autowired
 	private PaperDetailsService paperDetailsService;
+
+	@Autowired
+	private VenueService venueService;
 
 
 
@@ -71,5 +75,13 @@ public class MainRestController {
 		return paperDetailsService.getCitationTrend();
 	}
 
+	@RequestMapping("/venue/pieauthor")
+	public Map<String, Object> getVenuePieAuthor() {
+		return venueService.getPieAuthor();
+	}
 
+	@RequestMapping("/venue/pieaff")
+	public Map<String, Object> getVenuePieAff() {
+		return venueService.getPieAff();
+	}
 }
