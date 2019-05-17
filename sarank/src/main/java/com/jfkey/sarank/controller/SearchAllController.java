@@ -77,9 +77,15 @@ public class SearchAllController {
 		searchPara.setPage(evalPage);
 		searchPara.setRt(rt.get());
 		searchPara.setFormatStr(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
-		searchPara.setAuthor(searchPara.getAuthor().trim());
-		searchPara.setVenName(searchPara.getVenName().trim());
-		searchPara.setAffName(searchPara.getAffName().trim());
+		if (searchPara.getAuthor() != null) {
+			searchPara.setAuthor(searchPara.getAuthor().trim());
+		}
+		if (searchPara.getVenName() != null) {
+			searchPara.setVenName(searchPara.getVenName().trim());
+		}
+		if (searchPara.getAffName()!=null) {
+			searchPara.setAffName(searchPara.getAffName().trim());
+		}
 		LOG.info("search parameter : " + searchPara);
 
 

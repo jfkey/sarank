@@ -236,7 +236,11 @@ public class ACJAInfoHandler {
                 }
             }
             if (tmpScore == 0.0 ){
-                tmpScore = acjaShow.getJouScore().get(acjaShow.getJouScore().size() - 1) / 2;
+                if (acjaShow.getJouScore()== null || acjaShow.getJouScore().size() == 0 ) {
+                    tmpScore = 0.0;
+                } else {
+                    tmpScore = acjaShow.getJouScore().get(acjaShow.getJouScore().size() - 1) / 2;
+                }
             }
 
             legendData.add("OTHER");

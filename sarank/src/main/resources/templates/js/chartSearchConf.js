@@ -35,12 +35,7 @@ var chart_search_conf = echarts.init(document.getElementById('chartSearchConf'))
             radius : '70%',
             center: ['45%', '60%'],
             data:[
-                {value:1.5, name:'ICDE'},
-                {value:1.3, name:'WSDM'}, 
-                {value:1.1, name:'CIKM'},
-                {value:0.7, name:'ICDM'},
-                {value:2, name:'SIGMOD'},
-                {value:3, name:'VLDB'}
+                {value:1.1, name:'CIKM'}
                 
             ],
             itemStyle: {

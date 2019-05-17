@@ -79,6 +79,13 @@ public class MainRestController {
 		return venueService.getPieAuthor();
 	}
 
+
+	@RequestMapping("/venue/pieaff")
+	public Map<String, Object> getVenuePieAff() {
+		return venueService.getPieAff();
+	}
+
+
 	@RequestMapping("/aff/pieaff")
 	public Map<String, Object> getAffPieAff() {
 		return affService.getAffPieAff();

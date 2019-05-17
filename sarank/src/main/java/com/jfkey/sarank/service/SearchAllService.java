@@ -90,7 +90,7 @@ public class SearchAllService {
 		double nor = Constants.C;
 		String wordList = "['data', 'mining']";
 		String model = Constants.MODEL;
-		// 1. search and get paper info 
+
 		long t1 = System.currentTimeMillis();
 		
 		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
@@ -120,7 +120,14 @@ public class SearchAllService {
 		List<PaperInSearchBean> searchedPaperList = getIteratorData(searchedPaperIt);
 		List<PaperInSearchBean> searchedPaperList2 = getIteratorData(searchedPaperIt2);
 		List<PaperInSearchBean> searchedPaperList3 = getIteratorData(searchedPaperIt3);
-
+		if (searchPara.getRt() == RankType.MOST_CITATION) {
+			searchedPaperList.sort(new Comparator<PaperInSearchBean>() {
+				@Override
+				public int compare(PaperInSearchBean o1, PaperInSearchBean o2) {
+					return o2.getCitations() - o1.getCitations();
+				}
+			});
+		}
 		// title to upper
 		capitalize(searchedPaperList);
 

@@ -37,11 +37,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
             center: ['45%', '60%'],
             data:[
                 {value:3.3, name:'Jiawei Han'},
-                {value:2.5, name:'Wenfei Fan'},
-                {value:2.0, name:'Jerry Xu Yu'},
-                {value:1.3, name:'Xindong Wu'}, 
-                {value:1.1, name:'Shuai Ma'},
-                {value:0.4, name:'Xuelian lin'}
+               
                 
             ],
             itemStyle: {
