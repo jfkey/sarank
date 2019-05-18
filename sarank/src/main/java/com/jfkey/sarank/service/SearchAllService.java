@@ -133,9 +133,11 @@ public class SearchAllService {
 		}
 		// title to upper
 		capitalize(searchedPaperList);
+		capitalize(searchedPaperList2);
 
 		// color searched keywords
 		colorTitle(searchedPaperList, searchPara.getKeywords(), 1);
+		colorTitle(searchedPaperList2, searchPara.getKeywords(), 1);
 
 		PaperInSearchBean pib = searchedPaperList.get(0);
 		pib.setVersions(31);

@@ -42,7 +42,7 @@ public class SearchAllController {
 	@Autowired
 	private QueryEvaluation queryEvaluation;
 
-	@GetMapping("/eval")
+	@GetMapping("/eval2")
 	public String eval(Model model) {
 		// init main_eval.html with null data
 		queryEvaluation.doEval();
@@ -62,11 +62,41 @@ public class SearchAllController {
 		model.addAttribute("paper", paper);
 		model.addAttribute("pager", pager);
 
-		System.out.println("model: " + model);
-
 		return "main_eval";
 	}
-	
+
+
+	@GetMapping("/eval")
+	public ModelAndView eval(@ModelAttribute(value = "searchPara") SearchPara searchPara,
+							 @RequestParam("page") Optional<Integer> page, @RequestParam("rt") Optional<RankType> rt ) {
+		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
+		searchPara.setPage(evalPage);
+		searchPara.setRt(rt.get());
+		searchPara.setFormatStr(InputIKAnalyzer.analyzerAndFormat(searchPara.getKeywords(), Constants.PAPER_TITLE));
+		if (searchPara.getAuthor() != null) {
+			searchPara.setAuthor(searchPara.getAuthor().trim());
+		}
+		if (searchPara.getVenName() != null) {
+			searchPara.setVenName(searchPara.getVenName().trim());
+		}
+		if (searchPara.getAffName()!=null) {
+			searchPara.setAffName(searchPara.getAffName().trim());
+		}
+
+		ModelAndView mv= new ModelAndView("/main_eval");
+		mv.addObject("para", searchPara);
+
+		ACJAShow acjaShow = searchAllService.getACJAShow(searchPara);
+
+		mv.addObject("acjaShow", acjaShow);
+		Map<String, Object> res = searchAllService.search(searchPara);
+
+		mv.addAllObjects(res);
+
+
+		return mv;
+	}
+
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public ModelAndView search(@ModelAttribute(value = "searchPara") SearchPara searchPara,
 	@RequestParam("page") Optional<Integer> page, @RequestParam("rt") Optional<RankType> rt ) {
@@ -220,4 +250,28 @@ public class SearchAllController {
 		System.out.println("model: " + model);
 		return "main";
     }
+
+	@GetMapping("/mainEval")
+	public String mainEval(Model model) {
+		// init main_eval.html with null data
+		model.addAttribute("searchPara", new SearchPara());
+		model.addAttribute("acjaShow", new ACJAShow());
+		model.addAttribute("paperList", new ArrayList<PaperInSearchBean>());
+		model.addAttribute("paperList2", new ArrayList<PaperInSearchBean>());
+
+		SearchPara para = new SearchPara();
+		para.setRt(RankType.DEFAULT_RANK);
+		model.addAttribute("para", para);
+
+		// init pagination
+		Pager pager = new Pager(23, 0, BUTTONS_TO_SHOW);
+		Map<String, Object> paper = new HashMap<String, Object>();
+		paper.put("totalPages", 0);
+		paper.put("number", 0);
+		model.addAttribute("paper", paper);
+		model.addAttribute("pager", pager);
+
+		System.out.println("model: " + model);
+		return "main_eval";
+	}
 }
