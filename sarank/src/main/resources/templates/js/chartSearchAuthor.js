@@ -7,7 +7,7 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
 	chart_search_author.setOption({
 	color:['#FFAE8B','#428BCA','#67E0E3','#EEDD78', '#7D96BC', '#9BD4B9', '#E7BCF3', '#96BFFF', '#837BEA', '#F49F42', '#759AA0'],
 	 title : {
-        text: 'Author',
+        
         x:'left',
         textStyle : {
 						fontSize: 16,
@@ -36,7 +36,6 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
             radius : '70%',
             center: ['45%', '60%'],
             data:[
-                {value:3.3, name:'Jiawei Han'},
                
                 
             ],
@@ -52,7 +51,13 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
 })
 	
 	$.get('/search/chartauthor').done(function(data) {
-		chart_search_author.setOption({
+		if (! (!data && typeof(data)!="undefined" && data!=0)){
+			
+	chart_search_author.setOption({
+			
+			title : {
+        	text: 'Author',
+		 	},
 			legend: {
 				data: data.authorName
 			},
@@ -71,6 +76,10 @@ var chart_search_author = echarts.init(document.getElementById('chartSearchAutho
 				})() 
 				
 			}]
+		
 		});
+
+		}
+		
 	});
 			

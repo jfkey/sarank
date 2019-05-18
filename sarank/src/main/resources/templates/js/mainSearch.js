@@ -22,7 +22,7 @@ $("#btn_advanced").click(function(e) {
 $(document).ready(function() {
 	$('#select_start option:first').attr('selected',true);
 	$('#select_end option:last').attr('selected',true);
-	num = 4;
+	num = 5;
 	
 	i = $("#ul_ath").children().length; 
 	if (  i > num ){

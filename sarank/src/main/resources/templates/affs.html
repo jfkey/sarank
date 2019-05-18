@@ -97,6 +97,38 @@
 			<div class="row">
 				
 				<div class="col-md-2 col-sm-12" >
+				
+				<div class="div-left-rank-type" style="margin-top: 120px;">
+				<h5 style="font-size: larger;">Ranking Metrics</h5><br />
+				<ul class="ul-style-type" id="ul_rank_type">
+
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='RELEVANCE_RANK'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='RELEVANCE_RANK', page=1)}" >
+							<span style="font-size: 16px; text-decoration: line-through;">Relevance</span></a>
+					</li>
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='IMPORTANCE_RANK'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='IMPORTANCE_RANK', page=1)}" >
+							<span style="font-size: 16px; ">Importance</span></a>
+					</li>
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='DEFAULT_RANK'} ? '#337AB7' : '#222222')} +'; '" th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='DEFAULT_RANK', page=1)}" >
+							<span style="font-size: 16px; text-decoration: line-through;">Relevant Importance</span>
+						</a>
+					</li>
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='MOST_CITATION'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='MOST_CITATION', page=1)}" >
+							<span style="font-size: 16px; ">Citation Counts</span></a>
+					</li>
+
+					<li>
+						<a th:style="'color:' + @{ (${para.rt.name()=='LATEST_YEAR'} ? '#337AB7' : '#222222')}+'; '"  th:href="@{/search(keywords=${para.keywords},author=${para.author}, affName=${para.affName}, rt='LATEST_YEAR', page=1)}" >
+							<span style="font-size: 17px; ">Publish Time</span></a>
+					</li>
+
+				</ul>
+
+			</div>
+		
 					
 				</div>
 			
@@ -113,7 +145,7 @@
 								<tr>
 									<th class="col-md-1"></th>
 									<th class="col-md-7">Affiliation</th>
-									<th class="col-md-4">Paper Numbers</th>
+									<th class="col-md-4">Articles Numbers</th>
 								</tr>
 							</thead>
 							<tbody>

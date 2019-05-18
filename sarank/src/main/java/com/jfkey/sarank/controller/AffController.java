@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.jfkey.sarank.utils.FormatWords;
+import com.jfkey.sarank.utils.RankType;
 import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,8 @@ public class AffController {
 		mv.addObject("acjaShow", acjaShow);
 		Map<String, Object> searchResult = affService.getAffByID(para, acjaShow);
 		mv.addAllObjects(searchResult);
-		
+
+		para.setRt(RankType.IMPORTANCE_RANK);
 		mv.addObject("para", para );
 		return mv;
 	}

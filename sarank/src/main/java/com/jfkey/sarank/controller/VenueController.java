@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.jfkey.sarank.utils.RankType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,7 +24,7 @@ public class VenueController {
 	@RequestMapping("/ven") 
 	public ModelAndView findVenuePaper(@ModelAttribute(value = "para") SearchPara para ) {
 		para.setPage( para.getPage() - 1);
-		
+
 
 		ModelAndView mv = new ModelAndView("/venue");
 
@@ -33,7 +34,8 @@ public class VenueController {
 		Map<String, Object> result = venueService.findVenuePaper(para, acjaShow);
 
 		mv.addAllObjects(result);
-		
+
+		para.setRt(RankType.IMPORTANCE_RANK);
 		mv.addObject("para", para);
 		return mv;
 	}

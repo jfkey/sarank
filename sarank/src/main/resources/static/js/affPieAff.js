@@ -21,7 +21,7 @@ var aff_pie_aff = echarts.init(document.getElementById('affPieAff'));
     },
     legend: {
         type: 'scroll',
-        orient: 'vertical',
+        orient: 'vertical',        
         right: 10,
         show:false, 
         top: 20,

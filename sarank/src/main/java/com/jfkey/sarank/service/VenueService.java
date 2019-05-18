@@ -109,7 +109,7 @@ public class VenueService {
 		int skip = 0; 
 		int limit = 40;
 		// getACJAShowByACJA(acjaShow, venueRepository.getACJAByVenID(venID, skip, limit));
-		ACJAInfoHandler acjaInfoHandler= new ACJAInfoHandler(venueRepository.getACJAByVenID(venID, skip, limit), limit);
+		ACJAInfoHandler acjaInfoHandler= new ACJAInfoHandler(venueRepository.getACJAByVenID(venID, skip, limit), limit, RankType.DEFAULT_RANK);
 		pieAuthor = acjaInfoHandler.getSearchAuthorPie();
 		pieAff = acjaInfoHandler.getAffPie();
 

@@ -68,16 +68,19 @@ public class SearchAllService {
 		Iterable<SearchHits> queryKeywords = searchRepository.queryByKeywords(queryParam, wordList , limit, skip, rankType, model, alpha);
 		int allNumber = getHitsID(queryKeywords, acjaIDs);
 
-		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(searchRepository.getACJAInfo(acjaIDs), allNumber);
+		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(searchRepository.getACJAInfo(acjaIDs), allNumber, searchPara.getRt());
 		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
 		authorPie = acjaInfoHandler.getSearchAuthorPie();
 		confPie = acjaInfoHandler.getSearchConfPie();
+
 
 		// getDetailACJAInfo(acjaShow, searchRepository.getACJAInfo(acjaIDs), allNumber);
 		// acjaShow upper. 
 		// acjaUpper(acjaShow);
 		return acjaShow;
 	}
+
+
 	
 	private Map<String, Object> searchKeywords(SearchPara searchPara) {
 		Map<String, Object> result = new HashMap<String, Object>();

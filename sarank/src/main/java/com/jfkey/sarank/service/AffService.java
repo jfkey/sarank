@@ -61,7 +61,7 @@ public class AffService {
 		int limit = 30;
 		// get and set author conference journal affiliation information
 		// getACJAShowByACJA(acjaShow, affRespository.getACJAShowByAffID(affID, skip, limit));
-		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(affRespository.getACJAShowByAffID(affID, skip, limit), limit);
+		ACJAInfoHandler acjaInfoHandler = new ACJAInfoHandler(affRespository.getACJAShowByAffID(affID, skip, limit), limit, RankType.DEFAULT_RANK);
 		ACJAShow acjaShow = acjaInfoHandler.getAcjaShow();
 		affPieAff = acjaInfoHandler.getAffPie();
 		affPieAuthor = acjaInfoHandler.getSearchAuthorPie();

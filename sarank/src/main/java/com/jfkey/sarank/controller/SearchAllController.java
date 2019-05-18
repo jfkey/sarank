@@ -96,6 +96,8 @@ public class SearchAllController {
 			ModelAndView mv= new ModelAndView("/main");
 
 			ACJAShow acjaShow = searchAllService.getACJAShow(searchPara);
+
+
 			mv.addAllObjects(searchResult);
 			mv.addObject("acjaShow", acjaShow);		
 			mv.addObject("para", searchPara );
@@ -104,10 +106,12 @@ public class SearchAllController {
 		} else if  (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AUTHOR) {
 			ModelAndView mv= new ModelAndView("/authors");
 			mv.addAllObjects(searchResult);
+			searchPara.setRt(RankType.IMPORTANCE_RANK);
 			mv.addObject("para", searchPara );
 			return mv;
 		} else if (searchResult.get(Constants.SEARCH_TYPE) == SearchType.AFFILIATION) {
 			ModelAndView mv= new ModelAndView("/affs");
+			searchPara.setRt(RankType.IMPORTANCE_RANK);
 			mv.addAllObjects(searchResult);
 			mv.addObject("para", searchPara );
 			
@@ -115,6 +119,7 @@ public class SearchAllController {
 		} else if(searchResult.get(Constants.SEARCH_TYPE) == SearchType.VENUE) {
 			ModelAndView mv = new ModelAndView("vens");
 			mv.addAllObjects(searchResult);
+			searchPara.setRt(RankType.IMPORTANCE_RANK);
 			mv.addObject("para", searchPara);
 			// CIKM
 

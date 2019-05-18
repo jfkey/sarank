@@ -23,10 +23,12 @@ public class ACJAInfoHandler {
     private Map<String,  Object> affPie;
     private Map<String, Object> jouPie;
     private ACJAShow acjaShow;
+    private RankType rt;
 
-    public ACJAInfoHandler(Iterable<ACJA> ACJAIt, int paperSize) {
+    public ACJAInfoHandler(Iterable<ACJA> ACJAIt, int paperSize, RankType rt) {
         this.ACJAIt = ACJAIt;
         this.paperSize = paperSize;
+        this.rt = rt;
         acjaShow = new ACJAShow();
         searchConfPie = new HashMap<>();
         searchAuthorPie = new HashMap<>();
@@ -129,31 +131,32 @@ public class ACJAInfoHandler {
             listAff.stream().sorted().limit(size).forEach( item ->{
                 acjaShow.getAffID().add(item.getAffID());
                 acjaShow.getAffName().add(FormatWords.sentenceToUpper(item.getAffName()));
-                acjaShow.getAffScore().add(item.getScore() *  Math.sqrt(item.getTimes() ));
+                acjaShow.getAffScore().add( rt == RankType.MOST_CITATION ?  item.getScore() : item.getScore() *  Math.sqrt(item.getTimes() ));
             });
 
             listAuthor.stream().sorted().limit(size).forEach(item ->{
                 acjaShow.getAthID().add(item.getAthID());
                 acjaShow.getAthName().add(FormatWords.sentenceToUpper(item.getAthName()));
-                acjaShow.getAthScore().add(item.getScore()  *  Math.sqrt(item.getTimes() ));
-
+                acjaShow.getAthScore().add( rt == RankType.MOST_CITATION ?  item.getScore() : item.getScore()  *  Math.sqrt(item.getTimes() ));
+                // acjaShow.getAthScore().add(  item.getScore() );
             });
 
             listCon.stream().sorted().limit(size).forEach(item -> {
                 acjaShow.getConID().add(item.getConID());
                 acjaShow.getConName().add(FormatWords.upperAllChar(item.getConName()));
-                acjaShow.getConScore().add(item.getScore()  *  Math.sqrt(item.getTimes() ));
+                acjaShow.getConScore().add(rt == RankType.MOST_CITATION ?  item.getScore() : item.getScore()  *  Math.sqrt(item.getTimes() ));
             });
 
             listJou.stream().sorted().limit(size).forEach(item -> {
                 acjaShow.getJouID().add(item.getJouID());
                 acjaShow.getJouName().add(FormatWords.upperAllChar(item.getJouName()));
-                acjaShow.getJouScore().add(item.getScore()  *  Math.sqrt(item.getTimes() ));
+                acjaShow.getJouScore().add(rt == RankType.MOST_CITATION ?  item.getScore() : item.getScore()  *  Math.sqrt(item.getTimes() ));
             });
 
             years.stream().sorted().forEach(item -> {
                 acjaShow.getYears().add(item);
             });
+
 
 //            int pieAthNum = acjaShow.getAthName().size() > 6 ? 6 : acjaShow.getAthName().size();
 //            int pieConNum = acjaShow.getConName().size() > 6 ? 6 : acjaShow.getConName().size();

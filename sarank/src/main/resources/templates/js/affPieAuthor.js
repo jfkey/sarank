@@ -23,6 +23,7 @@ var aff_pie_author = echarts.init(document.getElementById('affPieAuthor'));
         type: 'scroll',
         orient: 'vertical',
         right: 10,
+        show: false, 
         top: 20,
         bottom: 20,
         data:['Jiawei Han', 'Wenfei fan','Jerry Xu Yu','Xindong Wu',  'Shuai Ma', 'Xuelian lin']
